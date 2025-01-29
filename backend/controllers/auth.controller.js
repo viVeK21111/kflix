@@ -74,3 +74,4 @@ export async function logout(req,res) {
         res.status(500).json({success:false,message:"error in logging out"});
     }
 }
+
