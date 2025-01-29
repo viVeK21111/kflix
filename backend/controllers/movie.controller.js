@@ -36,3 +36,27 @@ export const getMovieDetails = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export const getSimilarMovies = async(req,res) => {
+    const {id} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=1`);
+        const movies = data.results;
+        res.json({success:true,similarmovies:movies});
+    }
+    catch(error) {
+        console.log("Error in getting similar movies: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
+export const getMoviebyCategory = async(req,res) => {
+    const {category} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`);
+        const movies = data.results;
+        res.json({success:true,moviesbycategory:movies});
+    }
+    catch(error) {
+        console.log("Error in getting movies by category: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
