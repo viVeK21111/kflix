@@ -4,11 +4,12 @@ import { getMovieTrailer } from '../controllers/movie.controller.js';
 import { getMovieDetails } from '../controllers/movie.controller.js';
 import { getSimilarMovies } from '../controllers/movie.controller.js';
 import { getMoviebyCategory } from '../controllers/movie.controller.js';
+import { protectRoute } from '../middleware/protectRoute.js';
 const router = express.Router();
 
-router.get('/trending',getTrendingMovies)
-router.get('/trailers/:id',getMovieTrailer)
-router.get('/details/:id',getMovieDetails)
-router.get('/similar/:id',getSimilarMovies)
-router.get('/category/:category',getMoviebyCategory)
+router.get('/trending',protectRoute,getTrendingMovies)
+router.get('/trailers/:id',protectRoute,getMovieTrailer)
+router.get('/details/:id',protectRoute,getMovieDetails)
+router.get('/similar/:id',protectRoute,getSimilarMovies)
+router.get('/category/:category',protectRoute,getMoviebyCategory)
 export default router;
