@@ -80,13 +80,15 @@ export const searchHistory = async(req,res) => {
 }
 
 export const removeFromSearchHistory = async(req,res) => {
+    let {id} = req.params;
+    id = parseInt(id);
     try {
         await User.findByIdAndUpdate(req.user._id,{
             $pull:{
-                searchHistory:{id:req.params}
+                searchHistory:{id:id}
             }
-        }
-    );
+        });
+        res.json({success:true,message:"search history removed successfully"});
     }
     catch(error) {
         res.status(500).json({success:false,message:error.message});

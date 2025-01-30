@@ -9,5 +9,6 @@ router.get('/movie/:query',protectRoute,searchMovies);
 router.get('/tv/:query',protectRoute,searchTv);
 router.get('/people/:query',protectRoute,searchPeople);
 router.get('/history',protectRoute,searchHistory)
-router.get('removehistory/:id',protectRoute,removeFromSearchHistory)
+router.get('/removehistory/:id',protectRoute,removeFromSearchHistory)
+
 export default router;
