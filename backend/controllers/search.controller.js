@@ -10,6 +10,7 @@ export const searchMovies = async(req,res) => {
             res.json({success:false,message:"No movie found"});
         }
         res.json({success:true,movie:movie});
+        
         await User.findByIdAndUpdate(req.user._id,{
             $push:{
                 searchHistory:{
