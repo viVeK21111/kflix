@@ -47,7 +47,13 @@ export const GetMovieList = async (req, res) => {
                 for(let i=0;i<result1.length;i++) {
                     const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/${content}?query=${result1[i]}&language=en-US&page=1`);
                     const movie = data.results;
+                    if(movie.length===0) {
+                        continue;
+                    }
                     resf.push(movie);
+                }
+                if(resf.length===0) {
+                    res.json({success:false,message:"Sorry,Error fetching movies"});
                 }
                 res.json({content:resf});
             }
