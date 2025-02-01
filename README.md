@@ -1,1 +1,1 @@
-!(login page)[/page.png]
+![login page](/page.png)
