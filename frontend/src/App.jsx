@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import ChatPage from "./pages/ChatPage";
+import Footer from "./components/Footer";
 
 function App() {
 
