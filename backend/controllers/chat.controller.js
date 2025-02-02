@@ -37,6 +37,7 @@ export const GetMovieList = async (req, res) => {
             }
             else {
                 result1 = result['nocontext']
+                console.log("chat successful via gemini")
                 res.json({content:result1})
                 return;
             }
@@ -53,8 +54,9 @@ export const GetMovieList = async (req, res) => {
                     resf.push(movie);
                 }
                 if(resf.length===0) {
-                    res.json({success:false,message:"Sorry,Error fetching movies"});
+                    res.json({success:false,message:"Sorry,Error fetching content"});
                 }
+                console.log("content fetched successfully");
                 res.json({content:resf});
             }
           catch(error) {

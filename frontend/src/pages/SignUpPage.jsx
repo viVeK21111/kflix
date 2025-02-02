@@ -19,7 +19,7 @@ const SignUpPage = () => {
         <h1 className='text-red-700 font-bold text-7xl'>Flix</h1>
         </Link>
       </header>
-      <div className='flex items-center justify-center mt-15 mx-3'>
+      <div className='flex items-center justify-center mt-20 mx-3'>
         <div className='w-full max-w-md bg-black/70 shadow-md p-8 rounded-lg'>
           <h1 className='text-2xl text-white mb-4 font-bold text-center'>Sign Up</h1>
           <form className='space-y-4' onSubmit={handleSubmit}>
