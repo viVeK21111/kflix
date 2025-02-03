@@ -14,8 +14,8 @@ const LoginPage = () => {
     <div className='h-screen w-full hero-bg'>
       <header className='max-w-6xl mx-auto flex items-center justify-center p-4'>
         <Link to={'/'} className='flex items-center'>
-        <img src={'/klogo.png'} alt='logo' className='w-24' />
-        <h1 className='text-red-700 font-bold text-7xl'>Flix</h1>
+        <img src={'/kflix2.png'} alt='logo' className='w-52' />
+      
         </Link>
       </header>
       <div className='flex items-center justify-center mt-15 mx-3'>

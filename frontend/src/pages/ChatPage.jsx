@@ -13,8 +13,8 @@ export default function Chatbot() {
     <div className='h-screen w-full chat-bg'>
        <header className='max-w-6xl flex items-left justify-left p-4'>
         <Link to={'/'} className='flex items-center'>
-        <img src={'/klogo.png'} alt='logo' className='w-24' />
-        <h1 className='text-red-700 font-bold text-7xl'>Flix</h1>
+        <img src={'/kflix2.png'} alt='logo' className='w-52' />
+
         </Link>
       </header>
     <div className="flex items-center justify-center p-6">

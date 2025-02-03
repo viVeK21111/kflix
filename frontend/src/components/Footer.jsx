@@ -8,21 +8,22 @@ const Footer = () => {
 				<div className='flex items-center gap-4'>
 					<li className="list-none flex items-center gap-4">
 						<Link to='/' className='text-balance'> Home </Link>
-						<Link to='/tv' className='text-balance'> TV Shows </Link>
-						<Link to='/movies' className='text-balance'> Movies </Link>
+						{/* <Link to='/tv' className='text-balance'> TV Shows </Link> */}
+						{/* <Link to='/movies' className='text-balance'> Movies </Link> */}
 					</li>
+					
 					</div>
-			<p>
-					 The source code is available on{" "}
+					
+					<p className="flex">
 					<a
 						href='https://github.com/viVeK21111/netflix_clone'
 						target='_blank'
 						rel='noreferrer'
 						className='font-medium underline underline-offset-4'
 					>
-						GitHub
+						<img src="/kflix.png" className="w-20 items-center" alt='netflix'></img>
 					</a>
-					.
+					
 				</p>
 			</div>
 		</footer>
