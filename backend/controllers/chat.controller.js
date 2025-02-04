@@ -28,9 +28,7 @@ export const GetMovieList = async (req, res) => {
             try {
             let result1 = ''
             let content = ''
-            console.log(stdout);
             const result = JSON.parse(stdout); // json string to json object
-            console.log(result);
             if("movie" in result) {
                 content = "movie"
                 result1 = result[content]
@@ -44,14 +42,12 @@ export const GetMovieList = async (req, res) => {
             else if("nocontext" in result) {
                 result1 = result['nocontext']
                 console.log("chat successful via gemini")
-                res.json({content:result1})
-                return;
+                return res.json({content:result1});
             }
             else {
                 result1 = result['error']
                 console.log("chat unsuccessfull")
-                res.json({content:result1})
-                return;
+                return res.json({content:result1});
             }
            
             const resf = []
