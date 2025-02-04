@@ -10,7 +10,9 @@ const __dirname = path.dirname(__filename);
 
 export const GetMovieList = async (req, res) => {
     const {query} = req.body;
-    
+    if(query.length==0){
+       return res.status(500).json({success:false,message:"Query can't be empty"});
+    }
         // Call Python script
        
         const pythonScriptPath = path.join(__dirname, "Gemini.py"); // Correct script path
@@ -26,23 +28,32 @@ export const GetMovieList = async (req, res) => {
             try {
             let result1 = ''
             let content = ''
+            console.log(stdout);
             const result = JSON.parse(stdout); // json string to json object
+            console.log(result);
             if("movie" in result) {
-                content = 'movie'
-                result1 = result['movie']
+                content = "movie"
+                result1 = result[content]
+                console.log("movies successful via gemini")
             }
             else if("tv" in result) {
-                content = 'tv'
-                result1 = result['tv']
+                content = "tv"
+                result1 = result[content]
+                console.log("tv successful via gemini")
             }
-            else {
+            else if("nocontext" in result) {
                 result1 = result['nocontext']
                 console.log("chat successful via gemini")
                 res.json({content:result1})
                 return;
             }
-            result1 = result1.replace(/'/g, '"'); // string to valid json string
-            result1 = JSON.parse(result1); // json string to json object
+            else {
+                result1 = result['error']
+                console.log("chat unsuccessfull")
+                res.json({content:result1})
+                return;
+            }
+           
             const resf = []
            
                 for(let i=0;i<result1.length;i++) {
@@ -54,14 +65,14 @@ export const GetMovieList = async (req, res) => {
                     resf.push(movie);
                 }
                 if(resf.length===0) {
-                    res.json({success:false,message:"Sorry,Error fetching content"});
+                    return res.json({success:false,message:"Sorry,Error fetching content"});
                 }
                 console.log("content fetched successfully");
-                res.json({content:resf});
+                return res.json({content:resf});
             }
           catch(error) {
               console.log("Error in searching movies: "+error.message);
-              res.status(500).json({success:false,message:error.message});
+              return res.status(500).json({success:false,message:error.message});
           }
            
         });

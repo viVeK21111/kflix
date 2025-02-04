@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { chatStore } from "../store/chat";
 
 export default function Chatbot() {
   const [query, setQuery] = useState("");
-  const onSubmit = () => fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
-      })
+  const [Loading,setLoading] = useState(false);
+
+  const {getdata,data} = chatStore();
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await getdata({query});
+   setLoading(false);
+  }
 
   return (
-    <div className='h-screen w-full chat-bg'>
+    <div className='h-screen w-full chat-bg overflow-auto'>
        <header className='max-w-6xl flex items-left justify-left p-4'>
         <Link to={'/'} className='flex items-center'>
         <img src={'/kflix2.png'} alt='logo' className='w-52' />
@@ -25,7 +31,7 @@ export default function Chatbot() {
       </div>
       
 
-    <form onSubmit={onsubmit} className="space-y-4 mt-3">
+    <form onSubmit={onSubmit} className="space-y-4 mt-3">
       <div>
       <label className="text-white font-semibold text-lg items-center">Ask Me anything</label>
       <input
@@ -40,11 +46,23 @@ export default function Chatbot() {
       Search
       </button>
     </form>
+    {Loading && (
+            <p className=" text-white mt-4">Loading...</p>
+      )}
     
-          </div>
+    </div>
+    </div>
+    {!Loading && data && (
+      <div className="flex items-centre mx-40 justify-center"> 
+        <div className="mt-4 text-white bg-gray-800 p-4 rounded-lg">
+              <h2 className="font-semibold mb-3 text-lg">Response:</h2>
+              <pre className="text-white whitespace-pre-wrap">{JSON.stringify(data,null,2)}</pre>
+            </div>
+      </div>
+            
+      )}
+   
+    </div>
 
-      
-    </div>
-    </div>
   );
 }
