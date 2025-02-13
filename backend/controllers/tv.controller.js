@@ -17,7 +17,7 @@ export const getTvTrailer = async (req, res) => {
     try{
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`);
         const trailer = data.results;
-        res.json({success:true,trailers:trailer});
+        res.json({success:true,content:trailer});
         console.log("trailer fetched successfully");
     }
     catch {
@@ -29,7 +29,7 @@ export const getTvDetails = async (req, res) => {
     const {id} = req.params;
     try{
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}?language=en-US`);
-        res.json({success:true,details:data});
+        res.json({success:true,content:data});
     }
     catch {
         console.log("Error in getting movie details: "+error.message);
@@ -41,7 +41,7 @@ export const getSimilarTv = async(req,res) => {
     try {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}/similar?language=en-US&page=1`);
         const movies = data.results;
-        res.json({success:true,similarmovies:movies});
+        res.json({success:true,content:movies});
     }
     catch(error) {
         console.log("Error in getting similar movies: "+error.message);
@@ -53,7 +53,7 @@ export const getTvbyCategory = async(req,res) => {
     try {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${category}?language=en-US&page=1`);
         const movies = data.results;
-        res.json({success:true,moviesbycategory:movies});
+        res.json({success:true,content:movies});
     }
     catch(error) {
         console.log("Error in getting movies by category: "+error.message);
