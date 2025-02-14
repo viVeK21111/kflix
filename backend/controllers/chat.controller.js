@@ -3,12 +3,11 @@ import { exec } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { fetchFromTMDB } from "../services/tmdb.service.js";
-import { json } from "stream/consumers";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const GetMovieList = async (req, res) => {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
     const {query} = req.body;
     if(query.length==0){
        return res.status(500).json({success:false,message:"Query can't be empty"});
@@ -28,10 +27,11 @@ export const GetMovieList = async (req, res) => {
             try {
             let result1 = ''
             let content = ''
+            console.log(stdout)
             const result = JSON.parse(stdout); // json string to json object
-            if("movie" in result) {
+            if("movies" in result) {
                 content = "movie"
-                result1 = result[content]
+                result1 = result['movies']
                 console.log("movies successful via gemini")
             }
             else if("tv" in result) {
@@ -58,7 +58,7 @@ export const GetMovieList = async (req, res) => {
                     if(movie.length===0) {
                         continue;
                     }
-                    resf.push(movie);
+                    resf.push(movie[0]);
                 }
                 if(resf.length===0) {
                     return res.json({success:false,message:"Sorry,Error fetching content"});

@@ -16,13 +16,17 @@ def get_movie_recommendations(query):
         tv_keywords = ["tv", "series", "show", "serial", "anime"]
         movie_keywords = ["movie", "animation", "cartoon", "film"]
         if any(keyword in query for keyword in tv_keywords):
-            query += ' and give json string format "{"tv": ["tv1","tv2","tv3"]}"'
+            query += ' and give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}"'
+            query+=" don't give empty string"
             response = model.generate_content(query)
             print(response.text[7:-4])# json string
         elif any(keyword in query for keyword in movie_keywords):
-            query += ' and give json string format "{"movie": ["movie1","movie2","movie3"]}".'
+            query += ' give the movie names in json string format "{"movies": ["movie1","movie2","movie3"]}"'
+            query+=" don't give empty json incase if u didn't find any movies, just give text"
             response = model.generate_content(query)
-            print(response.text[7:-4])  # json string
+            if "json" not in response.text:
+                print(json.dumps({"nocontext": response.text}))
+            else:print(response.text[7:-4])  # json string
         else:
             query += " Note: Chat in a friendly manner, like a chatbot used in movie streaming platform(kflix) and ask user whether he wants to watch some movei or tv"
             response = model.generate_content(query)
