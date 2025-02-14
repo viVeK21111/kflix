@@ -17,7 +17,7 @@ def get_movie_recommendations(query):
         movie_keywords = ["movie", "animation", "cartoon", "film"]
         if any(keyword in query for keyword in tv_keywords):
             query += ' and give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}"'
-            query+=" don't give empty string"
+            query +=" don't give empty json incase if u didn't find any tv shows, just give text"
             response = model.generate_content(query)
             print(response.text[7:-4])# json string
         elif any(keyword in query for keyword in movie_keywords):
