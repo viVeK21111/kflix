@@ -2,4 +2,4 @@
 <br>
 ![chat page](/chat.png)
 <br>
-![chat page2][/chat2.png]
+![chat page2](/chat2.png)
