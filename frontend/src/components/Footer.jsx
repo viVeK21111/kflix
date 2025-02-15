@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Github } from 'lucide-react';
 
 
 const Footer = () => {
@@ -21,7 +22,7 @@ const Footer = () => {
 						rel='noreferrer'
 						className='font-medium underline underline-offset-4'
 					>
-						<img src="/kflix.png" className="w-20 items-center" alt='netflix'></img>
+						<Github size={24} />
 					</a>
 					
 				</p>

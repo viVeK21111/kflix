@@ -21,7 +21,6 @@ export default function Chatbot() {
        <header className='max-w-6xl flex items-left justify-left p-4'>
         <Link to={'/'} className='flex items-center'>
         <img src={'/kflix2.png'} alt='logo' className='w-52' />
-
         </Link>
       </header>
     <div className="flex items-center justify-center p-6">
@@ -63,6 +62,7 @@ export default function Chatbot() {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
     
       {data.map((movie, index) => (
+        <Link to={`/watch/?id=${movie?.id}`}>
         <div key={index} className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
           <img 
             src={`${ORIGINAL_IMG_BASE_URL}${movie?.backdrop_path ||movie?.poster_path}`} 
@@ -73,6 +73,7 @@ export default function Chatbot() {
           {movie?.release_date ? movie.release_date.split("-")[0] : movie?.first_air_date.split("-")[0]}
           <p className="text-sm text-gray-300">Rating: <b>{movie?.vote_average}</b> | {movie?.adult ? "18+" : "PG-13"} </p>
         </div>
+        </Link>
       ))}
       </div>
       </div>

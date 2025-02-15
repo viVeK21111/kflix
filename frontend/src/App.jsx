@@ -8,7 +8,7 @@ import {Toaster} from 'react-hot-toast';
 import { userAuthStore } from "./store/authUser";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
-import WatchPage from "./pages/home/WatchPage"; 
+import WatchPage from "./pages/WatchPage"; 
 
 function App() {
 

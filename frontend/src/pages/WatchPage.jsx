@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function WatchPage() {
   const location = useLocation();
@@ -11,12 +12,16 @@ function WatchPage() {
       }
       return (
         <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
+         <header className='flex items-center p-4'>
+          <Link to={'/'} className='flex items-center'>
+          <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
+          </Link>
+          </header>
           {/* Video Container */}
           <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
             {/* Video Player */}
             <iframe
               allowFullScreen
-              scrolling="no"
               src={`https://vidsrc.dev/embed/movie/${movieId}`}
               className="w-full aspect-video"
             ></iframe>
