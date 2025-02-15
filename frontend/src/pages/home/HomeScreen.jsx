@@ -2,6 +2,8 @@ import React from 'react'
 import Navbar from '../../components/Navbar';
 import useGetTrendingContent from '../../hooks/useGetTrendingContent';
 import { ORIGINAL_IMG_BASE_URL } from '../../utils/constants';
+import {Link} from 'react-router-dom';
+import {Play,Info} from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending} = useGetTrendingContent();
@@ -25,9 +27,26 @@ export const HomeScreen = () => {
           
           <p className='mt-3'>
           {trending && trending.overview 
-            ? (trending.overview.length > 250 ? trending.overview.slice(0, 250) + "..." : trending.overview)
+            ? (trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview)
             :"Loading..."}
             </p>
+            <div className='flex mt-8'>
+						<Link
+							to={`/watch/${trending?.id}`}
+							className='bg-white hover:bg-white/80 text-black font-bold py-2 px-4 rounded mr-4 flex
+							 items-center'
+						>
+							<Play className='size-6 mr-2 fill-black' />
+							Play
+						</Link>
+						<Link
+							to={`/watch/${trending?.id}`}
+							className='bg-gray-500/70 hover:bg-gray-500 text-white py-2 px-4 rounded flex items-center'
+						>
+							<Info className='size-6 mr-2' />
+							More Info
+						</Link>
+					</div>
 
          </div>
 

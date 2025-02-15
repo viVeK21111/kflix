@@ -65,12 +65,12 @@ export default function Chatbot() {
       {data.map((movie, index) => (
         <div key={index} className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
           <img 
-            src={`${ORIGINAL_IMG_BASE_URL}${movie.backdrop_path ||movie.poster_path}`} 
+            src={`${ORIGINAL_IMG_BASE_URL}${movie?.backdrop_path ||movie?.poster_path}`} 
             className="w-full h-40 object-cover rounded-lg mb-2" 
-            alt={movie.title} 
+            alt={movie?.title} 
           />
           <h3 className="text-lg font-bold text-white mb-1">{movie.title || movie.name}</h3>
-          {movie?.release_date.split("-")[0] || trending?.first_air_date.split('-')[0]}
+          {movie?.release_date ? movie.release_date.split("-")[0] : movie?.first_air_date.split("-")[0]}
           <p className="text-sm text-gray-300">Rating: <b>{movie?.vote_average}</b> | {movie?.adult ? "18+" : "PG-13"} </p>
         </div>
       ))}
