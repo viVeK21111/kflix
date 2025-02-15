@@ -62,7 +62,7 @@ export default function Chatbot() {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
     
       {data.map((movie, index) => (
-        <Link to={`/watch/?id=${movie?.id}`}>
+        <Link to={`/watch/?id=${movie?.id}&name=${movie?.name || movie?.title}`}>
         <div key={index} className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
           <img 
             src={`${ORIGINAL_IMG_BASE_URL}${movie?.backdrop_path ||movie?.poster_path}`} 

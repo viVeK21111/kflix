@@ -8,13 +8,14 @@ const Footer = () => {
 			<div className='flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row'>
 				<div className='flex items-center gap-4'>
 					<li className="list-none flex items-center gap-4">
-						<Link to='/' className='text-balance'> Home </Link>
+						<Link to='/' className='text-balance' onClick={() => window.scrollTo(0, 0)}> Home </Link>
 						{/* <Link to='/tv' className='text-balance'> TV Shows </Link> */}
 						{/* <Link to='/movies' className='text-balance'> Movies </Link> */}
 					</li>
 					
 					</div>
 					
+					<p>Copyrights Reserved @2025</p>
 					<p className="flex">
 					<a
 						href='https://github.com/viVeK21111/netflix_clone'
