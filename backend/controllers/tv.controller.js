@@ -20,7 +20,7 @@ export const getTvTrailer = async (req, res) => {
         res.json({success:true,content:trailer});
         console.log("trailer fetched successfully");
     }
-    catch {
+    catch(error) {
         console.log("Error in getting movie trailer: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }
@@ -31,8 +31,8 @@ export const getTvDetails = async (req, res) => {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}?language=en-US`);
         res.json({success:true,content:data});
     }
-    catch {
-        console.log("Error in getting movie details: "+error.message);
+    catch(error) {
+        console.log("Error in getting tv details: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }
 }
@@ -44,7 +44,7 @@ export const getSimilarTv = async(req,res) => {
         res.json({success:true,content:movies});
     }
     catch(error) {
-        console.log("Error in getting similar movies: "+error.message);
+        console.log("Error in getting similar tv: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }   
 }
@@ -56,7 +56,7 @@ export const getTvbyCategory = async(req,res) => {
         res.json({success:true,content:movies});
     }
     catch(error) {
-        console.log("Error in getting movies by category: "+error.message);
+        console.log("Error in getting tv by category: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }   
 }

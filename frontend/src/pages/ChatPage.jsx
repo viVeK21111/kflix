@@ -6,8 +6,7 @@ import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 export default function Chatbot() {
   const [query, setQuery] = useState("");
   const [Loading,setLoading] = useState(false);
-
-  const {getdata,data} = chatStore();
+  const {getdata,data,contentType} = chatStore();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +14,7 @@ export default function Chatbot() {
     await getdata({query});
    setLoading(false);
   }
-  console.log('Fetched Data:', data);
+  console.log("contentType "+contentType);
   return (
     <div className='h-screen w-full chat-bg overflow-auto'>
        <header className='max-w-6xl flex items-left justify-left p-4'>
@@ -53,7 +52,7 @@ export default function Chatbot() {
     </div>
     </div>
    
-    {!Loading && data && (
+    {!Loading && data && contentType && (
     Array.isArray(data) ? (
   <div className="flex items-center mx-40 justify-center"> 
   <div className="mt-4 text-white bg-gray-800 p-4 rounded-lg w-full">
@@ -61,21 +60,25 @@ export default function Chatbot() {
     {/* Movie Grid */}
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
     
-      {data.map((movie, index) => (
-        <Link to={`/watch/?id=${movie?.id}&name=${movie?.name || movie?.title}`}>
-        <div key={index} className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
-          <img 
-            src={`${ORIGINAL_IMG_BASE_URL}${movie?.backdrop_path ||movie?.poster_path}`} 
-            className="w-full h-40 object-cover rounded-lg mb-2" 
-            alt={movie?.title} 
-          />
-          <h3 className="text-lg font-bold text-white mb-1">{movie.title || movie.name}</h3>
-          {movie?.release_date ? movie.release_date.split("-")[0] : movie?.first_air_date.split("-")[0]}
-          <p className="text-sm text-gray-300">Rating: <b>{movie?.vote_average}</b> | {movie?.adult ? "18+" : "PG-13"} </p>
-        </div>
-        </Link>
-      ))}
-      </div>
+    {data.map((item, index) => (
+          <Link 
+            key={item.id || index} 
+            to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+          >
+            <div className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
+              <img 
+                src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`} 
+                className="w-full h-40 object-cover rounded-lg mb-2" 
+                alt={item?.title || item?.name} 
+              />
+              <h3 className="text-lg font-bold text-white mb-1">{item.title || item.name}</h3>
+              <p className="text-sm text-gray-300">
+                {item?.release_date?.split("-")[0] || item?.first_air_date?.split("-")[0]} | 
+                Rating: <b>{item?.vote_average}</b> | {item?.adult ? "18+" : "PG-13"}
+              </p>
+            </div>
+          </Link>
+        ))}</div>
       </div>
       </div>
     ) : (

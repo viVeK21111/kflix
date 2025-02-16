@@ -6,6 +6,7 @@ import { getSimilarTv } from '../controllers/tv.controller.js';
 import { getTvbyCategory } from '../controllers/tv.controller.js';
 import { protectRoute } from '../middleware/protectRoute.js';
 
+
 const router = express.Router();
 
 router.get('/trending',protectRoute,getTrendingTv)

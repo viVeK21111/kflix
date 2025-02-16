@@ -6,10 +6,12 @@ import { fetchFromTMDB } from "../services/tmdb.service.js";
 import { spawn } from 'child_process'; 
 
 
+
 export const GetMovieList = async (req, res) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     const {query} = req.body;
+
     if(query.length==0){
        return res.status(500).json({success:false,message:"Query can't be empty"});
     }
@@ -21,14 +23,17 @@ export const GetMovieList = async (req, res) => {
                 try {
                     let result1 = ''
                     let content = ''
+                    let contents = ''
                     const result = JSON.parse(data); // json string to json object
                     if("movies" in result) {
                         content = "movie"
-                        result1 = result['movies']
+                        contents = "movies"
+                        result1 = result[contents]
                         console.log("movies successful via gemini")
                     }
                     else if("tv" in result) {
                         content = "tv"
+                        contents = "tv"
                         result1 = result[content]
                         console.log("tv successful via gemini")
                     }
@@ -57,7 +62,7 @@ export const GetMovieList = async (req, res) => {
                             return res.json({success:false,message:"Sorry,Error fetching content"});
                         }
                         console.log("content fetched successfully");
-                        return res.json({content:resf});
+                        return res.json({content:resf,contentType:contents});
                     }
                   catch(error) {
                       console.log("Error in searching movies: "+error.message);

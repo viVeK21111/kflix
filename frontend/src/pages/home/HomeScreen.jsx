@@ -4,9 +4,11 @@ import useGetTrendingContent from '../../hooks/useGetTrendingContent';
 import { ORIGINAL_IMG_BASE_URL } from '../../utils/constants';
 import {Link} from 'react-router-dom';
 import {Play,Info} from 'lucide-react';
+import {useContentStore} from '../../store/content'
 
 export const HomeScreen = () => {
   const {trending} = useGetTrendingContent();
+  const {contentType} = useContentStore();
   console.log("trending "+trending);
   return (
       <div className='relative h-screen text-white'>
@@ -32,7 +34,7 @@ export const HomeScreen = () => {
             </p>
             <div className='flex mt-8'>
 						<Link
-							to={`/watch/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
+							to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
 							className='bg-white hover:bg-white/80 text-black font-bold py-2 px-4 rounded mr-4 flex
 							 items-center'
 						>

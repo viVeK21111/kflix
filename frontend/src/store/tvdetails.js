@@ -2,17 +2,14 @@ import {create} from 'zustand';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export const chatStore = create((set)=> ({
+export const tvDetailsStore = create((set)=> ({
     data:null,
     isLoading:true,
-    contentType:null,
-    getdata: async(query)=> {
+    getdetails: async(id)=> {
         set({isLoading:true})
         try {
-            const response = await axios.post("/api/v1/chat/movie/llm",query);
+            const response = await axios.get(`/api/v1/tv/details/${id}`);
             set({data:response.data.content,isLoading:false});
-            set({contentType:response.data.contentType});
-            toast.success("success");
 
         } catch (error) {
             toast.error(error.response.data.message || "an error occured");

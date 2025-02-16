@@ -9,6 +9,7 @@ import { userAuthStore } from "./store/authUser";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import WatchPage from "./pages/WatchPage"; 
+import TvPage from "./pages/TvPage";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
       <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
       <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
       <Route path="/watch" element = {user ? <WatchPage/> :  <Navigate to={'/'}/>} />
+      <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
     </Routes>
     <Footer/>
     <Toaster/>

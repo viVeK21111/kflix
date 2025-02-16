@@ -20,7 +20,7 @@ export const getMovieTrailer = async (req, res) => {
         res.json({success:true,content:trailer});
         console.log("trailer fetched successfully");
     }
-    catch {
+    catch(error) {
         console.log("Error in getting movie trailer: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }
@@ -31,7 +31,7 @@ export const getMovieDetails = async (req, res) => {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}?language=en-US`);
         res.json({success:true,content:data});
     }
-    catch {
+    catch(error) {
         console.log("Error in getting movie details: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }

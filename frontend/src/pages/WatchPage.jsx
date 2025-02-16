@@ -6,11 +6,19 @@ import { Lightbulb } from 'lucide-react';
 function WatchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const movieId = queryParams.get('id');
-  const movieName = queryParams.get('name');
+  const Id = queryParams.get('id');
+  const Name = queryParams.get('name');
+  const Season = queryParams.get('season')
+  const Episode = queryParams.get('episode')
   const [bgColorClass, setBgColorClass] = useState('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
   const [text,setText] = useState('text-white');
-    // Optional: Handle missing or invalid ID
+  let src = ""
+  if(!Season) {
+    src = `https://vidsrc.dev/embed/movie/${Id}`
+  }
+  else {
+   src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
+  }
    const Lightsout = (e) => {
     e.preventDefault();
       if(bgColorClass==='bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900') setBgColorClass('bg-black');
@@ -18,7 +26,7 @@ function WatchPage() {
       if(text==='text-white') setText('text-black');
       else setText('text-white');
    }
-    if (!movieId) {
+    if (!Id) {
         return <div className="text-white text-center">Invalid video ID</div>;
       }
       return (
@@ -33,7 +41,7 @@ function WatchPage() {
             {/* Video Player */}
             <iframe
               allowFullScreen
-              src={`https://vidsrc.dev/embed/movie/${movieId}`}
+              src={src}
               className="w-full aspect-video"
             ></iframe>
           </div>
@@ -43,7 +51,7 @@ function WatchPage() {
           
           <div className='w-full max-w-4xl flex justify-between items-center'>
           <div className="mt-8 text-center">
-            <h1 className={`text-2xl flex text-left font-semibold ${text} mb-3"`}>Now Playing: <p className='ml-2 font-extralight'>{movieName}</p></h1>
+            <h1 className={`text-2xl flex text-left font-semibold ${text} mb-3"`}>Now Playing: <p className='ml-2 font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}`: ""  }</p> </h1>
             <p className="mt-2 text-left text-gray-400">Enjoy your favorite movie in high quality!</p>
           </div>
           <button className={`flex mt-3 ml-72 p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}> <Lightbulb color={text==='text-white' ? 'white' : 'black'}/>Lights off</button>
