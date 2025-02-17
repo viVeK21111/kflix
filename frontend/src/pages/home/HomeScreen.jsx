@@ -7,9 +7,17 @@ import {Play,Info} from 'lucide-react';
 import {useContentStore} from '../../store/content'
 
 export const HomeScreen = () => {
-  const {trending} = useGetTrendingContent();
+  const {trending,loading} = useGetTrendingContent();
   const {contentType} = useContentStore();
   console.log("trending "+trending);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center text-black">
+        <p className="text-xl font-bold">Hold on tight... 🍿</p>
+      </div>
+    );
+  }
   return (
       <div className='relative h-screen text-white'>
         <Navbar/>
@@ -27,7 +35,7 @@ export const HomeScreen = () => {
           {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"}
           </p>
           
-          <p className='mt-3'>
+          <p className='mt-3 bg-slate-900 bg-opacity-70 p-2 rounded'>
           {trending && trending.overview 
             ? (trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview)
             :"Loading..."}

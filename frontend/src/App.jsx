@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import WatchPage from "./pages/WatchPage"; 
 import TvPage from "./pages/TvPage";
+import SearchPage from './pages/SearchPage'
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
       <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
       <Route path="/watch" element = {user ? <WatchPage/> :  <Navigate to={'/'}/>} />
       <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
+      <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />
     </Routes>
     <Footer/>
     <Toaster/>

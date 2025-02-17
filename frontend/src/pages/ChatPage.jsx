@@ -15,6 +15,7 @@ export default function Chatbot() {
    setLoading(false);
   }
   console.log("contentType "+contentType);
+  //console.log("data "+data);
   return (
     <div className='h-screen w-full chat-bg overflow-auto'>
        <header className='max-w-6xl flex items-left justify-left p-4'>

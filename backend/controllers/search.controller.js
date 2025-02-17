@@ -8,9 +8,11 @@ export const searchMovies = async(req,res) => {
         const movie = data.results;
         if(movie.length===0) {
             res.json({success:false,message:"No movie found"});
+            return;
         }
-        res.json({success:true,movie:movie});
-        
+        res.json({success:true,content:movie});
+        console.log("movie search success");
+
         await User.findByIdAndUpdate(req.user._id,{
             $push:{
                 searchHistory:{
@@ -35,7 +37,7 @@ export const searchTv = async(req,res) => {
         if(tv.length === 0) {
             return res.json({success:false,message:"No tv show found"});
         }
-        res.json({success:true,tv:tv});
+        res.json({success:true,content:tv});
         await User.findByIdAndUpdate(req.user._id,{$push:{searchHistory:{
             type:'tv',
             id:tv[0].id,
@@ -57,7 +59,8 @@ export const searchPeople = async(req,res) => {
         if(person.length===0) {
             return res.json({success:false,message:"No person found"});
         }
-        res.json({success:true,person:person});
+        res.json({success:true,content:person});
+        console.log("person search success");
         await User.findByIdAndUpdate(req.user._id,{$push:{searchHistory:{
             type:'person',
             id: person[0].id,

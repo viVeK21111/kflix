@@ -19,10 +19,10 @@ export const GetMovieList = async (req, res) => {
         const pythonScriptPath = path.join(__dirname, "Gemini.py"); // Correct script path
         const pythonProcess = spawn('python', [pythonScriptPath, query]); 
         pythonProcess.stdout.on('data', async (data) => { 
+                let content = 'content'
                 console.log(`Python script output: ${data}`);
                 try {
                     let result1 = ''
-                    let content = ''
                     let contents = ''
                     const result = JSON.parse(data); // json string to json object
                     if("movies" in result) {
@@ -39,8 +39,9 @@ export const GetMovieList = async (req, res) => {
                     }
                     else if("nocontext" in result) {
                         result1 = result['nocontext']
+                        contents = "text"
                         console.log("chat successful via gemini")
-                        return res.json({content:result1});
+                        return res.json({content:result1,contentType:contents});
                     }
                     else {
                         result1 = result['error']
@@ -65,7 +66,7 @@ export const GetMovieList = async (req, res) => {
                         return res.json({content:resf,contentType:contents});
                     }
                   catch(error) {
-                      console.log("Error in searching movies: "+error.message);
+                      console.log(`Error in searching ${content}: `+error.message);
                       return res.status(500).json({success:false,message:error.message});
                   }
 
