@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 
 const SearchPage = () => {
-  const [searchType, setSearchType] = useState('movie');
+  const [searchType, setSearchType] = useState(() => localStorage.getItem('searchType') || 'movie');
   const [query, setQuery] = useState('');
   const {getTv,getMovie,getPerson,data,Loading} = searchStore();
 
@@ -26,7 +26,9 @@ const SearchPage = () => {
   useEffect(() => {
         console.log("data is empty")
     }, [data]);
-  
+  useEffect(()=> {
+    localStorage.setItem("searchType",searchType);
+  },[searchType])
   return (
     <div className="h-screen w-full overflow-auto flex flex-col items-center p-6 bg-gray-900 text-white shadow-lg">
        <header className='flex items-center mr-auto p-4'>
@@ -64,37 +66,43 @@ const SearchPage = () => {
       </form>
       {!Loading && data && searchType && (
         Array.isArray(data) ? (
-  <div className="flex items-center mt-3 mx-40 scroll justify-center"> 
+<div className="flex items-center mt-3 px-4 sm:px-6 md:px-12 lg:px-40 justify-center"> 
   <div className="mt-4 text-white bg-gray-800 p-4 rounded-lg w-full">
     <h2 className="font-semibold mb-3 text-lg border-b pb-2">Response:</h2>
-    {/* Movie Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-    
-    {data.map((item, index) => (
-          <Link 
-            key={item.id || index} 
-            to={`/${searchType === 'movie' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-          >
-            <div className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
-              <img 
-                src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                className="w-full h-40 object-cover rounded-lg mb-2" 
-                alt={item?.title || item?.name} 
-              />
-              <h3 className="text-lg font-bold text-white mb-1">{item.title || item.name}</h3>
-              
-              {(item.release_date || item.first_air_date) && (
-                <p className="text-sm text-gray-300">{item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} | Rating: <b> {item.vote_average}</b> | {item.adult ? "18+" : "PG-13"} </p>
-                )}
-            
-           <p> {item.popularity && searchType==='person' && `Popularity: ${item.popularity}`}
-        </p>
 
-            </div>
-          </Link>
-        ))}</div>
-      </div>
-      </div>
+    {/* Movie Grid */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      {data.map((item, index) => (
+        <Link 
+          key={item.id || index} 
+          to={`/${searchType === 'movie' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+        >
+          <div className="p-2 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
+            <img 
+              src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+              className="w-full h-40 sm:h-48 object-cover rounded-lg mb-2" 
+              alt={item?.title || item?.name} 
+            />
+            <h3 className="text-sm sm:text-base font-bold text-white mb-1 truncate">
+              {item.title || item.name}
+            </h3>
+            {(item.release_date || item.first_air_date) && (
+              <p className="text-xs sm:text-sm text-gray-300">
+                {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
+                | Rating: <b>{item.vote_average}</b> 
+                | {item.adult ? "18+" : "PG-13"}
+              </p>
+            )}
+            {item.popularity && searchType === 'person' && (
+              <p className="text-xs sm:text-sm">Popularity: {item.popularity}</p>
+            )}
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+</div>
+
        ) : (
         <div className="flex items-center justify-between">
         <div className="mx-auto max-w-2xl max-h-screen justify-center p-3 border rounded-lg bg-slate-900 shadow-md">
