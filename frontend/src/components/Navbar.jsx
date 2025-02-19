@@ -22,14 +22,13 @@ const Navbar = () => {
                 <Link to='/' className='hover:underline' onClick={() => setContentType('movies')}>Movies</Link>
                 <Link to='/' className='hover:underline' onClick={() => setContentType('tv')}>Tv shows</Link>
                 <Link to='/chat' className='hover:underline'>Chat</Link>
-                <Link to='/history' className='hover:underline'>History</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
                 <Link to='/search'>
                 <Search className="size-6 cursor-pointer"/>
                 </Link>
-                <img src = {user.image} alt='avatar' className='h-8 rounded cursor-pointer'/>
-                <LogOut className='size-6 cursor-pointer' onClick={logout} />
+                <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded cursor-pointer'/></Link>
+
                 <div className='sm:hidden'>
                     <Menu className='size-6 cursor-pointer' onClick={toggleMobileMenu}/>
                 </div>

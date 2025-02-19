@@ -98,3 +98,15 @@ export const removeFromSearchHistory = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }
 };
+
+export const ClearHistory = async(req,res) => {
+    try {
+        await User.findByIdAndUpdate(req.user._id,{
+          searchHistory:[],
+        });
+        res.json({success:true,message:"search history cleared successfully"});
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+};

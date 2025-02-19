@@ -25,8 +25,8 @@ export default function Chatbot() {
       </header>
     <div className="flex items-center justify-center p-6">
       <div className="w-full max-w-2xl max-h-screen bg-slate-900/55 shadow-md p-8 rounded-lg">
-      <div className="flex items-center">
-      <h1 className="text-3xl ml-52 font-bold mb-4 text-red-700">Flix Chat</h1>
+      <div className="flex items-center justify-center">
+      <h1 className="text-3xl font-bold mb-4 text-red-700">Flix Chat</h1>
       <img src={'/chat.png'} alt="chat" className="w-10 ml-3" />
       </div>
       
@@ -59,7 +59,7 @@ export default function Chatbot() {
   <div className="mt-4 text-white bg-gray-800 p-4 rounded-lg w-full">
     <h2 className="font-semibold mb-3 text-lg border-b pb-2">Response:</h2>
     {/* Movie Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
     
     {data.map((item, index) => (
           <Link 
@@ -69,7 +69,7 @@ export default function Chatbot() {
             <div className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
               <img 
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`} 
-                className="w-full h-40 object-cover rounded-lg mb-2" 
+                className="w-full h-40 sm:h-48 object-cover rounded-lg mb-2" 
                 alt={item?.title || item?.name} 
               />
               <h3 className="text-lg font-bold text-white mb-1">{item.title || item.name}</h3>

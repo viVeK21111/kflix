@@ -19,12 +19,12 @@ const TvPage = () => {
     data && (
       <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-6">
         {/* Header Section */}
-        <header className="relative mb-10">
+        <header className="relative  mb-10">
           <img
-            className="w-full h-96 object-cover object-top rounded-xl shadow-2xl"
+            className="w-full h-[75vh] object-cover object-top rounded-xl shadow-2xl"
             src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.poster_path}`}
             alt="TV Show"
-    
+            style={{objectPosition:'top 50%'}}
           />
           <div className="bottom-6 left-6 bg-blue-950 bg-opacity-70 p-6 rounded-lg">
             <h1 className="text-5xl font-bold mb-4 text-yellow-400">{data?.name}</h1>
