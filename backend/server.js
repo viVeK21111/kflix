@@ -6,6 +6,7 @@ import tvRoutes from "./routes/tv.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import searchRoutes from './routes/search.route.js'
 import chatRoutes from './routes/chat.route.js'
+import cors from "cors";
 
 import {connectDB} from './config/db.js'
 import cookieParser from 'cookie-parser';
@@ -13,6 +14,8 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
+
+app.use(cors({ origin: "https://kflix-zeta.vercel.app/" })); // this allows the frontend url to send requests to the backend
 
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
