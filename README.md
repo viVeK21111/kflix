@@ -6,4 +6,4 @@ AI powered chat (By Gemini 2.0 Flash )
 <br><br>
 Streaming by VidSrc
 <br><br>
-![watch page](/watchpage.png)
+![watch page](/watchpage1.png)
