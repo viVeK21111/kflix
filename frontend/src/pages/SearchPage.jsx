@@ -75,7 +75,7 @@ const SearchPage = () => {
       {data.map((item, index) => (
         <Link 
           key={item.id || index} 
-          to={`/${searchType === 'movie' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+          to={`/${searchType === 'movie' ? 'watch' : searchType==='tv'? 'tv/details' : 'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
         >
           <div className="p-2 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
             <img 
