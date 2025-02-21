@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { DetailsStore } from '../store/tvdetails';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
@@ -8,16 +8,24 @@ const TvPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   const { getTvdetails, data } = DetailsStore();
+  const [Loading , setLoading] = useState('true');
 
   useEffect(() => {
     if (id) {
-      getTvdetails(id);
+      getTvdetails(id).finally(() => setLoading(false));
+      window.scrollTo(0, 0);
     }
-  }, [id, getTvdetails]);
+  }, [id]);
  
+  if(Loading) {
+    return (
+      <p className="flex justify-center items-center text-xl h-screen w-full font-bold"> Hold on tight... 🍿</p>
+    )
+  }
+
   return (
-    data && (
       <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-6">
+        
         {/* Header Section */}
         <header className="relative  mb-10">
           <img
@@ -73,8 +81,7 @@ const TvPage = () => {
           </div>
         </div>
       </div>
-    )
-  );
+          )
 };
 
 export default TvPage;

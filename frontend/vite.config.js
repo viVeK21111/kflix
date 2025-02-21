@@ -6,8 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server:{
     proxy:{
-      '/api' : {target:"https://kflix.onrender.com"}
+      '/api' : {target:"http://localhost:5000"}
     }
   }
 })
-//http://localhost:5000

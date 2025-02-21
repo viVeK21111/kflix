@@ -60,3 +60,14 @@ export const getMoviebyCategory = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }   
 }
+export const getMovieCredits = async(req,res) => {
+    const {id} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`);
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting movies by category: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}

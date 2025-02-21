@@ -15,7 +15,8 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({ origin: "https://kflix-zeta.vercel.app/" })); // this allows the frontend url to send requests to the backend
+//app.use(cors({ origin: "https://kflix-zeta.vercel.app/" })); // this allows the frontend url to send requests to the backend
+app.use(cors({ origin: "http://localhost:5173" })); 
 
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());

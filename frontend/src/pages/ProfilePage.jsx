@@ -9,20 +9,20 @@ export default function ProfilePage(){
   const { getdata, data,ClearHistory,ClearHistoryid } = ProfileStore();
   const {logout} = userAuthStore();
   const [visibleItems, setVisibleItems] = useState(6); // Show max 6 items initially
+  const [datalocal,setdatalocal] = useState(null);
 
   useEffect(() => {
     getdata();
-  }, []);
+    setdatalocal(data);
+  }, [data]);
 
   const ClearButton = (e) => {
     e.preventDefault();
     ClearHistory();
-    window.location.reload();
   }
   const ClearButtonid = (e,id) => {
     e.preventDefault();
     ClearHistoryid(id);
-    window.location.reload();
   }
   return (
     
@@ -31,12 +31,12 @@ export default function ProfilePage(){
       {/* User Profile Section */}
       <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md text-center">
         <img
-          src={data?.image || "/a1.jpg"}
+          src={datalocal?.image || "/a1.jpg"}
           alt="Profile"
           className="w-32 h-32 mx-auto border-red-600 shadow-lg object-cover"
         />
-        <h1 className="text-2xl font-bold mt-4">{data?.username || "Unknown"}</h1>
-        <p className="text-gray-400">{data?.email || "No email available"}</p>
+        <h1 className="text-2xl font-bold mt-4">{datalocal?.username || "Unknown"}</h1>
+        <p className="text-gray-400">{datalocal?.email || "No email available"}</p>
      <button onClick={logout} className='w-max-2xl mt-2 py-2 px-4 bg-red-500 text-white rounded-md font-semibold hover:bg-red-700'>Logout</button>  
 
       </div>
@@ -48,10 +48,10 @@ export default function ProfilePage(){
         </h2>
         <button className="flex p-1 ml-auto mb-2 bg-red-500 text-white text-base font-normal rounded-lg hover:bg-red-700 transition-all" onClick={ClearButton}>Clear History</button>
 
-        {data?.searchHistory?.length > 0 ? (
+        {datalocal?.searchHistory?.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {data.searchHistory.slice(0, visibleItems).map((item, index) => (
+              {datalocal.searchHistory.slice().reverse().slice(0, visibleItems).map((item, index) => ( // applying empty slice() to not directly modify the original array
                 <Link to={`/${item?.type === 'movie' ? 'watch' : item?.type === 'tv' ? 'tv/details' : 'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}>
                 <div
                   key={index}
@@ -77,7 +77,7 @@ export default function ProfilePage(){
             </div>
 
             {/* Load More Button */}
-            {visibleItems < data.searchHistory.length && (
+            {visibleItems < datalocal.searchHistory.length && (
               <div className="text-center mt-6">
                 <button
                   onClick={() => setVisibleItems(prev => prev + 6)} // Show 6 more items

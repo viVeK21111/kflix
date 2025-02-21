@@ -12,7 +12,6 @@ export const ProfileStore = create((set)=> ({
             const response = await axios.get("/api/v1/user/profile");
             set({data:response.data.user,isLoading:false});
             set({contentType:response.data.contentType});
-            toast.success("success");
 
         } catch (error) {
             toast.error(error.response.data.message || "an error occured");
