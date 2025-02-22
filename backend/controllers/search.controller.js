@@ -74,6 +74,40 @@ export const searchPeople = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }   
 }
+export const getPersonDetails = async(req,res) => {
+    const {id} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/person/${id}?language=en-US&page=1`);
+        if(data.length===0) {
+            return res.json({success:false,message:"No person found"});
+        }
+        res.json({success:true,content:data});
+        console.log("person details success");
+       
+    }
+    catch(error) {
+        console.log("Error in searching person: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
+
+export const getPersonCredits = async(req,res) => {
+    const {id} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/person/${id}/movie_credits?language=en-US&page=1`);
+        if(data.length===0) {
+            return res.json({success:false,message:"No person found"});
+        }
+        res.json({success:true,content:data});
+        console.log("person credits success");
+       
+    }
+    catch(error) {
+        console.log("Error in searching person: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
+
 export const searchHistory = async(req,res) => {
     try {
         res.json({success:true,searchHistory:req.user.searchHistory});

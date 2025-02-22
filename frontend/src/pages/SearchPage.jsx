@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSearchParams } from "react-router-dom"
 import { searchStore } from '../store/searchStore';
 import {Link} from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
@@ -64,6 +62,7 @@ const SearchPage = () => {
           Search
         </button>
       </form>
+      <Link to = '/profile' className='flex text-blue-500 underline mt-2'>Search History</Link>
       {!Loading && data && searchType && (
         Array.isArray(data) ? (
 <div className="flex items-center mt-3 px-4 sm:px-6 md:px-12 lg:px-40 justify-center"> 
