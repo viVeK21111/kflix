@@ -77,7 +77,7 @@ function WatchPage() {
           </div>
         
           
-          <div className='w-full max-w-4xl flex justify-between items-center'>
+          <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
           <div className="mt-8 text-center">
             <h1 className={`lg:text-2xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3"`}>Now Playing: <span className='ml-2 font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}`: ""  }</span> </h1>
              
@@ -99,7 +99,7 @@ function WatchPage() {
             className="w-60 h-60 object-cover rounded-lg mb-2" 
              alt={data?.title || data?.name} />
           
-            <span className='text-white mt-2 ml-3 w-full max-w-4xl'>{data?.overview}</span>
+            {!Season && <span className='text-white mt-2 ml-3 w-full max-w-4xl'>{data?.overview}</span>}
          
               </div>
         <div className='w-full max-w-4xl  mt-2'>

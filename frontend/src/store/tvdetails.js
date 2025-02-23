@@ -27,5 +27,17 @@ export const DetailsStore = create((set)=> ({
             set({data:null,isLoading:false});
         }
     },
+    getMovieDetail: async(id)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/movies/details/${id}`);
+            console.log("movie detail succuessfull");
+            return response.data.content;
+
+        } catch (error) {
+            toast.error(error.response.data.message || "an error occured");
+            return null;
+        }
+    },
     
 }));

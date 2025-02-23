@@ -28,7 +28,7 @@ export const HomeScreen = () => {
          <div className='bg-gradient-to-b from-black/70 via-transparent to-transparent absolute w-full h-full top-0 left-0 -z-10' />
 
          <div className='max-w-2xl'>
-          <h1 className='mt-4 text-6xl font-extrabold text-balance'>
+          <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl mt-4  font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
           <p className='mt-2 flex text-lg font-bold'>

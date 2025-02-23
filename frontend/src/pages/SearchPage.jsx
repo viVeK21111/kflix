@@ -39,7 +39,7 @@ const SearchPage = () => {
         <select
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700"
+          className="p-2 ml-2 w-full rounded-lg bg-gray-800 text-white border border-gray-700"
         >
           <option value="movie">Movies</option>
           <option value="tv">TV Shows</option>

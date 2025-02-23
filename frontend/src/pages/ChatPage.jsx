@@ -55,11 +55,11 @@ export default function Chatbot() {
    
     {!Loading && data && contentType && (
     Array.isArray(data) ? (
-  <div className="flex items-center mx-40 justify-center"> 
+  <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-24 xl:mx-32 2xl:mx-40 mt-6">
   <div className="mt-4 text-white bg-gray-800 p-4 rounded-lg w-full">
     <h2 className="font-semibold mb-3 text-lg border-b pb-2">Response:</h2>
     {/* Movie Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
     
     {data.map((item, index) => (
           <Link 

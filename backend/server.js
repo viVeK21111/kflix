@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 //app.use(cors({ origin: "https://kflix-zeta.vercel.app/" })); // this allows the frontend url to send requests to the backend
-app.use(cors({ origin: "http://localhost:5173" })); 
+app.use(cors({ origin: "http://192.168.56.1:5173" })); 
 
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
@@ -28,9 +28,13 @@ app.use('/api/v1/user',profileRoutes);
 app.use('/api/v1/search',searchRoutes);
 app.use('/api/v1/chat',chatRoutes);
 
-app.listen(PORT,() => {
-    console.log("server started at https://localhost:5000");
+//app.listen(PORT,() => {
+//    console.log("server started at https://localhost:5000");
+//    connectDB();
+//});
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server started at http://${process.env.HOST || 'localhost'}:${PORT}`);
     connectDB();
 });
-
 
