@@ -9,6 +9,7 @@ const Navbar = () => {
     
     const toggleMobileMenu = () => {
         setisMobileMenuOpen(!isMobileMenuOpen);
+        
     };
     const {user,logout}  = userAuthStore();
     const {setContentType} = useContentStore();
@@ -39,7 +40,6 @@ const Navbar = () => {
                     <Link to='/' className='block hover:underline p-2' onClick={toggleMobileMenu}>Movies</Link>
                     <Link to='/' className='block hover:underline p-2' onClick={toggleMobileMenu}>Tv shows</Link>
                     <Link to='/chat' className='block hover:underline p-2' onClick={toggleMobileMenu}>Chat</Link>
-                    <Link to='/history' className='block hover:underline p-2' onClick={toggleMobileMenu}>History</Link>
                 </div>
             )}
         </header>

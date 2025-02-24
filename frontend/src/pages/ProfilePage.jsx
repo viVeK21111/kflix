@@ -10,10 +10,12 @@ export default function ProfilePage(){
   const {logout} = userAuthStore();
   const [visibleItems, setVisibleItems] = useState(6); // Show max 6 items initially
   const [datalocal,setdatalocal] = useState(null);
+  
 
   useEffect(() => {
     getdata();
     setdatalocal(data);
+    localStorage.setItem("numitems",6);
   }, [data]);
 
   const ClearButton = (e) => {

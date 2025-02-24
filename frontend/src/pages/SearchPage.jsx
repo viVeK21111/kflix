@@ -8,6 +8,7 @@ const SearchPage = () => {
   const [query, setQuery] = useState('');
   const {getTv,getMovie,getPerson,data,Loading} = searchStore();
 
+  localStorage.setItem("numitems",6);
 
   const handleSearch = (e) => {
     e.preventDefault();

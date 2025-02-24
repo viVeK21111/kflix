@@ -44,7 +44,7 @@ function WatchPage() {
 
   let src = ""
   if(!Season) {
-    src = `https://vidsrc.dev/embed/movie/${Id}`
+    src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
   }
   else {
    src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`

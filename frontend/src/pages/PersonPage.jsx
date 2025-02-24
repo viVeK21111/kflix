@@ -4,6 +4,7 @@ import { PersonStore } from "../store/PersonStore"; // Assuming store import
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants"; // Import Image base URL
 import { DetailsStore } from "../store/tvdetails";
 import { Link } from 'react-router-dom';
+import { use } from "react";
 
 export default function PersonPage() {
   const { datap, getPersonDetails, datac, getPersonCredits } = PersonStore();
@@ -11,34 +12,39 @@ export default function PersonPage() {
   const [movieids, setMovieIds] = useState([]);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loading2,setLoading2] = useState(true);
   const [loading1, setLoading1] = useState(true);
-  const [numitems,setnumitems] = useState(6);
+  const [numitems,setnumitems] = useState(() => {
+    return Number(localStorage.getItem("numitems")) || 6;
+  });
   const { getMovieDetail } = DetailsStore();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
 
   useEffect(() => {
     if (id) {
-      setMovieIds([]);
-      setMovies([]); // Clear previous movies when changing persons
-      setLoading1(true)
       getPersonDetails(id).finally(() => setLoading(false));
-      window.scrollTo(0, 0);
-      getPersonCredits(id);
+      if(numitems===6) window.scrollTo(0, 0);
+      getPersonCredits(id).finally(()=> setLoading2(false));
     }
   }, [id]);
 
   // Fetch Movie IDs when datac changes
+
+  useEffect(()=> {
+    localStorage.setItem("numitems",numitems);
+  },[numitems])
+
   useEffect(() => {
-    if (datac?.cast?.length > 0) {
+    if ( datac?.cast?.length > 0 && !loading2) {
       const ids = [...new Set(datac.cast.map(x => x.id))];
       setMovieIds(ids);
     }
-  }, [datac]);
+  },[datac,loading2]);
 
   // Fetch Movie Details when movieids updates
   useEffect(() => {
-    if (movieids.length > 0) {
+    if (movieids.length > 0 && !loading2) {
       Promise.all(movieids.map(movieId => getMovieDetail(movieId)))
         .then(movieDetails => {
           setMovies(movieDetails);
@@ -46,7 +52,7 @@ export default function PersonPage() {
         })
         .catch(err => console.error("Error fetching movie details:", err));
     }
-  }, [movieids]);
+  }, [movieids,loading2]);
 
   if (loading) {
     return (
