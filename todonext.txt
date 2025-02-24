@@ -1,9 +1,10 @@
 movies page from homescreen link (category wise)
 tv show page from homescreen link (category wise)
-PersonPage (create new page,details like name,known for movies)
 similar tvs in TvPage
 similar movies in WatchPage
+cast in WatchPage (optional)
 watchhistory(Optional)
+Library (Optional)
 
 Extensive testing
 deploy vercel+render
