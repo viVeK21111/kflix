@@ -25,9 +25,11 @@ const Navbar = () => {
                 <Link to='/chat' className='hover:underline'>Chat</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
-                <Link to='/search'>
-                <Search className="size-6 cursor-pointer"/>
+                <div className='flex bg-white rounded-lg px-2 py-1 font-semibold text-base'>
+                <Link className='flex text-black' to='/search'>
+                <Search className="size-5 text-black mr-1 cursor-pointer"/> Search
                 </Link>
+                </div>
                 <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded cursor-pointer'/></Link>
 
                 <div className='sm:hidden'>

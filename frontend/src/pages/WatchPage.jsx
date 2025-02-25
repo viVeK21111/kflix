@@ -16,6 +16,7 @@ function WatchPage() {
   const [text,setText] = useState('text-white');
   const [dir,setDir] = useState("");
   const [Loading,setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
   const Season = queryParams.get('season')
@@ -44,7 +45,7 @@ function WatchPage() {
 
   let src = ""
   if(!Season) {
-    src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
+    src = `https://vidsrc.dev/embed/movie/${Id}`
   }
   else {
    src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
@@ -69,11 +70,19 @@ function WatchPage() {
           {/* Video Container */}
           <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
             {/* Video Player */}
+
             <iframe
               allowFullScreen
               src={src}
               className="w-full aspect-video"
+              onLoad={() => setIsLoading(false)} // Hide loader when iframe loads
             ></iframe>
+
+            {isLoading && (
+              <div className="w-full flex justify-center items-center">
+                <p className='text-white'>Loading...🍿</p>
+              </div>
+            )}
           </div>
         
           

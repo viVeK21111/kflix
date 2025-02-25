@@ -23,20 +23,18 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen w-full overflow-auto flex flex-col items-center p-6 bg-gray-900 text-white">
       {/* Header */}
-      <header className="w-full max-w-6xl flex justify-between items-center p-4">
+      <header className="w-full max-w-6xl flex mx-auto justify-center items-center p-4">
         <Link to={'/'}>
           <img src={'/kflix2.png'} alt='Kflix Logo' className='w-40 sm:w-52' />
         </Link>
-        <Link to='/profile' className='text-blue-400 hover:underline'>Search History</Link>
       </header>
       
       {/* Search Section */}
-      <h2 className="text-2xl font-bold mt-8">Search</h2>
-      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mt-4 w-full max-w-lg">
+      <form onSubmit={handleSearch} className="flex max-w-xl mt-10 w-full">
         <select
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
-          className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 w-full sm:w-40"
+          className="p-2 rounded-lg bg-gray-800 text-white border mr-2 border-gray-700 w-24 sm:w-40"
         >
           <option value="movie">Movies</option>
           <option value="tv">TV Shows</option>
@@ -47,21 +45,23 @@ const SearchPage = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter search term..."
-          className="p-2 rounded-lg text-black w-full flex-1"
+          className="p-2 rounded-l-lg text-black w-full flex-1"
           required
         />
         <button
           type="submit"
-          className="p-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold w-full sm:w-auto"
+          className="p-2 bg-blue-600 hover:bg-blue-700 rounded-r-lg font-semibold"
         >
           Search
         </button>
       </form>
+      <Link to='/profile' className='flex text-white-400 text-sm mt-3 bg-blue-950 py-1 px-2 rounded-md hover:underline'>Search History</Link>
+
       
       {/* Search Results */}
       {!Loading && data && searchType && (
         Array.isArray(data) ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mt-8 px-4 sm:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-8">
             {data.map((item, index) => (
               <Link 
                 key={item.id || index} 
