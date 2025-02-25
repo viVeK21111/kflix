@@ -11,7 +11,7 @@ genai.configure(api_key=API_KEY)
 
 def get_movie_recommendations(query):
     try:
-        model = genai.GenerativeModel(model_name='gemini-2.0-flash')
+        model = genai.GenerativeModel(model_name='gemini-1.5-pro')
         query = query.lower()
         tv_keywords = ["tv", "series", "show", "serial", "anime"]
         movie_keywords = ["movie", "animation", "cartoon", "film"]

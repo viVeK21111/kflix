@@ -80,11 +80,12 @@ export default function PersonPage() {
               <b>Also Known As:</b> {datap?.also_known_as.slice(0, 4).join(", ")}
             </p>
           )}
-          <p className="mt-2 text-white-400 text-sm">
-            <b>Born</b>: {datap?.birthday} ({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years) <b className="ml-3">Place:</b> {datap?.place_of_birth}
-          </p>
+          <p className="mt-2 text-white-400 text-base">
+          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (<span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} <b className="ml-3">Place:</b> {datap?.place_of_birth}
+        </p>
+
           {datap?.deathday && (
-            <p>Death: {datap.deathday}</p>
+            <p className="text-base"> <b>Death:</b> {datap.deathday} <span>({datap.deathday.split("-")[0] - (datap?.birthday?.split("-")[0] || 0)} years)</span> </p>
           )}
           {datap?.known_for_department && (
             <p className="mt-2"><b>Department:</b> {datap.known_for_department}</p>

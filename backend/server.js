@@ -15,8 +15,8 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 
-//app.use(cors({ origin: "https://kflix-zeta.vercel.app/" })); // this allows the frontend url to send requests to the backend
-app.use(cors({ origin: "http://192.168.56.1:5173" })); 
+//app.use(cors({ origin: "https://kflix-zeta.vercel.app/",credentails:true })); // this allows the frontend url to send requests to the backend
+//app.use(cors({ origin: "http://192.168.1.9:5173",credentails:true })); 
 
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
@@ -33,8 +33,8 @@ app.use('/api/v1/chat',chatRoutes);
 //    connectDB();
 //});
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server started at http://${process.env.HOST || 'localhost'}:${PORT}`);
+app.listen(PORT, () => { // server defualt listens on 0.0.0.0 (within the network)
+    console.log(`Server started at local ipv4 :${PORT}`);
     connectDB();
 });
 
