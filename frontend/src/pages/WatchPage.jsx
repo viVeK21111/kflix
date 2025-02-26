@@ -17,6 +17,7 @@ function WatchPage() {
   const [dir,setDir] = useState("");
   const [Loading,setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [directorId, setdirectorId] = useState(null);
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
   const Season = queryParams.get('season')
@@ -36,6 +37,7 @@ function WatchPage() {
 
   function getDirector(crew) {
     const director = crew.find(person => (person.known_for_department==='Directing' && (person.job === "Director" || person.job==='Writer' || person.job==='producer')) || person.job==='Director');
+    setdirectorId(director.id);
     return director ? director.name : "Unknown";
   }
  
@@ -45,7 +47,7 @@ function WatchPage() {
 
   let src = ""
   if(!Season) {
-    src = `https://vidsrc.dev/embed/movie/${Id}`
+    src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
   }
   else {
    src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
@@ -98,7 +100,11 @@ function WatchPage() {
           ):(
             <div className='w-full max-w-4xl'>
           {datac && (
-            <div className='text-white flex w-full max-w-4xl mt-2'> Director: <p className='font-semibold ml-1'> {dir} </p></div>
+            
+             <div className='text-white flex w-full max-w-4xl mt-2'> Director: <Link to={'/person/details/?id='+directorId+"&name="+dir} className='hover:underline hover:text-white'><p className='font-semibold ml-1'> {dir} </p>
+             </Link> </div>
+           
+           
           )}
           {bgColorClass!='bg-black' && (
             <div className='w-full max-w-4xl'> 

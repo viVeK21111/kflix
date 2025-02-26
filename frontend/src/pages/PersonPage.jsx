@@ -81,7 +81,7 @@ export default function PersonPage() {
             </p>
           )}
           <p className="mt-2 text-white-400 text-base">
-          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (<span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} <b className="ml-3">Place:</b> {datap?.place_of_birth}
+          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (datap?.birthday && <span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} <b className="ml-3">Place:</b> {datap?.place_of_birth}
         </p>
 
           {datap?.deathday && (
