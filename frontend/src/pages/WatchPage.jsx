@@ -6,11 +6,13 @@ import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
 import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
+import { SimilarStore } from '../store/SimilarStore';
 
 function WatchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search)
   const {getMoviedetails,getTvdetails,data}  = DetailsStore();
+  const {getSimilarMovies,datas} = SimilarStore();
   const {datac,getCredits} = creditStore();
   const [bgColorClass, setBgColorClass] = useState('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
   const [text,setText] = useState('text-white');
@@ -18,10 +20,13 @@ function WatchPage() {
   const [Loading,setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [directorId, setdirectorId] = useState(null);
+  const [numitems,setnumitems] = useState(6);
+  const [numitemsm,setnumitemsm] = useState(6);
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
   const Season = queryParams.get('season')
   const Episode = queryParams.get('episode')
+  localStorage.setItem("numitems",6);
   useEffect(() => {
     if(Season) {
       getTvdetails(Id).finally(()=> setLoading(false));
@@ -30,8 +35,9 @@ function WatchPage() {
     else if (Id) {
       getMoviedetails(Id);
       getCredits(Id);
-      Promise.all([getMoviedetails(Id), getCredits(Id)]).then(() => setLoading(false)); 
+      Promise.all([getMoviedetails(Id), getCredits(Id),getSimilarMovies(Id)]).then(() => setLoading(false)); 
       window.scrollTo(0, 0);
+
     }
   }, [Id, getMoviedetails]);
 
@@ -126,10 +132,84 @@ function WatchPage() {
                   <span className='gap-2 text-white' key={item.id}> {item.name} </span>
               ))}
         </div>
+        {!data?.seasons && (
+          <>
+                <div className='text-white w-full max-w-4xl mt-3 text-xl'><h3 className='font-bold'>Cast</h3></div>
+                  <div className="grid grid-cols-2 w-full max-w-4xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
+                  {datac.cast.slice(0,numitems).map((item, index) => (
+                    <Link 
+                      key={item.id || index} 
+                      to={'/person/details'+`/?id=${item?.id}&name=${item?.name}`}
+                      className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                    >
+                      <img 
+                        src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+                        className="w-full h-48 object-cover rounded-lg" 
+                        alt={item?.title || item?.name} 
+                      />
+                      <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                        {item.title || item.name}
+                      </h3>
+                      
+                      {item?.character && (
+                        <p className="text-xs sm:text-sm text-gray-400">character: {item.character}</p>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+                {numitems < datac.cast.slice(0,10).length && (
+          <div className="flex w-full justify-center max-w-4xl mt-6">
+            <button
+              onClick={() => setnumitems(prev => prev + 4)} // Show 6 more items
+              className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+        <div className='text-white w-full max-w-4xl mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
+        <div className="grid grid-cols-2 w-full max-w-4xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
+                  {datas.slice(0,numitemsm).map((item, index) => (
+                    <Link 
+                      key={item.id || index} 
+                      to={'/watch/'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
+                      className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                    >
+                      <img 
+                        src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+                        className="w-full h-48 object-cover rounded-lg" 
+                        alt={item?.title || item?.name} 
+                      />
+                      <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                        {item.title || item.name}
+                      </h3>
+                      
+                      {item?.popularity && (
+                        <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+                {numitemsm < datas.slice(0,10).length && (
+          <div className="flex w-full justify-center max-w-4xl mt-6">
+            <button
+              onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
+              className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+        </>
+        )}
+        
         </div>
-          )}
+        
+          )} 
+           
           </div>
           )
+          
           }
         </div>
       );
