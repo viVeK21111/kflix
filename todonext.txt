@@ -1,8 +1,7 @@
 movies page from homescreen link (category wise)
 tv show page from homescreen link (category wise)
-similar tvs in TvPage
 watchhistory(Optional)
-Library (Optional)
+Library (Optional) (favorites, watchlater)
 
 Extensive testing
 deploy vercel+render
