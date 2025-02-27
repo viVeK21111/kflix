@@ -35,11 +35,10 @@ export const HomeScreen = () => {
           {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"}
           </p>
           
-          <p className='mt-3 bg-slate-900 bg-opacity-70 p-2 rounded'>
-          {trending && trending.overview 
-            ? (trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview)
-            :"Loading..."}
-            </p>
+          
+          {trending && trending?.overview  && ( <p className='mt-3 bg-slate-900 bg-opacity-70 p-2 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
+            
+  
             <div className='flex mt-8'>
 						<Link
 							to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}

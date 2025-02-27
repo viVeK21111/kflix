@@ -106,11 +106,13 @@ function WatchPage() {
           ):(
             <div className='w-full max-w-4xl'>
           {datac && (
-            
              <div className='text-white flex w-full max-w-4xl mt-2'> Director: <Link to={'/person/details/?id='+directorId+"&name="+dir} className='hover:underline hover:text-white'><p className='font-semibold ml-1'> {dir} </p>
              </Link> </div>
            
-           
+          )}
+          {Season && data?.created_by[0] && (
+            <div className='text-white flex w-full max-w-4xl mt-2'> Created by: <Link to={'/person/details/?id='+data?.created_by[0].id+"&name="+data?.created_by[0].name} className='hover:underline hover:text-white'><p className='font-semibold ml-1'> {data.created_by[0].name} </p>
+             </Link> </div>
           )}
           {bgColorClass!='bg-black' && (
             <div className='w-full max-w-4xl'> 
