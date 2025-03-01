@@ -7,6 +7,8 @@ import { creditStore } from '../store/credits';
 import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
+import { addWatchStore } from '../store/watchStore';
+import { Clock } from 'lucide-react';
 
 function WatchPage() {
   const location = useLocation();
@@ -27,6 +29,8 @@ function WatchPage() {
   const Season = queryParams.get('season')
   const Episode = queryParams.get('episode')
   localStorage.setItem("numitems",6);
+  const {addWatch} = addWatchStore();
+
   useEffect(() => {
     if(Season) {
       getTvdetails(Id).finally(()=> setLoading(false));
@@ -50,6 +54,12 @@ function WatchPage() {
   useEffect ( () => {
     if(datac) setDir(getDirector(datac.crew));
   },[datac])
+
+  const addWatchList = async(e,id) => {
+    e.preventDefault();
+    console.log("id "+id);
+    addWatch(id);
+  }
 
   let src = ""
   if(!Season) {
@@ -116,13 +126,23 @@ function WatchPage() {
           )}
           {bgColorClass!='bg-black' && (
             <div className='w-full max-w-4xl'> 
-             <div className='text-left w-full flex flex-row max-w-4xl mt-10 items-start'>
+             <div className='text-left w-full  flex flex-col sm:flex-col md:flex-row xl:flow-rowlg:flex-row max-w-4xl mt-10 items-start'>
              <img 
             src={`${ORIGINAL_IMG_BASE_URL}${ (data?.season && data?.seasons[Season]?.poster_path)|| data?.poster_path || data?.backdrop_path || data?.profile_path}`} 
-            className="w-60 h-60 object-cover rounded-lg mb-2" 
+            className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2 " 
              alt={data?.title || data?.name} />
-          
-            {!Season && <span className='text-white mt-2 ml-3 w-full max-w-4xl'>{data?.overview}</span>}
+            <div className='ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
+            {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
+            <button
+							className='bg-red-600 hover:bg-red/800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
+							 items-center'
+               onClick={(e) => addWatchList(e,data?.id)}
+						>
+							<Clock className='size-5' />
+              <p className='ml-1'>Watch Later</p>
+						</button>
+            </div>
+           
          
               </div>
         <div className='w-full max-w-4xl  mt-2'>

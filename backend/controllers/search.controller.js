@@ -38,7 +38,8 @@ export const searchTv = async(req,res) => {
             return res.json({success:false,message:"No tv show found"});
         }
         res.json({success:true,content:tv});
-        await User.findByIdAndUpdate(req.user._id,{$push:{searchHistory:{
+        await User.findByIdAndUpdate(req.user._id,{
+            $push:{searchHistory:{
             type:'tv',
             id:tv[0].id,
             image: tv[0].backdrop_path,
@@ -61,7 +62,8 @@ export const searchPeople = async(req,res) => {
         }
         res.json({success:true,content:person});
         console.log("person search success");
-        await User.findByIdAndUpdate(req.user._id,{$push:{searchHistory:{
+        await User.findByIdAndUpdate(req.user._id,{
+            $push:{searchHistory:{
             type:'person',
             id: person[0].id,
             image: person[0].profile_path,

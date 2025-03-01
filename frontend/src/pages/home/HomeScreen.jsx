@@ -8,12 +8,15 @@ import {useContentStore} from '../../store/content'
 import MovieSlider from '../../components/MovieSlider';
 import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
 import { useState,useEffect,useRef } from 'react';
+import { Clock } from 'lucide-react';
+import {addWatchStore} from '../../store/watchStore';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
   const {contentType} = useContentStore();
   const [ImageLoad,setImageLoad] = useState(true);
   const movieSectionRef = useRef(null);
+  const {addWatch} = addWatchStore();
 
   useEffect(() => {
     setImageLoad(true);
@@ -26,6 +29,13 @@ export const HomeScreen = () => {
       </div>
     );
   }
+
+  const addWatchList = async(e,id) => {
+    e.preventDefault();
+    console.log("id "+id);
+    addWatch(id);
+  }
+
   return (
     <>
       <div className='relative h-screen text-white'>
@@ -55,12 +65,20 @@ export const HomeScreen = () => {
             <div className='flex mt-8'>
 						<Link
 							to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
-							className='bg-white hover:bg-white/80 text-black font-bold py-2 px-2 rounded  flex
+							className='bg-red-600 hover:bg-red/800 text-white font-bold py-2 px-2 rounded  flex
 							 items-center'
 						>
-							<Play className='size-6  fill-black' />
+							<Play className='size-5  fill-white' />
 							Play
 						</Link>
+            <button
+							className='bg-white hover:bg-white/80 text-black font-bold py-2 ml-2 px-2 rounded  flex
+							 items-center'
+               onClick={(e) => addWatchList(e,trending?.id)}
+						>
+							<Clock className='size-5' />
+              <p className='ml-1'>Watch Later</p>
+						</button>
 						
 					</div>
 

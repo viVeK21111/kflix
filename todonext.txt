@@ -1,5 +1,3 @@
-movies page from homescreen link (category wise)
-tv show page from homescreen link (category wise)
 watchhistory(Optional)
 Library (Optional) (favorites, watchlater)
 

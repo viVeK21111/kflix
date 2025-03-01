@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
 		type: Array,
 		default: [],
 	},
+	watchList: {
+		type: Array,
+		default: [],
+	},
 });
 
 export const User = mongoose.model("User", userSchema);

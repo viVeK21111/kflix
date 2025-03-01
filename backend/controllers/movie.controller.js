@@ -1,5 +1,6 @@
 
 import { fetchFromTMDB } from "../services/tmdb.service.js"
+import {User} from "../models/user.model.js";
 
 export const getTrendingMovies = async (req, res) => {
     try {
@@ -33,6 +34,26 @@ export const getMovieDetails = async (req, res) => {
     }
     catch(error) {
         console.log("Error in getting movie details: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+export const addMovieWatch = async (req, res) => {
+    const {id} = req.params;
+    try{
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}?language=en-US`);
+        await User.findByIdAndUpdate(req.user._id,{
+                    $push:{
+                    watchList:{
+                    type:'movie',
+                    id:data.id,
+                    image: data.poster_path,
+                    title: data.title,
+                    }
+                }});
+        return res.json({success:true,message:"movie added to watchlist"});
+    }
+    catch(error) {
+        console.log("Error in adding movie to watchlist: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }
 }
