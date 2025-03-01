@@ -4,15 +4,22 @@ import { userAuthStore } from '../store/authUser';
 import {Search,LogOut,Menu} from 'lucide-react';
 import { useContentStore } from '../store/content';
 
-const Navbar = () => {
+const Navbar = ({ movieSectionRef }) => {
     const [isMobileMenuOpen,setisMobileMenuOpen] = useState(false);
     
     const toggleMobileMenu = () => {
         setisMobileMenuOpen(!isMobileMenuOpen);
         
     };
-    const {user,logout}  = userAuthStore();
-    const {setContentType} = useContentStore();
+    const {user}  = userAuthStore();
+    const {contentType,setContentType} = useContentStore();
+
+    const scrollToMovies = (type) => {
+        setContentType(type);
+        setTimeout(() => {
+          movieSectionRef?.current?.scrollIntoView({ behavior: "smooth",block: "start" });
+        },500); 
+      };
 
     return (
         <header className='max-w mx-auto flex flex-wrap items-center justify-between p-4 h-20'>
@@ -20,8 +27,8 @@ const Navbar = () => {
                 <Link to='/'><img src='/kflix2.png' alt='logo' className='w-32 sm:w-40'></img></Link>
             </div>
             <div className='hidden sm:flex items-center ml-5 gap-4 mr-auto z-50'>
-                <Link to='/' className='hover:underline' onClick={() => setContentType('movies')}>Movies</Link>
-                <Link to='/' className='hover:underline' onClick={() => setContentType('tv')}>Tv shows</Link>
+                <button className={`hover:underline ${contentType==='movies'? 'underline':''}`} onClick={() => scrollToMovies('movies')}>Movies</button>
+                <button className={`hover:underline ${contentType==='tv'? 'underline':""}`}onClick={() => scrollToMovies('tv')}>Tv shows</button>
                 <Link to='/chat' className='hover:underline'>Chat</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
@@ -38,9 +45,15 @@ const Navbar = () => {
                
             </div>
             {isMobileMenuOpen && (
-                <div className='w-full sm:hidden mt-4 z-50 bg-black border rounded border-gray-800'>
-                    <Link to='/' className='block hover:underline p-2' onClick={toggleMobileMenu}>Movies</Link>
-                    <Link to='/' className='block hover:underline p-2' onClick={toggleMobileMenu}>Tv shows</Link>
+                <div  className='w-full sm:hidden mt-4 z-50 bg-black border rounded border-gray-800'>
+                    <Link to='/' className='block hover:underline p-2' onClick={ () => {
+                    toggleMobileMenu
+                    scrollToMovies('movies')
+                    }}>Movies</Link>
+                    <Link to='/' className='block hover:underline p-2' onClick={() => {
+                        toggleMobileMenu
+                        scrollToMovies('tv')
+                        }}>Tv shows</Link>
                     <Link to='/chat' className='block hover:underline p-2' onClick={toggleMobileMenu}>Chat</Link>
                 </div>
             )}
