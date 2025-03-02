@@ -1,5 +1,6 @@
 
 import { fetchFromTMDB } from "../services/tmdb.service.js"
+import {User} from "../models/user.model.js";
 
 export const getTrendingTv = async (req, res) => {
     try {
@@ -59,4 +60,31 @@ export const getTvbyCategory = async(req,res) => {
         console.log("Error in getting tv by category: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }   
+}
+export const addTvWatch = async (req, res) => {
+    const {id} = req.params;
+    try{
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}?language=en-US`);
+        const user = await User.findById(req.user._id);
+
+        const isMovieExists = user.watchList.some(x => x.id === data.id);
+
+        if (isMovieExists) {
+            return res.json({ success: false, message: "Already exists in watchlist" });
+        }
+        await User.findByIdAndUpdate(req.user._id,{
+                    $push:{
+                    watchList:{
+                    type:'tv',
+                    id:data.id,
+                    image: data.poster_path,
+                    title: data.name,
+                    }
+                }});
+        return res.json({success:true,message:"tvshow added to watchlist"});
+    }
+    catch(error) {
+        console.log("Error in adding tv to watchlist: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
 }

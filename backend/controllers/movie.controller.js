@@ -82,7 +82,7 @@ export const removeFromWatchlist = async(req,res) => {
                 watchList:{id:id}
             }
         });
-        res.json({success:true,message:"movie removed successfully"});
+        res.json({success:true,message:"Removed successfully"});
     }
     catch(error) {
         res.status(500).json({success:false,message:error.message});

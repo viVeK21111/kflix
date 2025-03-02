@@ -15,4 +15,17 @@ export const addWatchStore = create((set)=> ({
             set({datas:null,isLoading:false});
         }
     },
+    addTv: async(id)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/tv/addWatch/${id}`);
+            toast.success(response.data.message);
+            return;
+
+        } catch (error) {
+            toast.error(error.response.data.message || "an error occured");
+            set({datas:null,isLoading:false});
+        }
+    },
+
 }));

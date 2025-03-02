@@ -36,7 +36,7 @@ const MovieSlider = ({ category }) => {
 
 	return (
 		<div
-			className='bg-black text-white relative px-5 md:px-20'
+			className='bg-black text-white relative px-4'
 			onMouseEnter={() => setShowArrows(true)}
 			onMouseLeave={() => setShowArrows(false)}
 		>

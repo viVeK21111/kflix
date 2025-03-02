@@ -133,14 +133,16 @@ function WatchPage() {
              alt={data?.title || data?.name} />
             <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
             {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
-            <button
-							className='bg-red-600 hover:bg-red/800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
+            {!Season && (
+              <button
+							className='bg-red-600 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
 							 items-center'
                onClick={(e) => addWatchList(e,data?.id)}
 						>
 							<Clock className='size-5' />
               <p className='ml-1'>Watch Later</p>
 						</button>
+            )}
             </div>
            
          

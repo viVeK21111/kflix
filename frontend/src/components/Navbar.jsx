@@ -16,9 +16,9 @@ const Navbar = ({ movieSectionRef }) => {
 
     const scrollToMovies = (type) => {
         setContentType(type);
-        setTimeout(() => {
-          movieSectionRef?.current?.scrollIntoView({ behavior: "smooth",block: "start" });
-        },500); 
+        //setTimeout(() => {
+          //movieSectionRef?.current?.scrollIntoView({ behavior: "smooth",block: "start" });
+        //},500); 
       };
 
     return (
@@ -33,9 +33,9 @@ const Navbar = ({ movieSectionRef }) => {
                 <Link to='/watchlist' className='hover:underline'>Watchlist</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
-                <div className='flex bg-white rounded-lg px-2 py-1 font-semibold text-base'>
-                <Link className='flex text-black' to='/search'>
-                <Search className="size-5 text-black mr-1 cursor-pointer"/> Search
+                <div className='flex bg-slate-500 rounded-3xl p-2 font-semibold text-base'>
+                <Link className='flex ' to='/search'>
+                <Search className="size-5 text-white  cursor-pointer"/> 
                 </Link>
                 </div>
                 <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded cursor-pointer'/></Link>

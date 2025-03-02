@@ -4,6 +4,8 @@ import { DetailsStore } from "../store/tvdetails";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
+import { addWatchStore } from "../store/watchStore";
+import { Clock } from "lucide-react";
 
 const TvPage = () => {
   const location = useLocation();
@@ -15,6 +17,7 @@ const TvPage = () => {
   const [openSeason, setOpenSeason] = useState(null);
   const [numitemsm, setnumitemsm] = useState(6);
   const [imageSrc, setImageSrc] = useState("");
+  const {addTv} = addWatchStore();
 
   useEffect(() => {
     if (id) {
@@ -51,7 +54,10 @@ const TvPage = () => {
       </p>
     );
   }
- 
+  const addWatchList = async(e,id) => {
+    e.preventDefault();
+    addTv(id);
+  }
 
   return (
     <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-2">
@@ -96,6 +102,14 @@ const TvPage = () => {
               <strong>Last Air Date:</strong> {data?.last_air_date}
             </p>
           </div>
+          <button
+							className='bg-blue-600 hover:bg-blue-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
+							 items-center'
+               onClick={(e) => addWatchList(e,data?.id)}
+						>
+							<Clock className='size-5' />
+              <p className='ml-1'>Watch Later</p>
+						</button>
         </div>
       </header>
 
@@ -159,8 +173,8 @@ const TvPage = () => {
       </div>
       
       {/* Similar TV Shows */}
-      <div className='text-white w-full max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl'><h3 className='font-bold'>Similar Tv shows</h3></div>
-        <div className="grid grid-cols-2 w-full max-w-6xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-5">
+      <div className='text-white max-w-8xl max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl'><h3 className='font-bold'>Similar Tv shows</h3></div>
+        <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-5">
                   {datas?.slice(0,numitemsm).map((item, index) => (
                     <Link 
                       key={item.id || index} 
@@ -183,10 +197,10 @@ const TvPage = () => {
                   ))}
                 </div>
                 {numitemsm < datas?.slice(0,10).length && (
-          <div className="flex w-full justify-center max-w-4xl mt-6">
+          <div className="flex max-w-8xl justify-center items-center max-w-4xl mt-6">
             <button
               onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
-              className="px-3 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 transition-all"
+              className="px-3 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg  transition-all"
             >
               Load More
             </button>

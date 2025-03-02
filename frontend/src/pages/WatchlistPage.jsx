@@ -4,9 +4,10 @@ import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import axios from "axios";
 import { SquareX } from 'lucide-react';
 import toast from "react-hot-toast";
+import { use } from "react";
 
 const WatchlistPage = () => {
-  const [numitems, setnumitems] = useState(6);
+  const [numitems, setnumitems] = useState(localStorage.getItem("numtvitems") || 6);
   const [datac, setdatac] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,6 +26,10 @@ const WatchlistPage = () => {
     };
     getWatchlist();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("numtvitems",numitems);
+  }, [numitems]);
 
   const removeFromWatchlist = (e,id) => {
     e.preventDefault();
@@ -67,7 +72,7 @@ const WatchlistPage = () => {
         {datac?.slice(0, numitems).map((item, index) => (
           <Link
             key={item.id || index}
-            to={`/watch?id=${item?.id}&name=${item?.title}`}
+            to={item.type==='movie' ?  `/watch?id=${item?.id}&name=${item?.title}` : `/tv/details?id=${item?.id}&name=${item?.title}`}
             className="group relative block bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <button onClick={(e) => removeFromWatchlist(e,item.id)} className='absolute rounded-full'>

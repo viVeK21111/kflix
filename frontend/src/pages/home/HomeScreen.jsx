@@ -16,7 +16,7 @@ export const HomeScreen = () => {
   const {contentType} = useContentStore();
   const [ImageLoad,setImageLoad] = useState(true);
   const movieSectionRef = useRef(null);
-  const {addWatch} = addWatchStore();
+  const {addWatch,addTv} = addWatchStore();
   const [imageSrc, setImageSrc] = useState("");
 
 
@@ -51,29 +51,31 @@ export const HomeScreen = () => {
   const addWatchList = async(e,id) => {
     e.preventDefault();
     console.log("id "+id);
-    addWatch(id);
+    if(contentType === 'movies') addWatch(id);
+    else if(contentType === 'tv') addTv(id);
   }
   
 
   return (
     <>
-      <div className='relative h-screen text-white'>
+      <div className='relative h-[80vh] text-white'>
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
+        
         <div className="absolute top-0 left-0 w-full h-full bg-black/40 md:bg-black/40 lg:bg-black/0 xl:bg-black/0 -z-40" />
           <img 
             src={imageSrc} 
             alt='img' 
-            className='absolute top-0 left-0 w-full h-full object-cover -z-50' 
+            className='absolute top-0 left-0 w-full h-[80vh] object-cover -z-50' 
             onLoad={() => setImageLoad(false)}
           />
 
-         <div className='absolute top-0 left-0 w-full h-full bg-black/50 -z-50 aria-hidden:true'/>
-         <div className='absolute top-0 left-0 w-full h-full flex flex-col justify-center px-8 md:px-16 lg:px-8'>
-         <div className='bg-gradient-to-b from-black/70 via-transparent to-transparent absolute w-full h-full top-0 left-0 -z-10' />
+         <div className='absolute top-0 left-0 w-full h-[80vh] bg-black/50 -z-50 aria-hidden:true'/>
+         <div className='absolute top-0 left-0 w-full h-[80vh] flex flex-col justify-center px-4'>
+         <div className='bg-gradient-to-b from-black/70 via-transparent to-transparent absolute w-full h-[80vh] top-0 left-0 -z-10' />
 
          <div className='max-w-2xl'>
-          <div> <p className='text-white-600 text-2xl mt-64 animate-pulse'>Trending...</p> </div>
+          <div> <p className='text-white-600 text-2xl mt-60 animate-pulse'>Trending...</p> </div>
           <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl mt-20 font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
@@ -82,20 +84,20 @@ export const HomeScreen = () => {
           </p>
           
           
-          {trending && trending?.overview  && ( <p className='mt-4 text-base bg-slate-900 bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
+          {trending && trending?.overview  && ( <p className='mt-2 text-base bg-slate-900 bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
             
   
             <div className='flex mt-8'>
 						<Link
 							to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
-							className='bg-red-600 hover:bg-red/800 text-white font-bold py-2 px-2 rounded  flex
+							className='bg-red-600 hover:bg-red/800 text-white font-semibold py-1 px-2 rounded  flex
 							 items-center'
 						>
 							<Play className='size-5  fill-white' />
 							Play
 						</Link>
             <button
-							className='bg-white hover:bg-white/80 text-black font-bold py-2 ml-2 px-2 rounded  flex
+							className='flex bg-slate-500 rounded-lg bg-opacity-80 p-2 text-base text-white  py-1 ml-2 px-2
 							 items-center'
                onClick={(e) => addWatchList(e,trending?.id)}
 						>
@@ -109,7 +111,8 @@ export const HomeScreen = () => {
 
          </div>
       </div>
-      <div  ref={movieSectionRef} className="flex flex-col gap-10 bg-black py-10">
+      
+      <div  ref={movieSectionRef} className="px-0 mx-0 flex flex-col gap-10 bg-black py-10 ">
         {contentType==="movies" ? 
         MOVIE_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)
         : TV_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)}
