@@ -60,7 +60,7 @@ export const HomeScreen = () => {
       <div className='relative h-screen text-white'>
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
-        <div className="absolute top-0 left-0 w-full h-full bg-black/50 md:bg-black/40 lg:bg-black/0 xl:bg-black/0 -z-40" />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/40 md:bg-black/40 lg:bg-black/0 xl:bg-black/0 -z-40" />
           <img 
             src={imageSrc} 
             alt='img' 

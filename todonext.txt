@@ -1,5 +1,4 @@
 watchhistory(Optional)
-Library (Optional) (favorites, watchlater)
 
 Extensive testing
 deploy vercel+render

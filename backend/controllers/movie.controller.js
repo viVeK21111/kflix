@@ -41,6 +41,13 @@ export const addMovieWatch = async (req, res) => {
     const {id} = req.params;
     try{
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}?language=en-US`);
+        const user = await User.findById(req.user._id);
+
+        const isMovieExists = user.watchList.some(x => x.id === data.id);
+
+        if (isMovieExists) {
+            return res.json({ success: false, message: "Already exists in watchlist" });
+        }
         await User.findByIdAndUpdate(req.user._id,{
                     $push:{
                     watchList:{
@@ -66,6 +73,21 @@ export const getWatchlist = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export const removeFromWatchlist = async(req,res) => {
+    let {id} = req.params;
+    id = parseInt(id);
+    try {
+        await User.findByIdAndUpdate(req.user._id,{
+            $pull:{
+                watchList:{id:id}
+            }
+        });
+        res.json({success:true,message:"movie removed successfully"});
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+};
 export const getSimilarMovies = async(req,res) => {
     const {id} = req.params;
     try {

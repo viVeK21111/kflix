@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import axios from "axios";
+import { SquareX } from 'lucide-react';
+import toast from "react-hot-toast";
 
 const WatchlistPage = () => {
   const [numitems, setnumitems] = useState(6);
   const [datac, setdatac] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const getWatchlist = async () => {
@@ -22,6 +25,19 @@ const WatchlistPage = () => {
     };
     getWatchlist();
   }, []);
+
+  const removeFromWatchlist = (e,id) => {
+    e.preventDefault();
+    const remove = async (id) => {
+    const response = await axios.get(`api/v1/movies/removeWatch/${id}`);
+    if (response.data.success) {
+      setdatac(datac.filter((item) => item.id !== id));
+    }
+    toast.success(response.data.message);
+    };
+    remove(id);
+    setnumitems(prev=>prev-1);
+  }
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 bg-gray-900">
@@ -54,7 +70,10 @@ const WatchlistPage = () => {
             to={`/watch?id=${item?.id}&name=${item?.title}`}
             className="group relative block bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            {/* Image */}
+            <button onClick={(e) => removeFromWatchlist(e,item.id)} className='absolute rounded-full'>
+            <SquareX className='size-6 cursor-pointer fill-white' />
+            </button>
+            
             <img
               src={`${ORIGINAL_IMG_BASE_URL}${item?.image}`}
               className="w-full h-56 sm:h-64 object-cover rounded-lg transition-all"
@@ -71,7 +90,7 @@ const WatchlistPage = () => {
 
       {/* Load More Button */}
       {numitems < datac?.length && (
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 mb-2">
           <button
             onClick={() => setnumitems(prev => prev + 4)}
             className="px-2 py-2 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
@@ -80,10 +99,10 @@ const WatchlistPage = () => {
           </button>
         </div>
       )}
-      {numitems >= datac?.length && (
-        <div className="flex justify-center mb-2">
+      {numitems > datac?.length && numitems>6 && (
+        <div className="flex justify-center mb-2 mt-5">
           <button
-            onClick={() => setnumitems(prev => prev - 4)}
+            onClick={() => setnumitems(6)}
             className="px-2 py-2 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
           >
             Load Less

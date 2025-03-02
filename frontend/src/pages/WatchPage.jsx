@@ -131,7 +131,7 @@ function WatchPage() {
             src={`${ORIGINAL_IMG_BASE_URL}${ (data?.season && data?.seasons[Season]?.poster_path)|| data?.poster_path || data?.backdrop_path || data?.profile_path}`} 
             className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2 " 
              alt={data?.title || data?.name} />
-            <div className='ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
+            <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
             {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
             <button
 							className='bg-red-600 hover:bg-red/800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
