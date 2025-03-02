@@ -57,6 +57,15 @@ export const addMovieWatch = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export const getWatchlist = async(req,res) => { 
+    try {
+        res.json({success:true,content:req.user.watchList});
+    }
+    catch(error) {
+        console.log("Error in getting watchlist: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
 export const getSimilarMovies = async(req,res) => {
     const {id} = req.params;
     try {

@@ -17,9 +17,27 @@ export const HomeScreen = () => {
   const [ImageLoad,setImageLoad] = useState(true);
   const movieSectionRef = useRef(null);
   const {addWatch} = addWatchStore();
+  const [imageSrc, setImageSrc] = useState("");
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.poster_path);
+      } else {
+        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.backdrop_path);
+      }
+    };
+  
+    if (trending) handleResize(); 
+  
+    window.addEventListener("resize", handleResize); // Listen for resize
+    return () => window.removeEventListener("resize", handleResize); // Remove listener
+  }, [trending]); 
 
   useEffect(() => {
     setImageLoad(true);
+      setImageSrc("");
   },[contentType]);
 
   if (loading) {
@@ -35,16 +53,21 @@ export const HomeScreen = () => {
     console.log("id "+id);
     addWatch(id);
   }
+  
 
   return (
     <>
       <div className='relative h-screen text-white'>
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
-         <img src= {ORIGINAL_IMG_BASE_URL+trending?.backdrop_path} alt='img' className='absolute top-0 left-0 w-full h-full object-cover -z-50'
-          onLoad={() => setImageLoad(false)}
-         >
-         </img>
+        <div className="absolute top-0 left-0 w-full h-full bg-black/50 md:bg-black/40 lg:bg-black/0 xl:bg-black/0 -z-40" />
+          <img 
+            src={imageSrc} 
+            alt='img' 
+            className='absolute top-0 left-0 w-full h-full object-cover -z-50' 
+            onLoad={() => setImageLoad(false)}
+          />
+
          <div className='absolute top-0 left-0 w-full h-full bg-black/50 -z-50 aria-hidden:true'/>
          <div className='absolute top-0 left-0 w-full h-full flex flex-col justify-center px-8 md:px-16 lg:px-8'>
          <div className='bg-gradient-to-b from-black/70 via-transparent to-transparent absolute w-full h-full top-0 left-0 -z-10' />
@@ -54,12 +77,12 @@ export const HomeScreen = () => {
           <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl mt-20 font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
-          <p className='mt-2 flex text-lg font-bold'>
+          <p className='mt-2 text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
           {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"}
           </p>
           
           
-          {trending && trending?.overview  && ( <p className='mt-4 bg-slate-900 bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
+          {trending && trending?.overview  && ( <p className='mt-4 text-base bg-slate-900 bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
             
   
             <div className='flex mt-8'>

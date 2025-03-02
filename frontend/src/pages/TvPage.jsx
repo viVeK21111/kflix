@@ -14,6 +14,7 @@ const TvPage = () => {
   const [loading, setLoading] = useState(true);
   const [openSeason, setOpenSeason] = useState(null);
   const [numitemsm, setnumitemsm] = useState(6);
+  const [imageSrc, setImageSrc] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -23,6 +24,21 @@ const TvPage = () => {
       getSimilarTv(id);
     }
   }, [id]);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.poster_path);
+      } else {
+        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.backdrop_path);
+      }
+    };
+  
+    if (data) handleResize(); 
+  
+    window.addEventListener("resize", handleResize); // Listen for resize
+    return () => window.removeEventListener("resize", handleResize); // Remove listener
+  }, [data]); 
 
   const toggleSeason = (seasonNumber) => {
     setOpenSeason(openSeason === seasonNumber ? null : seasonNumber);
@@ -35,6 +51,7 @@ const TvPage = () => {
       </p>
     );
   }
+ 
 
   return (
     <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-2">
@@ -42,7 +59,7 @@ const TvPage = () => {
       <header className="relative mb-10">
         <img
           className="w-full h-[75vh] object-cover object-top rounded-t-lg shadow-2xl"
-          src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.poster_path}`}
+          src={imageSrc}
           alt="TV Show"
           style={{ objectPosition: "top 50%" }}
         />

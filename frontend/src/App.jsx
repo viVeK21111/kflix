@@ -13,6 +13,7 @@ import TvPage from "./pages/TvPage";
 import SearchPage from './pages/SearchPage'
 import ProfilePage from './pages/ProfilePage'
 import PersonPage from './pages/PersonPage'
+import WatchlistPage from "./pages/WatchlistPage";
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
       <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/'}/>} />
       <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />
       <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/'}/>} />
+      <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/'}/>} />
     </Routes>
     <Footer/>
     <Toaster/>

@@ -30,6 +30,7 @@ const Navbar = ({ movieSectionRef }) => {
                 <button className={`hover:underline ${contentType==='movies'? 'underline':''}`} onClick={() => scrollToMovies('movies')}>Movies</button>
                 <button className={`hover:underline ${contentType==='tv'? 'underline':""}`}onClick={() => scrollToMovies('tv')}>Tv shows</button>
                 <Link to='/chat' className='hover:underline'>Chat</Link>
+                <Link to='/watchlist' className='hover:underline'>Watchlist</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
                 <div className='flex bg-white rounded-lg px-2 py-1 font-semibold text-base'>
@@ -45,7 +46,7 @@ const Navbar = ({ movieSectionRef }) => {
                
             </div>
             {isMobileMenuOpen && (
-                <div  className='w-full sm:hidden mt-4 z-50 bg-black border rounded border-gray-800'>
+                <div  className='w-full sm:hidden mt-4 z-50 bg-slate-900 border rounded border-gray-800'>
                     <Link to='/' className='block hover:underline p-2' onClick={ () => {
                     toggleMobileMenu
                     scrollToMovies('movies')
@@ -55,6 +56,7 @@ const Navbar = ({ movieSectionRef }) => {
                         scrollToMovies('tv')
                         }}>Tv shows</Link>
                     <Link to='/chat' className='block hover:underline p-2' onClick={toggleMobileMenu}>Chat</Link>
+                    <Link to='/watchlist' className='block hover:underline p-2' onClick={toggleMobileMenu}>Watchlist</Link>
                 </div>
             )}
         </header>
