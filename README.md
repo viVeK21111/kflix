@@ -1,4 +1,4 @@
-![Homescreen](/homepage.png)
+![Homescreen](/homepage1.png)
 <br><br>
 AI powered chat (By Gemini 2.0 Flash )
 <br><br>
