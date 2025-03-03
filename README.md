@@ -1,3 +1,11 @@
+### Run the project
+-> cd backend <br>
+> npm start <br>
+-> cd frontend 
+> npm run dev 
+<br> <br>
+Note( run npm install to install all the node packages)
+
 ![Homescreen](/homepage1.png)
 <br><br>
 AI powered chat (By Gemini 2.0 Flash )
