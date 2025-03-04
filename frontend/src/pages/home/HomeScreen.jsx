@@ -10,6 +10,7 @@ import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
 import { useState,useEffect,useRef } from 'react';
 import { Clock } from 'lucide-react';
 import {addWatchStore} from '../../store/watchStore';
+import {Star} from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
@@ -79,8 +80,8 @@ export const HomeScreen = () => {
           <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl mt-20 font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
-          <p className='mt-2 text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
-          {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"}
+          <p className='flex mt-2 text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
+          {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"} | <p className="ml-1 flex"><Star className='size-6 fill-white/20 pt-1'/> {trending?.vote_average} </p>
           </p>
           
           

@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { Clock } from "lucide-react";
+import { Star } from 'lucide-react';
 
 const TvPage = () => {
   const location = useLocation();
@@ -67,13 +68,21 @@ const TvPage = () => {
           className="w-full h-[75vh] object-cover object-top rounded-t-lg shadow-2xl"
           src={imageSrc}
           alt="TV Show"
-          style={{ objectPosition: "top 50%" }}
         />
-        <div className="bottom-6 left-6 bg-sky-950 bg-opacity-70 p-3 rounded-b-lg">
-          <h1 className="text-2xl md:text-3xl xl:text-3xl 2xl:text-4xl font-bold mb-4 text-yellow-500">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+      <div className="relative md:absolute max-w-xl sm:max-w-3xl md:max-w-2xl  bg-slate-900 bg-opacity-60  bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4 rounded-t-lg">
+        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 text-yellow-500">
             {data?.name}
           </h1>
-          <p className="text-lg mb-5 max-w pb-3 border-b-2 border-white-400">{data?.overview}</p>
+          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-white-400">{data?.overview.length<600 ? data?.overview : data?.overview.slice(0,600)+". . ."}</p>
+          <p className="flex gap-2">
+          {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average} </p> 
+        </p>
+        </div>
+       
+        </header>
+        <div className="bottom-6 left-6 bg-sky-950 bg-opacity-70 p-3 rounded-b-lg">
+
           <div className="text-md">
             <p>
               <strong>Creator:</strong>{" "}
@@ -82,12 +91,6 @@ const TvPage = () => {
               data.created_by[0].name
                 ? data.created_by[0].name
                 : "Unknown"}
-            </p>
-            <p>
-              <strong>View:</strong> {data?.adult ? "18+" : "PG-13"}
-            </p>
-            <p>
-              <strong>Rating:</strong> {data?.vote_average}
             </p>
             <p>
               <strong>Total Seasons:</strong> {data?.number_of_seasons}
@@ -111,7 +114,7 @@ const TvPage = () => {
               <p className='ml-1'>Watch Later</p>
 						</button>
         </div>
-      </header>
+    
 
       {/* Seasons Section */}
       <div className="mt-6">
@@ -197,7 +200,7 @@ const TvPage = () => {
                   ))}
                 </div>
                 {numitemsm < datas?.slice(0,10).length && (
-          <div className="flex max-w-8xl justify-center items-center max-w-4xl mt-6">
+          <div className="flex max-w-8xl justify-center items-center mt-6">
             <button
               onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
               className="px-3 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg  transition-all"

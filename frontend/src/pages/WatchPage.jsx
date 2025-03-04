@@ -22,8 +22,8 @@ function WatchPage() {
   const [Loading,setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [directorId, setdirectorId] = useState(null);
-  const [numitems,setnumitems] = useState(6);
-  const [numitemsm,setnumitemsm] = useState(6);
+  const [numitems,setnumitems] = useState(5);
+  const [numitemsm,setnumitemsm] = useState(4);
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
   const Season = queryParams.get('season')
@@ -43,6 +43,8 @@ function WatchPage() {
       window.scrollTo(0, 0);
 
     }
+    setnumitems(5);
+    setnumitemsm(4);
   }, [Id, getMoviedetails]);
 
   function getDirector(crew) {
@@ -81,88 +83,104 @@ function WatchPage() {
         return <div className="text-white text-center">Invalid video ID</div>;
       }
       return (
-        <div className={`page min-h-screen ${bgColorClass} overflow-auto flex flex-col items-center p-4`}>
-         <header className='flex items-center p-4'>
-          <Link to={'/'} className='flex items-center'>
+        <div className={`page min-h-screen ${bgColorClass} overflow-auto  p-4`}>
+    <div className='flex flex-col items-center'>
+      <header className='flex items-center p-4'>
+        <Link to={'/'} className='flex items-center'>
           <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
-          </Link>
-          </header>
-          {/* Video Container */}
-          <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
-            {/* Video Player */}
+        </Link>
+      </header>
 
-            <iframe
-              allowFullScreen
-              src={src}
-              className="w-full aspect-video"
-              onLoad={() => setIsLoading(false)} // Hide loader when iframe loads
-            ></iframe>
+      {/* Video Container */}
+      <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
+        {/* Video Player */}
+        <iframe
+          allowFullScreen
+          src={src}
+          className="w-full aspect-video"
+          onLoad={() => setIsLoading(false)} // Hide loader when iframe loads
+        ></iframe>
 
-            {isLoading && (
-              <div className="w-full flex justify-center items-center">
-                <p className='text-white'>Loading...🍿</p>
-              </div>
-            )}
+        {isLoading && (
+          <div className="w-full flex justify-center items-center">
+            <p className='text-white'>Loading...🍿</p>
           </div>
-        
-          
-          <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
-          <div className="mt-8 text-center">
-            <h1 className={`lg:text-2xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3"`}>Now Playing: <span className='ml-2 font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}`: ""  }</span> </h1>
-             
-          </div>
-          <button className={`flex mt-3 ml-auto p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}> <Lightbulb color={text==='text-white' ? 'white' : 'black'}/>Lights off</button>
-          </div> 
-          {Loading ? (
-            <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
-          ):(
-            <div className='w-full max-w-4xl'>
-          {datac && (
-             <div className='text-white flex w-full max-w-4xl mt-2'> Director: <Link to={'/person/details/?id='+directorId+"&name="+dir} className='hover:underline hover:text-white'><p className='font-semibold ml-1'> {dir} </p>
-             </Link> </div>
-           
+        )}
+      </div>
+
+      <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
+        <div className="mt-8 text-center">
+          <h1 className={`lg:text-2xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
+            Now Playing: <span className='ml-2 font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}` : ""}</span>
+          </h1>
+        </div>
+        <button className={`flex mt-3 ml-auto p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
+          <Lightbulb color={text === 'text-white' ? 'white' : 'black'} />Lights off
+        </button>
+      </div>
+
+      {Loading ? (
+        <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
+      ) : (
+        <div className='w-full max-w-4xl'>
+          {datac && !Season && (
+            <div className='text-white flex w-full max-w-4xl mt-2'> Director:
+              <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
+                <p className='font-semibold ml-1'> {dir} </p>
+              </Link>
+            </div>
           )}
           {Season && data?.created_by[0] && (
-            <div className='text-white flex w-full max-w-4xl mt-2'> Created by: <Link to={'/person/details/?id='+data?.created_by[0].id+"&name="+data?.created_by[0].name} className='hover:underline hover:text-white'><p className='font-semibold ml-1'> {data.created_by[0].name} </p>
-             </Link> </div>
-          )}
-          {bgColorClass!='bg-black' && (
-            <div className='w-full max-w-4xl'> 
-             <div className='text-left w-full  flex flex-col sm:flex-col md:flex-row xl:flow-rowlg:flex-row max-w-4xl mt-10 items-start'>
-             <img 
-            src={`${ORIGINAL_IMG_BASE_URL}${ (data?.season && data?.seasons[Season]?.poster_path)|| data?.poster_path || data?.backdrop_path || data?.profile_path}`} 
-            className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2 " 
-             alt={data?.title || data?.name} />
-            <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
-            {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
-            {!Season && (
-              <button
-							className='bg-red-600 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
-							 items-center'
-               onClick={(e) => addWatchList(e,data?.id)}
-						>
-							<Clock className='size-5' />
-              <p className='ml-1'>Watch Later</p>
-						</button>
-            )}
+            <div className='text-white flex w-full max-w-4xl mt-2'> Created by:
+              <Link to={'/person/details/?id=' + data?.created_by[0].id + "&name=" + data?.created_by[0].name} className='hover:underline hover:text-white'>
+                <p className='font-semibold ml-1'> {data.created_by[0].name} </p>
+              </Link>
             </div>
-           
-         
+          )}
+          {bgColorClass !== 'bg-black' && (
+            <div className='w-full max-w-4xl'>
+              <div className='text-left w-full flex flex-col sm:flex-col md:flex-row xl:flex-row lg:flex-row max-w-4xl mt-10 items-start'>
+                <img
+                  src={`${ORIGINAL_IMG_BASE_URL}${(data?.season && data?.seasons[Season]?.poster_path) || data?.poster_path || data?.backdrop_path || data?.profile_path}`}
+                  className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
+                  alt={data?.title || data?.name}
+                />
+                <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
+                  {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
+                  {!Season && (
+                    <button
+                      className='bg-red-600 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
+                      onClick={(e) => addWatchList(e, data?.id)}
+                    >
+                      <Clock className='size-5' />
+                      <p className='ml-1'>Watch Later</p>
+                    </button>
+                  )}
+                </div>
               </div>
-        <div className='w-full max-w-4xl  mt-2'>
-        {(data?.release_date || data?.first_air_date) && (
-                <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
-                )}
-                <span className='text-white font-medium'>Genres: </span>
-                {data?.genres && data?.genres.map((item,index) => (
-                  <span className='gap-2 text-white' key={item.id}> {item.name} </span>
-              ))}
+              <div className='w-full max-w-4xl mt-2'>
+            {(data?.release_date || data?.first_air_date) && (
+              <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
+            )}
+            <span className='text-white font-medium'>Genres: </span>
+            {data?.genres && data?.genres.map((item, index) => (
+              <span className='gap-2 text-white' key={item.id}> {item.name} </span>
+            ))}
+          </div>
+
+            </div>
+          )}
+
+         
         </div>
-        {!data?.seasons && (
-          <>
-                <div className='text-white w-full max-w-4xl mt-3 text-xl'><h3 className='font-bold'>Cast</h3></div>
-                  <div className="grid grid-cols-2 w-full max-w-4xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
-                  {datac.cast.slice(0,numitems).map((item, index) => (
+      )}
+    </div>
+        
+        {bgColorClass!='bg-black'  && !data?.seasons && (
+          <div className=''>
+                <div className='flex text-white max-w-8xl border-t-2 border-yellow-500 p-2 mt-3 text-xl'><h3 className='font-bold'>Cast</h3></div>
+                  <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-5">
+                  {datac?.cast.slice(0,numitems).map((item, index) => (
                     <Link 
                       key={item.id || index} 
                       to={'/person/details'+`/?id=${item?.id}&name=${item?.name}`}
@@ -183,19 +201,19 @@ function WatchPage() {
                     </Link>
                   ))}
                 </div>
-                {numitems < datac.cast.slice(0,10).length && (
-          <div className="flex w-full justify-center max-w-4xl mt-6">
+                {numitems < datac?.cast.slice(0,10).length && (
+          <div className="flex w-full justify-center max-w-8xl mt-5 mb-3">
             <button
-              onClick={() => setnumitems(prev => prev + 4)} // Show 6 more items
+              onClick={() => setnumitems(prev => prev + 4)} // Show 4 more items
               className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
             >
               Load More
             </button>
           </div>
         )}
-        <div className='text-white w-full max-w-4xl mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
-        <div className="grid grid-cols-2 w-full max-w-4xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
-                  {datas.slice(0,numitemsm).map((item, index) => (
+        <div className='text-white w-full max-w-8xl border-t-2 border-yellow-500 p-2 mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
+        <div className="grid grid-cols-2 w-full max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
+                  {datas?.slice(0,numitemsm).map((item, index) => (
                     <Link 
                       key={item.id || index} 
                       to={'/watch/'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
@@ -216,8 +234,8 @@ function WatchPage() {
                     </Link>
                   ))}
                 </div>
-                {numitemsm < datas.slice(0,10).length && (
-          <div className="flex w-full justify-center max-w-4xl mt-6">
+                {numitemsm < datas?.slice(0,10).length && (
+          <div className="flex w-full justify-center max-w-8xl mt-6">
             <button
               onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
               className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
@@ -226,19 +244,11 @@ function WatchPage() {
             </button>
           </div>
         )}
-        </>
+        </div>
         )}
         
         </div>
-        
-          )} 
-           
-          </div>
-          )
-          
-          }
-        </div>
       );
-    };
+}
 export default WatchPage;
 //<span className="mt-2 w-full text-left flex items-center whitespace-nowrap text-gray-400">Enjoy your favorite movie in high quality!</span>
