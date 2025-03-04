@@ -17,8 +17,13 @@ export default function Chatbot() {
   console.log("contentType "+contentType);
   //console.log("data "+data);
   return (
-    <div className='h-screen w-full chat-bg overflow-auto'>
-       <header className='max-w-6xl flex items-left justify-left p-4'>
+      <div
+        className='h-screen w-full chat-bg overflow-auto'
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('batman.jpg')`,
+          backgroundSize: 'cover',
+        }}
+      >       <header className='max-w-6xl flex items-left justify-left p-4'>
         <Link to={'/'} className='flex items-center'>
         <img src={'/kflix2.png'} alt='logo' className='w-52' />
         </Link>

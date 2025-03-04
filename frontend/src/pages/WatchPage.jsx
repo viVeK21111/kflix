@@ -63,10 +63,12 @@ function WatchPage() {
 
   let src = ""
   if(!Season) {
-    src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
+    //src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
+    src = `https://embed.filmu.fun/media/tmdb-movie-${Id}`
   }
   else {
-   src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
+   //src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
+   src = `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}`
   }
    const Lightsout = (e) => {
     e.preventDefault();

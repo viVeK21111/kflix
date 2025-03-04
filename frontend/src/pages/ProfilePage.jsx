@@ -48,7 +48,7 @@ export default function ProfilePage(){
         <h2 className="text-xl font-semibold mb-4 text-yellow-400 border-b border-yellow-500 pb-2">
           Search History
         </h2>
-        <button className="flex p-1 ml-auto mb-2 bg-red-500 text-white text-base font-normal rounded-lg hover:bg-red-700 transition-all" onClick={ClearButton}>Clear History</button>
+        <button className="flex p-1 ml-auto mb-2 bg-red-600 text-white text-base font-normal rounded-md hover:bg-red-700 transition-all" onClick={ClearButton}>Clear History</button>
 
         {datalocal?.searchHistory?.length > 0 ? (
           <>

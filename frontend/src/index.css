@@ -5,7 +5,3 @@
 .hero-bg {
   background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.2)),url('hero.png');
 }
-.chat-bg {
-  background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.2)),url('batman.jpg');
-  background-size: cover;
-}
