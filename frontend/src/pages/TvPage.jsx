@@ -16,7 +16,7 @@ const TvPage = () => {
   const { getTvdetails, data } = DetailsStore();
   const [loading, setLoading] = useState(true);
   const [openSeason, setOpenSeason] = useState(null);
-  const [numitemsm, setnumitemsm] = useState(6);
+  const [numitemsm, setnumitemsm] = useState(5);
   const [imageSrc, setImageSrc] = useState("");
   const {addTv} = addWatchStore();
 
@@ -63,25 +63,25 @@ const TvPage = () => {
   return (
     <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-2">
       
-      <header className="relative mb-10">
+      <header className="relative ">
         <img
           className="w-full h-[75vh] object-cover object-top rounded-t-lg shadow-2xl"
           src={imageSrc}
           alt="TV Show"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-      <div className="relative md:absolute max-w-xl sm:max-w-3xl md:max-w-2xl  bg-slate-900 bg-opacity-60  bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4 rounded-t-lg">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+      <div className="relative lg:absolute lg:max-w-3xl  bg-slate-900 bg-opacity-60  bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4 rounded-t-lg">
         <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 text-yellow-500">
             {data?.name}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-white-400">{data?.overview.length<600 ? data?.overview : data?.overview.slice(0,600)+". . ."}</p>
+          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-white-400">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
           <p className="flex gap-2">
-          {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average} </p> 
+          {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average}  </p> 
         </p>
         </div>
        
         </header>
-        <div className="bottom-6 left-6 bg-sky-950 bg-opacity-70 p-3 rounded-b-lg">
+        <div className=" bg-slate-900 bg-opacity-70 p-3 rounded-b-lg">
 
           <div className="text-md">
             <p>
@@ -106,7 +106,7 @@ const TvPage = () => {
             </p>
           </div>
           <button
-							className='bg-blue-600 hover:bg-blue-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded  flex
+							className='bg-blue-600 hover:bg-blue-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded-lg  flex
 							 items-center'
                onClick={(e) => addWatchList(e,data?.id)}
 						>
@@ -202,8 +202,8 @@ const TvPage = () => {
                 {numitemsm < datas?.slice(0,10).length && (
           <div className="flex max-w-8xl justify-center items-center mt-6">
             <button
-              onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
-              className="px-3 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg  transition-all"
+              onClick={() => setnumitemsm(prev => prev + 5)} // Show 6 more items
+              className="px-2 py-1 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg  transition-all"
             >
               Load More
             </button>

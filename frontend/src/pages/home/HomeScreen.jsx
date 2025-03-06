@@ -11,6 +11,7 @@ import { useState,useEffect,useRef } from 'react';
 import { Clock } from 'lucide-react';
 import {addWatchStore} from '../../store/watchStore';
 import {Star} from 'lucide-react';
+import { TvMinimalPlay } from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
@@ -63,7 +64,7 @@ export const HomeScreen = () => {
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
         
-        <div className="absolute top-0 left-0 w-full h-full bg-black/40 md:bg-black/40 lg:bg-black/0 xl:bg-black/0 -z-40" />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/40  lg:bg-black/30 xl:bg-black/20 -z-40" />
           <img 
             src={imageSrc} 
             alt='img' 
@@ -73,37 +74,45 @@ export const HomeScreen = () => {
 
          <div className='absolute top-0 left-0 w-full h-[80vh] bg-black/50 -z-50 aria-hidden:true'/>
          <div className='absolute top-0 left-0 w-full h-[80vh] flex flex-col justify-center px-4'>
-         <div className='bg-gradient-to-b from-black/70 via-transparent to-transparent absolute w-full h-[80vh] top-0 left-0 -z-10' />
+         <div className='absolute bg-gradient-to-b from-black/70 via-transparent to-transparent w-full h-[80vh] top-0 left-0 -z-10' />
 
-         <div className='max-w-2xl'>
-          <div> <p className='text-white-600 text-2xl mt-60 animate-pulse'>Trending...</p> </div>
+         <div className='absolute bottom-12 left-3 max-w-2xl'>
+          <div> <p className='text-white-600 text-2xl mt-auto animate-pulse'>Trending...</p> </div>
           <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl mt-20 font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
           <p className='flex mt-2 text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
           {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"} | <p className="ml-1 flex"><Star className='size-6 fill-white/20 pt-1'/> {trending?.vote_average} </p>
           </p>
-          
+      
           
           {trending && trending?.overview  && ( <p className='mt-2 text-base bg-slate-900 bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
             
   
-            <div className='flex mt-8'>
+            <div className='absolute flex mt-3'>
 						<Link
 							to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
-							className='bg-red-600 hover:bg-red/800 text-white font-semibold py-1 px-2 rounded  flex
+							className='bg-red-600 hover:bg-red-800 text-white font-semibold py-1 px-2 rounded  flex
 							 items-center'
 						>
-							<Play className='size-5  fill-white' />
-							Play
+              {contentType==='movies' && (<div className='flex '>
+              <Play className='size-6 fill-white p-1' />
+              <p className='font-semibold'>Play</p>
+						 </div>)
+              }
+              {contentType==='tv' && (<div className='flex '>
+              <TvMinimalPlay className='size-7 p-1' />
+              <p className='font-semibold'>Episodes</p>
+						 </div>)
+              }
 						</Link>
             <button
-							className='flex bg-slate-500 rounded-lg bg-opacity-80 p-2 text-base text-white  py-1 ml-2 px-2
+							className='flex bg-slate-600 hover:bg-slate-700 rounded-lg bg-opacity-80 text-base text-white ml-2 px-2
 							 items-center'
                onClick={(e) => addWatchList(e,trending?.id)}
 						>
 							<Clock className='size-5' />
-              <p className='ml-1'>Watch Later</p>
+              <p className='ml-1 font-semibold'>Watch Later</p>
 						</button>
 						
 					</div>

@@ -83,8 +83,8 @@ function WatchPage() {
         return <div className="text-white text-center">Invalid video ID</div>;
       }
       return (
-        <div className={`page min-h-screen ${bgColorClass} overflow-auto  p-4`}>
-    <div className='flex flex-col items-center'>
+        <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
+    <div className='flex flex-col items-center p-3'>
       <header className='flex items-center p-4'>
         <Link to={'/'} className='flex items-center'>
           <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
@@ -92,7 +92,7 @@ function WatchPage() {
       </header>
 
       {/* Video Container */}
-      <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
+      <div className="w-full max-w-3xl lg:max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
         {/* Video Player */}
         <iframe
           allowFullScreen
@@ -177,21 +177,21 @@ function WatchPage() {
     </div>
         
         {bgColorClass!='bg-black'  && !data?.seasons && (
-          <div className=''>
-                <div className='flex text-white max-w-8xl border-t-2 border-yellow-500 p-2 mt-3 text-xl'><h3 className='font-bold'>Cast</h3></div>
-                  <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-5">
+          <div className='bg-black w-full'>
+                <div className='flex text-white border-t-2 border-yellow-500 p-1 mt-6 text-xl'><h3 className='font-bold'>Cast</h3></div>
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8 px-1 sm:px-5">
                   {datac?.cast.slice(0,numitems).map((item, index) => (
                     <Link 
                       key={item.id || index} 
                       to={'/person/details'+`/?id=${item?.id}&name=${item?.name}`}
-                      className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                      className="flex flex-col items-center bg-opacity-60 shadow-md hover:scale-105 transition-transform"
                     >
                       <img 
                         src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                        className="w-full h-48 object-cover rounded-lg" 
+                        className="object-cover size-60 aspect-square rounded-full" 
                         alt={item?.title || item?.name} 
                       />
-                      <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                      <h3 className=" text-sm sm:text-base font-bold text-white mt-2 truncate">
                         {item.title || item.name}
                       </h3>
                       
@@ -202,22 +202,32 @@ function WatchPage() {
                   ))}
                 </div>
                 {numitems < datac?.cast.slice(0,10).length && (
-          <div className="flex w-full justify-center max-w-8xl mt-5 mb-3">
+          <div className="flex w-full justify-end mt-5 mb-3">
             <button
               onClick={() => setnumitems(prev => prev + 4)} // Show 4 more items
-              className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+              className="px-2 py-1 mr-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
             >
               Load More
             </button>
           </div>
         )}
-        <div className='text-white w-full max-w-8xl border-t-2 border-yellow-500 p-2 mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
-        <div className="grid grid-cols-2 w-full max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
+         {numitems >= 10 && (
+        <div className="flex w-full justify-center max-w-8xl mt-6">
+          <button
+            onClick={() => setnumitems(5)}
+            className="px-2 py-1 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
+          >
+            Load Less
+          </button>
+        </div>
+      )}
+        <div className='text-white w-full  border-t-2 border-yellow-500 p-1 mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
+        <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8 px-4 sm:px-5">
                   {datas?.slice(0,numitemsm).map((item, index) => (
                     <Link 
                       key={item.id || index} 
                       to={'/watch/'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
-                      className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                      className="block bg-gray-800 bg-opacity-60 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
                     >
                       <img 
                         src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
@@ -235,15 +245,25 @@ function WatchPage() {
                   ))}
                 </div>
                 {numitemsm < datas?.slice(0,10).length && (
-          <div className="flex w-full justify-center max-w-8xl mt-6">
+          <div className="flex w-full justify-end  mt-6">
             <button
               onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
-              className="px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+              className="px-2 py-1 mb-3 mr-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
             >
               Load More
             </button>
           </div>
         )}
+        {numitemsm >= 10 && (
+        <div className="flex w-full justify-center mt-6">
+          <button
+            onClick={() => setnumitemsm(4)}
+            className="px-2 py-1 mb-2 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
+          >
+            Load Less
+          </button>
+        </div>
+      )}
         </div>
         )}
         
