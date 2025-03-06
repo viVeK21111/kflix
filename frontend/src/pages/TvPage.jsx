@@ -19,6 +19,7 @@ const TvPage = () => {
   const [numitemsm, setnumitemsm] = useState(5);
   const [imageSrc, setImageSrc] = useState("");
   const {addTv} = addWatchStore();
+ 
 
   useEffect(() => {
     if (id) {
@@ -32,7 +33,7 @@ const TvPage = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.poster_path);
+        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.backdrop_path);
       } else {
         setImageSrc(ORIGINAL_IMG_BASE_URL + data?.backdrop_path);
       }
@@ -65,13 +66,13 @@ const TvPage = () => {
       
       <header className="relative ">
         <img
-          className="w-full h-[75vh] object-cover object-top rounded-t-lg shadow-2xl"
+          className="w-full md:h-[80vh] object-cover object-top rounded-t-lg shadow-2xl"
           src={imageSrc}
           alt="TV Show"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
-      <div className="relative lg:absolute lg:max-w-3xl  bg-slate-900 bg-opacity-60  bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4 rounded-t-lg">
-        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 text-yellow-500">
+        <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+      <div className="md:absolute lg:max-w-3xl bottom-2 left-3  rounded-t-lg">
+        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
             {data?.name}
           </h1>
           <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-white-400">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
@@ -81,7 +82,7 @@ const TvPage = () => {
         </div>
        
         </header>
-        <div className=" bg-slate-900 bg-opacity-70 p-3 rounded-b-lg">
+        <div className=" bg-slate-900 bg-opacity-70 md:p-3 rounded-b-lg">
 
           <div className="text-md">
             <p>

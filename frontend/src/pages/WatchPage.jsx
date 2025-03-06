@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Clock } from 'lucide-react';
+import { Clock,Star,Play } from 'lucide-react';
 
 function WatchPage() {
   const location = useLocation();
@@ -30,8 +30,11 @@ function WatchPage() {
   const Episode = queryParams.get('episode')
   localStorage.setItem("numitems",6);
   const {addWatch} = addWatchStore();
+  const [isplay,setisplay] = useState(false);
 
   useEffect(() => {
+    setisplay(false);
+    setLoading(true)
     if(Season) {
       getTvdetails(Id).finally(()=> setLoading(false));
       window.scrollTo(0, 0);
@@ -84,15 +87,61 @@ function WatchPage() {
       }
       return (
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
-    <div className='flex flex-col items-center p-3'>
-      <header className='flex items-center p-4'>
-        <Link to={'/'} className='flex items-center'>
-          <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
-        </Link>
-      </header>
+    <div className='p-3 md:p-0 '>
+    {(isplay || Season) && (
+      <header className='flex items-center justify-center p-4'>
+      <Link to={'/'} className='flex items-center'>
+        <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
+      </Link>
+    </header>
+    )}
+     
+      {Loading && (
+        <div className="w-full flex mt-20 justify-center items-center">
+        <p className='text-white '>Loading...</p>
+      </div>
+      )}
 
+      { !isplay && !Loading && !Season && (
+        <div className='relative'>
+          <img src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path}`}
+          className='w-full object-top object-cover h-full md:h-[80vh] rounded-t-lg shadow-2xl'
+          ></img>
+          <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+          <div className="md:absolute text-white lg:max-w-3xl  bottom-2 left-3">
+        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
+            {data?.title}
+          </h1>
+          <p className="text-sm md:text-base lg:text-base mb-2 max-w pb-3 ">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
+          <p className="flex gap-2">
+          {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average}  
+      
+            <button className='flex ml-3 bg-red-600 items-center hover:bg-red-800 px-2 rounded-sm'
+            onClick={() => setisplay(true)}
+            >
+            <Play className='size-6 fill-white p-1'/>
+            <p className='font-semibold'>Play</p>
+            </button>
+             <button
+              className='bg-blue-700 hover:bg-blue-800 text-white text-sm py-1 ml-2 px-2 rounded-lg  flex
+              items-center'
+              onClick={(e) => addWatchList(e,data?.id)}
+            >
+          <Clock className='size-5' />
+            <p className='ml-1'>Watch Later</p>
+            </button>
+            
+          </p> 
+        </p>
+        </div>
+        </div>
+      )}
+
+    
       {/* Video Container */}
-      <div className="w-full max-w-3xl lg:max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
+      {(isplay || Season) && (
+        <div className='flex flex-col items-center'>
+        <div className="w-full max-w-3xl lg:max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
         {/* Video Player */}
         <iframe
           allowFullScreen
@@ -107,6 +156,7 @@ function WatchPage() {
           </div>
         )}
       </div>
+     
 
       <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
         <div className="mt-8 text-center">
@@ -170,25 +220,26 @@ function WatchPage() {
 
             </div>
           )}
-
          
         </div>
       )}
+      </div>
+    )}
     </div>
         
-        {bgColorClass!='bg-black'  && !data?.seasons && (
+        {bgColorClass!='bg-black'  && !data?.seasons && !Loading && (
           <div className='bg-black w-full'>
                 <div className='flex text-white border-t-2 border-yellow-500 p-1 mt-6 text-xl'><h3 className='font-bold'>Cast</h3></div>
-                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8 px-1 sm:px-5">
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
                   {datac?.cast.slice(0,numitems).map((item, index) => (
-                    <Link 
+                    <Link
                       key={item.id || index} 
                       to={'/person/details'+`/?id=${item?.id}&name=${item?.name}`}
                       className="flex flex-col items-center bg-opacity-60 shadow-md hover:scale-105 transition-transform"
                     >
                       <img 
                         src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                        className="object-cover size-60 aspect-square rounded-full" 
+                        className="object-cover size-48 aspect-square rounded-full" 
                         alt={item?.title || item?.name} 
                       />
                       <h3 className=" text-sm sm:text-base font-bold text-white mt-2 truncate">
