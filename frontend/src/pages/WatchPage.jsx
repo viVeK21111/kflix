@@ -31,6 +31,7 @@ function WatchPage() {
   localStorage.setItem("numitems",6);
   const {addWatch} = addWatchStore();
   const [isplay,setisplay] = useState(false);
+  const [srcIndex, setSrcIndex] = useState(0);
 
   useEffect(() => {
     setisplay(false);
@@ -66,15 +67,7 @@ function WatchPage() {
     addWatch(id);
   }
 
-  let src = ""
-  if(!Season) {
-    //src = `https://vidsrc.dev/embed/movie/${Id}?autoplay=0`
-    src = `https://embed.filmu.fun/media/tmdb-movie-${Id}`
-  }
-  else {
-   //src = `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}`
-   src = `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}`
-  }
+
    const Lightsout = (e) => {
     e.preventDefault();
       if(bgColorClass==='bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900' || bgColorClass=== 'bg-slate-950') setBgColorClass('bg-black');
@@ -82,6 +75,23 @@ function WatchPage() {
       if(text==='text-white') setText('text-black');
       else setText('text-white');
    }
+   let sources;
+   if(!Season) {
+    sources = [
+      { name: "Source1 (Vidbinge)", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
+      { name: "Source2 (Filmu)", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
+    ];
+   }
+   else {
+    sources = [
+      { name: "Source1 (Vidbinge)", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source2 (Filmu)", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
+    ];
+   }
+  
+  const handleSourceChange = (e) => {
+    setSrcIndex(Number(e.target.value)); // Change the source based on selection
+  };
     if (!Id) {
         return <div className="text-white text-center">Invalid video ID</div>;
       }
@@ -147,7 +157,7 @@ function WatchPage() {
         {/* Video Player */}
         <iframe
           allowFullScreen
-          src={src}
+          src={sources[srcIndex].url}
           className="w-full aspect-video"
           onLoad={() => setIsLoading(false)} // Hide loader when iframe loads
         ></iframe>
@@ -157,6 +167,19 @@ function WatchPage() {
             <p className='text-white'>Loading...🍿</p>
           </div>
         )}
+        <div>
+        <select
+          className="bg-gray-800 text-xs md:text-sm lg:text-md text-white px-1 py-1 rounded-md"
+          value={srcIndex}
+          onChange={handleSourceChange}
+        >
+          {sources.map((server, index) => (
+            <option key={index} value={index}>
+              {server.name}
+            </option>
+          ))}
+        </select>
+      </div>
       </div>
      
 
