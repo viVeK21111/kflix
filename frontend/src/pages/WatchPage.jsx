@@ -16,7 +16,7 @@ function WatchPage() {
   const {getMoviedetails,getTvdetails,data}  = DetailsStore();
   const {getSimilarMovies,datas} = SimilarStore();
   const {datac,getCredits} = creditStore();
-  const [bgColorClass, setBgColorClass] = useState('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
+  const [bgColorClass, setBgColorClass] = useState(window.innerWidth < 768 ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900' : "bg-slate-950");
   const [text,setText] = useState('text-white');
   const [dir,setDir] = useState("");
   const [Loading,setLoading] = useState(true);
@@ -77,8 +77,8 @@ function WatchPage() {
   }
    const Lightsout = (e) => {
     e.preventDefault();
-      if(bgColorClass==='bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900') setBgColorClass('bg-black');
-      else setBgColorClass('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
+      if(bgColorClass==='bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900' || bgColorClass=== 'bg-slate-950') setBgColorClass('bg-black');
+      else setBgColorClass(window.innerWidth < 768 ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900' : "bg-slate-950");
       if(text==='text-white') setText('text-black');
       else setText('text-white');
    }
@@ -105,18 +105,19 @@ function WatchPage() {
       { !isplay && !Loading && !Season && (
         <div className='relative'>
           <img src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path}`}
-          className='w-full object-top object-cover h-full md:h-[80vh] rounded-t-lg shadow-2xl'
+          className='w-full object-top object-cover h-full md:h-[85vh]  shadow-2xl'
           ></img>
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
-          <div className="md:absolute text-white lg:max-w-3xl  bottom-2 left-3">
+          <div className="md:absolute text-white lg:max-w-3xl  bottom-5 left-3">
         <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
             {data?.title}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-2 max-w pb-3 ">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
+          <p className="text-sm md:text-base mb-2 max-w pb-3 ">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
+          <p className='mb-1 text-sm md:text-base'> {data?.release_date?.split("")} </p>
           <p className="flex gap-2">
           {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average}  
       
-            <button className='flex ml-3 bg-red-600 items-center hover:bg-red-800 px-2 rounded-sm'
+            <button className='flex ml-3 bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
             onClick={() => setisplay(true)}
             >
             <Play className='size-6 fill-white p-1'/>
@@ -139,7 +140,8 @@ function WatchPage() {
 
     
       {/* Video Container */}
-      {(isplay || Season) && (
+      {(isplay || Season) &&  (
+        
         <div className='flex flex-col items-center'>
         <div className="w-full max-w-3xl lg:max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
         {/* Video Player */}
@@ -160,11 +162,11 @@ function WatchPage() {
 
       <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
         <div className="mt-8 text-center">
-          <h1 className={`lg:text-2xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
-            Now Playing: <span className='ml-2 font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}` : ""}</span>
+          <h1 className={`lg:text-2xl md:text-xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
+            Now Playing: <span className='font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}` : ""}</span>
           </h1>
         </div>
-        <button className={`flex mt-3 ml-auto p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
+        <button className={`flex mt-3 ml-auto text-sm md:text-lg p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
           <Lightbulb color={text === 'text-white' ? 'white' : 'black'} />Lights off
         </button>
       </div>
@@ -228,8 +230,8 @@ function WatchPage() {
     </div>
         
         {bgColorClass!='bg-black'  && !data?.seasons && !Loading && (
-          <div className='bg-black w-full'>
-                <div className='flex text-white border-t-2 border-yellow-500 p-1 mt-6 text-xl'><h3 className='font-bold'>Cast</h3></div>
+          <div className='bg-black w-full mt-5'>
+                <div className='flex text-white border-t-2 border-yellow-500 p-1 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
                   {datac?.cast.slice(0,numitems).map((item, index) => (
                     <Link
@@ -239,7 +241,7 @@ function WatchPage() {
                     >
                       <img 
                         src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                        className="object-cover size-48 aspect-square rounded-full" 
+                        className="object-cover size-36 md:size-48 aspect-square rounded-full" 
                         alt={item?.title || item?.name} 
                       />
                       <h3 className=" text-sm sm:text-base font-bold text-white mt-2 truncate">
