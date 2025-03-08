@@ -41,3 +41,7 @@ Streaming by filmu
 -> Dedicated Search to search tv,movies or person <br>
 -> User authentication (only if loggedin the user can access the content) <br>
 -> Similar movies or tv shows are displayed when a particular content is viewed by the user <br>
+
+### Deployment 
+Frontend deployed on vercel, backend deployed on render. <br>
+Link: https://kflix-mocha.vercel.app/
