@@ -1,0 +1,6 @@
+PORT=5000
+MONGO_URI=
+NODE_ENV=production
+JWT_SECRET=my_really_hard_secret
+TMDB_API_KEY=
+GOOGLE_API_KEY=
