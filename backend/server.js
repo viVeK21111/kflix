@@ -15,10 +15,10 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({ origin: "https://kflix-mocha.vercel.app",credentials:true })); // this allows the frontend url to send requests to the backend
-
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
+
+app.use(cors({ origin: "https://kflix-mocha.vercel.app",credentials:true })); // this allows the frontend url to send requests to the backend
 
 app.use('/api/v1/auth',authRoutes);
 app.use('/api/v1/movies',movieRoutes);
@@ -32,7 +32,7 @@ app.use('/api/v1/chat',chatRoutes);
 //    connectDB();
 //});
 
-app.listen(PORT, () => { // server defualt listens on 0.0.0.0 (within the network) and also localhost on port
+app.listen(PORT || 5000, () => { // server defualt listens on 0.0.0.0 (within the network) and also localhost on port
     console.log(`Server started on port:${PORT}`);
     connectDB();
 });
