@@ -34,6 +34,7 @@ function WatchPage() {
   const [isplay,setisplay] = useState(false);
   const [srcIndex, setSrcIndex] = useState(0);
   const [imageload,setimageload] = useState(true);
+  const [readov,setreadov] = useState(300);
 
   useEffect(() => {
     setisplay(false);
@@ -127,7 +128,16 @@ function WatchPage() {
         <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
             {data?.title}
           </h1>
-          <p className="text-sm md:text-base mb-2 max-w pb-3 ">{data?.overview.length<300 ? data?.overview : data?.overview.slice(0,300)+". . ."}</p>
+          <p className="text-sm md:text-base lg:text-base mb-3 max-w pb-3">
+            {data?.overview.length < readov ? data?.overview : ( 
+              <> 
+            {data?.overview.slice(0, readov)}
+            {readov<data?.overview.length && (
+               <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(data?.overview.length)}>...Read more</button> 
+            )}
+            </>
+          )}
+          </p>
           <p className='mb-1 text-sm md:text-base'> {data?.release_date?.split("")} </p>
           <p className="flex gap-2">
           {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average}  
@@ -194,8 +204,12 @@ function WatchPage() {
         </button>
         <div className="mt-8 text-center">
           <h1 className={`flex items-center lg:text-2xl md:text-xl text-left  gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
-            Now Playing: <span className='font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}` : ""}</span>
+            Now Playing: <span className='font-extralight'>{Name} </span>
           </h1>
+          { Season && (
+          <p className='flex text-white text-sm md:text-base font-mono max-w-4xl'>{`Season ${Season} Episode ${Episode}`}</p>
+          )
+          }
         </div>
         <button className={`hidden sm:flex mt-3 ml-auto text-sm md:text-base px-2 p-1 md:p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
           <Lightbulb size={21} color={text === 'text-white' ? 'white' : 'black'} />Lights off
@@ -207,7 +221,7 @@ function WatchPage() {
       ) : (
         <div className='w-full max-w-4xl sm:px-1'>
           {datac && !Season && (
-            <div className='text-white flex w-full max-w-4xl mt-2'> Director:
+            <div className='text-white flex w-full max-w-4xl mt-1 mb-1'> Director:
               <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
                 <p className='font-semibold ml-1'> {dir} </p>
               </Link>

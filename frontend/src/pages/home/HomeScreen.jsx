@@ -25,7 +25,7 @@ export const HomeScreen = () => {
     sessionStorage.setItem("openseason",null);
   },[])
   useEffect( () => {
-    sessionStorage.setItem("scrollPosition",0);
+    sessionStorage.setItem("navigating_from_tv_page","false");
   },[])
 
   useEffect(() => {

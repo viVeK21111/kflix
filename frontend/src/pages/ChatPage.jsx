@@ -70,6 +70,7 @@ export default function Chatbot() {
           <Link 
             key={item.id || index} 
             to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+            onClick={() => window.scroll(0,0)}
           >
             <div className="p-3 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
               <img 

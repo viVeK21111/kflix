@@ -6,6 +6,16 @@ import { SMALL_IMG_BASE_URL } from "../utils/constants";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const MovieSlider = ({ category }) => {
+	useEffect( () => {
+		sessionStorage.setItem("navigating_from_tv_page","false");
+		
+	  },[])
+	  useEffect( () => {
+		  sessionStorage.setItem("openseason",null);
+		},[])
+		
+
+	
 	const { contentType } = useContentStore();
 	const [content, setContent] = useState([]);
 	const [showArrows, setShowArrows] = useState(false);
@@ -24,7 +34,7 @@ const MovieSlider = ({ category }) => {
 
 		getContent();
 	}, [contentType, category]);
-
+	
 	const scrollLeft = () => {
 		if (sliderRef.current) {
 			sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });

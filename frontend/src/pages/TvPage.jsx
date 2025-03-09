@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { Clock, Star } from "lucide-react";
+import { use } from "react";
 
 const TvPage = () => {
   const location = useLocation();
@@ -17,39 +18,70 @@ const TvPage = () => {
   const [openSeason, setOpenSeason] = useState(null);
   const [numitemsm, setnumitemsm] = useState(5);
   const [imageSrc, setImageSrc] = useState("");
-  const [imageload,setimageload] = useState(true);
+  const [imageload, setimageload] = useState(true);
   const { addTv } = addWatchStore();
+  const [scrollRestored, setScrollRestored] = useState(false);
+  const [readov,setreadov] = useState(300);
   
   const navigate = useNavigate();
 
+  useEffect( ()=> {
+    if(openSeason===null || openSeason==="0" || sessionStorage.getItem("navigating_from_tv_page") === null) {
+      window.scroll(0,0);
+    } 
+  },[])
+
+  // Save scroll position before navigating away
+  const saveScrollPosition = () => {
+    sessionStorage.setItem("navigating_from_tv_page", "true");
+    sessionStorage.setItem("tv_page_scroll_position", window.scrollY.toString());
+  };
+
   const handleNavigation = (episode, season) => {
+    saveScrollPosition();
     navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season.season_number}&episode=${episode}`);
   };
 
   useEffect(() => {
     const storedSeason = sessionStorage.getItem("openseason");
-    if (storedSeason !==0) {
-    setOpenSeason(parseInt(storedSeason));
+    // Fix the condition check
+    if (storedSeason !== null && storedSeason !== "0" && storedSeason !== 0) {
+      setOpenSeason(parseInt(storedSeason));
+    }
+    const isNavigatingBack = sessionStorage.getItem("navigating_from_tv_page") === "true";
+    if (isNavigatingBack && !loading && !imageload && !scrollRestored) {
+      const storedScrollPosition = sessionStorage.getItem("tv_page_scroll_position");
+      if (storedScrollPosition && parseInt(storedScrollPosition) > 0) {
+        // Increase timeout to ensure everything is rendered
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: parseInt(storedScrollPosition),
+            left: 0,
+            behavior: "instant"
+          });
+        });
+      sessionStorage.removeItem("navigating_from_tv_page");
+    }
+      else if (!isNavigatingBack && !scrollRestored) {
+        window.scrollTo(0, 0);
+        setScrollRestored(true);
       }
       
-      const handleScroll = () => {
-          sessionStorage.setItem("scrollPosition", window.scrollY);
-      };
-  
-      window.addEventListener("scroll", handleScroll);
-
-      return () => window.removeEventListener("scroll", handleScroll);
-    
-  }, []);
-
-  useEffect(() => {
-
-    if (id) {
-      setLoading(true);
-      getTvdetails(id).finally(() => setLoading(false));
-      getSimilarTv(id);
+      // Clear the navigation flag after restoring
+     
     }
-
+  }, [loading, imageload, scrollRestored]);
+  
+  useEffect(() => {
+    setLoading(true);
+    if(id) {
+    Promise.all([
+      getTvdetails(id),
+      getSimilarTv(id)
+    ]).finally(() => {
+      setLoading(false);
+    });
+  }
   }, [id]);
 
   useEffect(() => {
@@ -67,19 +99,7 @@ const TvPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [data]);
 
-  useEffect(()=> {
-    if(!loading) {
-      const storedScrollPosition = sessionStorage.getItem("scrollPosition");
-    if (storedScrollPosition) {
-        setTimeout(() => {
-            window.scrollTo(0, parseInt(storedScrollPosition));
-        }, 100); // Delay added to ensure DOM is rendered
-    }
-
-    }
-    
-  },[loading])
-
+  
   const toggleSeason = (seasonNumber) => {
     const newOpenSeason = openSeason === seasonNumber ? null : seasonNumber;
     setOpenSeason(newOpenSeason);
@@ -114,8 +134,16 @@ const TvPage = () => {
           <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
             {data?.name}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-white-400">
-            {data?.overview.length < 300 ? data?.overview : data?.overview.slice(0, 300) + ". . ."}
+          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-slate-600">
+            {data?.overview.length < readov ? data?.overview : ( 
+              <> 
+            {data?.overview.slice(0, readov)}
+            {readov<data?.overview.length && (
+               <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(data?.overview.length)}>...Read more</button> 
+            )}
+           
+            </>
+          )}
           </p>
           <p className="flex gap-2">
             {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
@@ -226,6 +254,7 @@ const TvPage = () => {
             key={item.id || index}
             to={'/tv/details' + `/?id=${item?.id}&name=${item?.name || item?.title}`}
             className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+            onClick={() => window.scroll(0,0)} // Add this onClick handler
           >
             <img
               src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
@@ -245,7 +274,7 @@ const TvPage = () => {
       {numitemsm < datas?.slice(0, 10).length && (
         <div className="flex max-w-8xl justify-center items-center mt-6">
           <button
-            onClick={() => setnumitemsm(prev => prev + 5)} // Show 6 more items
+            onClick={() => setnumitemsm(prev => prev + 5)}
             className="px-2 py-1 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
           >
             Load More
@@ -253,8 +282,7 @@ const TvPage = () => {
         </div>
       )}
         </>
-      )
-      }
+      )}
       
     </div>
   );
