@@ -10,6 +10,7 @@ import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
 import { Clock,Star,Play } from 'lucide-react';
 
+
 function WatchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search)
@@ -32,6 +33,7 @@ function WatchPage() {
   const {addWatch} = addWatchStore();
   const [isplay,setisplay] = useState(false);
   const [srcIndex, setSrcIndex] = useState(0);
+  const [imageload,setimageload] = useState(true);
 
   useEffect(() => {
     setisplay(false);
@@ -78,14 +80,16 @@ function WatchPage() {
    let sources;
    if(!Season) {
     sources = [
-      { name: "Source1 (Vidbinge)", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
-      { name: "Source2 (Filmu)", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
+      { name: "Source1 (Filmu)", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
+      { name: "Source2 (Vidbinge)", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
+      
     ];
    }
    else {
     sources = [
-      { name: "Source1 (Vidbinge)", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
-      { name: "Source2 (Filmu)", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
+      { name: "Source1 (Filmu)", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
+      { name: "Source2 (Vidbinge)", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
+     
     ];
    }
   
@@ -106,7 +110,7 @@ function WatchPage() {
     </header>
     )}
      
-      {Loading && (
+      {Loading &&  (
         <div className="w-full flex mt-20 justify-center items-center">
         <p className='text-white '>Loading...</p>
       </div>
@@ -116,6 +120,7 @@ function WatchPage() {
         <div className='relative'>
           <img src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path}`}
           className='w-full object-top object-cover h-full md:h-[85vh]  shadow-2xl'
+          onLoad={() => setimageload(false)}
           ></img>
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
           <div className="md:absolute text-white lg:max-w-3xl  bottom-5 left-3">
@@ -183,21 +188,24 @@ function WatchPage() {
       </div>
      
 
-      <div className='w-full max-w-4xl flex flex-wrap justify-between items-center'>
+      <div className='w-full max-w-4xl sm:flex sm:px-1 flex-wrap justify-between items-center'>
+      <button className={`flex mt-3 items-center ml-auto sm:hidden text-sm md:text-base px-2 p-1 md:p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
+          <Lightbulb size={21} color={text === 'text-white' ? 'white' : 'black'} />Lights off
+        </button>
         <div className="mt-8 text-center">
-          <h1 className={`lg:text-2xl md:text-xl text-left flex items-center gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
+          <h1 className={`flex items-center lg:text-2xl md:text-xl text-left  gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
             Now Playing: <span className='font-extralight'>{Name} {Season ? `Season ${Season} Episode ${Episode}` : ""}</span>
           </h1>
         </div>
-        <button className={`flex mt-3 ml-auto text-sm md:text-lg p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
-          <Lightbulb color={text === 'text-white' ? 'white' : 'black'} />Lights off
+        <button className={`hidden sm:flex mt-3 ml-auto text-sm md:text-base px-2 p-1 md:p-2 rounded-md border-black ${text} bg-blue-950`} onClick={Lightsout}>
+          <Lightbulb size={21} color={text === 'text-white' ? 'white' : 'black'} />Lights off
         </button>
       </div>
 
       {Loading ? (
         <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
       ) : (
-        <div className='w-full max-w-4xl'>
+        <div className='w-full max-w-4xl sm:px-1'>
           {datac && !Season && (
             <div className='text-white flex w-full max-w-4xl mt-2'> Director:
               <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
@@ -252,7 +260,7 @@ function WatchPage() {
     )}
     </div>
         
-        {bgColorClass!='bg-black'  && !data?.seasons && !Loading && (
+        {bgColorClass!='bg-black'  && !data?.seasons && !Loading && !imageload && (
           <div className='bg-black w-full mt-5'>
                 <div className='flex text-white border-t-2 border-yellow-500 p-1 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">

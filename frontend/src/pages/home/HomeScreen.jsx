@@ -21,6 +21,12 @@ export const HomeScreen = () => {
   const {addWatch,addTv} = addWatchStore();
   const [imageSrc, setImageSrc] = useState("");
 
+  useEffect( () => {
+    sessionStorage.setItem("openseason",null);
+  },[])
+  useEffect( () => {
+    sessionStorage.setItem("scrollPosition",0);
+  },[])
 
   useEffect(() => {
     const handleResize = () => {
@@ -64,7 +70,7 @@ export const HomeScreen = () => {
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
         
-        <div className="absolute top-0 left-0 w-full h-full bg-black/40  lg:bg-black/30 xl:bg-black/20 -z-40" />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/30 xl:bg-black/20 -z-40" />
           <img 
             src={imageSrc} 
             alt='img' 
@@ -81,8 +87,8 @@ export const HomeScreen = () => {
           <h1 className='text-xl sm:text-xl lg:text-2xl xl:text-3xl md:mt-20 font-extrabold text-balance'>
             {trending?.title || trending?.name}
           </h1>
-          <p className='flex mt-2 text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
-          {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"} | <p className="ml-1 flex"><Star className='size-6 fill-white/20 pt-1'/> {trending?.vote_average} </p>
+          <p className='flex mt-2 text-center text-base sm:text-base lg:text-lg xl:text-lg font-semibold text-balance'>
+          {trending?.release_date?.split("") || trending?.first_air_date.split('-')[0]} | {trending?.adult? "18+":"PG-13"} | <p className="ml-1 flex"><Star className='size-5 lg:size-6 fill-white/20 pt-1'/> {trending?.vote_average} </p>
           </p>
       
           
