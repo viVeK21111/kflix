@@ -23,9 +23,10 @@ export default function Chatbot() {
           backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('batman.jpg')`,
           backgroundSize: 'cover',
         }}
-      >       <header className='max-w-6xl flex items-left justify-left p-4'>
+      > 
+      <header className='flex justify-center xl:justify-start p-4'>
         <Link to={'/'} className='flex items-center'>
-        <img src={'/kflix2.png'} alt='logo' className='w-52' />
+        <img src={'/kflix2.png'} alt='logo' className='w-28 md:w-44' />
         </Link>
       </header>
     <div className="flex items-center justify-center p-6">

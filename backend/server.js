@@ -6,6 +6,7 @@ import tvRoutes from "./routes/tv.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import searchRoutes from './routes/search.route.js'
 import chatRoutes from './routes/chat.route.js'
+import contactRoutes from './routes/contact.route.js'
 import cors from "cors";
 
 import {connectDB} from './config/db.js'
@@ -26,6 +27,8 @@ app.use('/api/v1/tv',tvRoutes);
 app.use('/api/v1/user',profileRoutes);
 app.use('/api/v1/search',searchRoutes);
 app.use('/api/v1/chat',chatRoutes);
+app.use('/api/v1/contact',contactRoutes);
+
 
 //app.listen(PORT,() => {
 //    console.log("server started at https://localhost:5000");

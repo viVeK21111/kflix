@@ -37,8 +37,8 @@ const SearchPage = () => {
           className="p-2 rounded-lg bg-gray-800 text-white border mr-2 border-gray-700 w-24 sm:w-40"
         >
           <option value="movie">Movies</option>
-          <option value="tv">TV Shows</option>
-          <option value="person">People</option>
+          <option value="tv">Tv Show</option>
+          <option value="person">Person</option>
         </select>
         <input
           type="text"

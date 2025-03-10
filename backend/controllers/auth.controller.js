@@ -19,7 +19,7 @@ export async function signin(req,res) {
             return res.status(400).json({success:false,message:"password incorrect"});
         }
         generateToken(user._id,res);
-        return res.status(200).json({success:true,user:user,message:"logged in successfully"});
+        return res.status(200).json({success:true,user:user,message:"signed in successfully"});
     }
     catch(error) {
         console.log("Error in signing in: "+error.message);
