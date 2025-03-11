@@ -102,7 +102,7 @@ function WatchPage() {
       }
       return (
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
-    <div className='p-3 md:p-0 '>
+    <div className='p-1 md:p-0 '>
     {(isplay || Season) && (
       <header className='flex items-center justify-center p-4'>
       <Link to={'/'} className='flex items-center'>
@@ -141,6 +141,7 @@ function WatchPage() {
               </button>
         </div>
         
+        <div className='mx-2 md:mx-0'>
         <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-2 mt-3 text-white">
             {data?.title}
           </h1>
@@ -175,6 +176,8 @@ function WatchPage() {
                        <p className='ml-1'>Watch List</p>
               </button>
         </div>
+        </div>
+        
         
             
         </div>

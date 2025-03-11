@@ -133,7 +133,7 @@ const TvPage = () => {
           <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-white">
             {data?.name}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-3 max-w pb-3 border-b-2 border-slate-600">
+          <p className="text-sm md:text-base mb-3 max-w pb-3 border-b-2 border-slate-600">
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
