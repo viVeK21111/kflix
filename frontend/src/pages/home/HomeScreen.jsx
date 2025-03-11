@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar';
 import useGetTrendingContent from '../../hooks/useGetTrendingContent';
 import { ORIGINAL_IMG_BASE_URL } from '../../utils/constants';
 import {Link} from 'react-router-dom';
-import {Play,Info} from 'lucide-react';
 import {useContentStore} from '../../store/content'
 import MovieSlider from '../../components/MovieSlider';
 import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
@@ -15,6 +14,7 @@ import { TvMinimalPlay,Clapperboard } from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
+ 
   const {contentType} = useContentStore();
   const [ImageLoad,setImageLoad] = useState(true);
   const movieSectionRef = useRef(null);

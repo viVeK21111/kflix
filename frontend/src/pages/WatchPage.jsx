@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Clock,Star,Play } from 'lucide-react';
+import { Plus,Star,Play } from 'lucide-react';
 
 
 function WatchPage() {
@@ -56,7 +56,7 @@ function WatchPage() {
 
   function getDirector(crew) {
     const director = crew.find(person => (person.known_for_department==='Directing' && (person.job === "Director" || person.job==='Writer' || person.job==='producer')) || person.job==='Director');
-    setdirectorId(director.id);
+    setdirectorId(director?.id);
     return director ? director.name : "Unknown";
   }
  
@@ -125,10 +125,26 @@ function WatchPage() {
           ></img>
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
           <div className="md:absolute text-white lg:max-w-3xl  bottom-5 left-3">
-        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
+          <div className='flex mt-4 sm:hidden justify-center'>
+        <button className='flex bg-red-600  items-center hover:bg-red-800 px-2 rounded-md'
+            onClick={() => setisplay(true)}
+            >
+            <Play className='size-6 fill-white p-1'/>
+            <p className='font-semibold'>Play</p>
+            </button>
+              <button
+                       className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center'
+                       onClick={(e) => addWatchList(e, data?.id)}
+                     >
+                       <Plus className='size-5' />
+                       <p className='ml-1'>Watch List</p>
+              </button>
+        </div>
+        
+        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-2 mt-3 text-white">
             {data?.title}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-3 max-w pb-3">
+          <p className="text-sm md:text-base mb-2 max-w pb-2">
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
@@ -141,24 +157,26 @@ function WatchPage() {
           <p className='mb-1 text-sm md:text-base'> {data?.release_date?.split("")} </p>
           <p className="flex gap-2">
           {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1'/>{data?.vote_average}  
-      
-            <button className='flex ml-3 bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
+          </p> 
+         
+        </p>
+        <div className='hidden sm:flex mt-4'>
+        <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
             onClick={() => setisplay(true)}
             >
             <Play className='size-6 fill-white p-1'/>
             <p className='font-semibold'>Play</p>
             </button>
-             <button
-              className='bg-blue-700 hover:bg-blue-800 text-white text-sm py-1 ml-2 px-2 rounded-lg  flex
-              items-center'
-              onClick={(e) => addWatchList(e,data?.id)}
-            >
-          <Clock className='size-5' />
-            <p className='ml-1'>Watch Later</p>
-            </button>
+              <button
+                       className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center'
+                       onClick={(e) => addWatchList(e, data?.id)}
+                     >
+                       <Plus className='size-5' />
+                       <p className='ml-1'>Watch List</p>
+              </button>
+        </div>
+        
             
-          </p> 
-        </p>
         </div>
         </div>
       )}
@@ -246,10 +264,10 @@ function WatchPage() {
                   {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
                   {!Season && (
                     <button
-                      className='bg-red-600 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
+                      className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
                       onClick={(e) => addWatchList(e, data?.id)}
                     >
-                      <Clock className='size-5' />
+                      <Plus className='size-5' />
                       <p className='ml-1'>Watch Later</p>
                     </button>
                   )}
@@ -278,7 +296,7 @@ function WatchPage() {
           <div className='bg-black w-full mt-5'>
                 <div className='flex text-white border-t-2 border-yellow-500 p-1 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
-                  {datac?.cast.slice(0,numitems).map((item, index) => (
+                  {datac?.cast?.slice(0,numitems).map((item, index) => (
                     <Link
                       key={item.id || index} 
                       to={'/person/details'+`/?id=${item?.id}&name=${item?.name}`}
@@ -303,7 +321,7 @@ function WatchPage() {
           <div className="flex w-full justify-end mt-5 mb-3">
             <button
               onClick={() => setnumitems(prev => prev + 4)} // Show 4 more items
-              className="px-2 py-1 mr-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+              className="px-2 py-1 mr-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-900 transition-all"
             >
               Load More
             </button>
@@ -346,7 +364,7 @@ function WatchPage() {
           <div className="flex w-full justify-end  mt-6">
             <button
               onClick={() => setnumitemsm(prev => prev + 4)} // Show 6 more items
-              className="px-2 py-1 mb-3 mr-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+              className="px-2 py-1 mb-3 mr-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-900 transition-all"
             >
               Load More
             </button>

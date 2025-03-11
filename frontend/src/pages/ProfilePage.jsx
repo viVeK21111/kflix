@@ -3,6 +3,7 @@ import { ProfileStore } from "../store/ProfileStore";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
+import { Trash2 } from "lucide-react";
 
 
 export default function ProfilePage(){
@@ -48,7 +49,7 @@ export default function ProfilePage(){
         <h2 className="text-xl font-semibold mb-4 text-yellow-400 border-b border-yellow-500 pb-2">
           Search History
         </h2>
-        <button className="flex p-1 ml-auto mb-2 bg-red-600 text-white text-base font-normal rounded-md hover:bg-red-700 transition-all" onClick={ClearButton}>Clear History</button>
+        <button className="flex p-1 ml-auto mb-2 px-2 bg-red-600 text-white text-base font-normal rounded-md hover:bg-red-700 transition-all" onClick={ClearButton}>Clear</button>
 
         {datalocal?.searchHistory?.length > 0 ? (
           <>
@@ -57,12 +58,12 @@ export default function ProfilePage(){
                 <Link to={`/${item?.type === 'movie' ? 'watch' : item?.type === 'tv' ? 'tv/details' : 'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}>
                 <div
                   key={index}
-                  className="bg-gray-800 p-4 rounded-lg shadow-md hover:scale-105 transition-transform"
+                  className="bg-gray-800 p-1 mx-2 md:mx-0 rounded-lg shadow-md hover:scale-105 transition-transform"
                 >
                   <img
                     src={`${ORIGINAL_IMG_BASE_URL}${item?.image}`}
                     alt={item.title}
-                    className="w-full h-40 object-cover rounded-md mb-3"
+                    className="w-full h-[30vh] object-cover rounded-md mb-3"
                   />
                   <h3 className="text-lg font-bold text-white">{item?.title || item?.name}</h3>
                   <p className="text-gray-300 text-sm">
@@ -71,7 +72,7 @@ export default function ProfilePage(){
                   <p className="text-gray-400 text-xs">
                     <b>Search Date:</b> {new Date(item.date).toLocaleDateString()}
                   </p>
-                  <button className="flex p-1 ml-auto mb-2 bg-blue-600 text-white text-base font-normal rounded-lg hover:bg-blue-700 transition-all" onClick={(e) => ClearButtonid(e, item.id)}>Remove</button>
+                  <button className="flex px-1 ml-auto mb-2 text-sm font-normal rounded-lg transition-all" onClick={(e) => ClearButtonid(e, item.id)}>< Trash2 className="transform transition-transform hover:translate-y-[-5px]" /></button>
                 </div>
                 </Link>
                 

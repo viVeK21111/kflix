@@ -15,13 +15,15 @@ export default function PersonPage() {
   const [loading2,setLoading2] = useState(true);
   const [loading1, setLoading1] = useState(true);
   const [numitems,setnumitems] = useState(() => {
-    return Number(localStorage.getItem("numitems")) || 6;
+    return Number(sessionStorage.getItem("numitems")) || 8;
   });
   const { getMovieDetail } = DetailsStore();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
+  const [readov,setreadov] = useState(300);
 
   useEffect(() => {
+    window.scroll(0,0);
     if (id) {
       getPersonDetails(id).finally(() => setLoading(false));
       if(numitems===6) window.scrollTo(0, 0);
@@ -32,7 +34,7 @@ export default function PersonPage() {
   // Fetch Movie IDs when datac changes
 
   useEffect(()=> {
-    localStorage.setItem("numitems",numitems);
+    sessionStorage.setItem("numitems",numitems);
   },[numitems])
 
   useEffect(() => {
@@ -63,8 +65,8 @@ export default function PersonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-10 px-6 flex flex-col items-center">
-      <div className="max-w-4xl w-full bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center gap-6">
+    <div className="min-h-screen bg-gray-900 text-white p-1 flex flex-col ">
+      <div className="max-w-full w-full bg-black-800 p-5 rounded-t-lg shadow-lg flex flex-col sm:flex-row items-center gap-6">
         {/* Profile Image */}
         <img
           src={`${ORIGINAL_IMG_BASE_URL}${datap?.profile_path}`}
@@ -81,9 +83,9 @@ export default function PersonPage() {
             </p>
           )}
           <p className="mt-2 text-white-400 text-base">
-          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (datap?.birthday && <span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} <b className="ml-3">Place:</b> {datap?.place_of_birth}
+          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (datap?.birthday && <span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} 
         </p>
-
+        <p className="mt-2"><b>Place:</b> {datap?.place_of_birth}</p> 
           {datap?.deathday && (
             <p className="text-base"> <b>Death:</b> {datap.deathday} <span>({datap.deathday.split("-")[0] - (datap?.birthday?.split("-")[0] || 0)} years)</span> </p>
           )}
@@ -118,16 +120,26 @@ export default function PersonPage() {
       </div>
 
       {/* Biography Section */}
-      <div className="mt-6 max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold text-yellow-400 mb-2">Biography</h2>
-        <p className="text-gray-300 text-sm leading-relaxed">{datap?.biography || "No biography available."}</p>
+      <div className="max-w-full bg-gray-800 p-3 md:p-4 rounded--blg shadow-lg">
+        <h2 className="text-xl font-semibold text-white mb-2">Biography</h2>
+        <p className="text-gray-300 text-base leading-relaxed">
+          {datap?.biography.length < readov ? datap?.biography : ( 
+              <> 
+            {datap?.biography.slice(0, readov)}
+            {readov<datap?.biography.length && (
+               <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(prev => prev+300)}>...Read more</button> 
+            )}
+           
+            </>
+          )}
+          </p>
       </div>
 
       {/* Movies Section */}
       <div className="w-full max-w-4xl text-xl mt-3"> 
         <p className="font-semibold">Movies Known For: </p>
       </div>
-      <div className="mt-6 max-w-4xl grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="mt-6 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {loading1 ? (
           <div><p>Loading...</p></div>
         ):(
@@ -153,19 +165,20 @@ export default function PersonPage() {
             </div>
           </Link>
         ))}
-        {numitems < movies.length && (
-              <div className="flex w-full max-w-4xl mt-6">
+       
+       </>
+       )}
+      </div>
+      {numitems < movies.length && (
+              <div className="flex w-full justify-center mt-4 mb-3">
                 <button
-                  onClick={() => setnumitems(prev => prev + 6)} // Show 6 more items
-                  className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 transition-all"
+                  onClick={() => setnumitems(prev => prev + 4)} // Show 6 more items
+                  className="px-3 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all"
                 >
                   Load More
                 </button>
               </div>
             )}
-       </>
-       )}
-      </div>
     </div>
   );
 }

@@ -5,8 +5,7 @@ import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
-import { Clock, Star } from "lucide-react";
-import { use } from "react";
+import { Plus, Star } from "lucide-react";
 
 const TvPage = () => {
   const location = useLocation();
@@ -87,9 +86,9 @@ const TvPage = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.backdrop_path);
+        setImageSrc(ORIGINAL_IMG_BASE_URL + (data?.backdrop_path || data?.poster_path));
       } else {
-        setImageSrc(ORIGINAL_IMG_BASE_URL + data?.backdrop_path);
+        setImageSrc(ORIGINAL_IMG_BASE_URL + (data?.backdrop_path || data?.poster_path));
       }
     };
 
@@ -131,10 +130,10 @@ const TvPage = () => {
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
         <div className="md:absolute lg:max-w-3xl bottom-2 left-3 rounded-t-lg">
-          <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-yellow-500">
+          <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-white">
             {data?.name}
           </h1>
-          <p className="text-sm md:text-base lg:text-base mb-5 max-w pb-3 border-b-2 border-slate-600">
+          <p className="text-sm md:text-base lg:text-base mb-3 max-w pb-3 border-b-2 border-slate-600">
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
@@ -145,12 +144,12 @@ const TvPage = () => {
             </>
           )}
           </p>
-          <p className="flex gap-2">
+          <p className="flex gap-2 mb-2">
             {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
           </p>
         </div>
       </header>
-      <div className="bg-slate-900 bg-opacity-70 md:p-3 rounded-b-lg">
+      <div className="bg-slate-900 bg-opacity-70 pt-2 md:p-3 rounded-b-lg">
         <div className="text-md">
           <p>
             <strong>Creator:</strong>{" "}
@@ -174,11 +173,11 @@ const TvPage = () => {
           </p>
         </div>
         <button
-          className='bg-blue-600 hover:bg-blue-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded-lg flex items-center'
+          className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 rounded-lg flex items-center'
           onClick={(e) => addWatchList(e, data?.id)}
         >
-          <Clock className='size-5' />
-          <p className='ml-1'>Watch Later</p>
+          <Plus className='size-5' />
+          <p className='ml-1'>Watch List</p>
         </button>
       </div>
 
@@ -275,7 +274,7 @@ const TvPage = () => {
         <div className="flex max-w-8xl justify-center items-center mt-6">
           <button
             onClick={() => setnumitemsm(prev => prev + 5)}
-            className="px-2 py-1 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
+            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
           >
             Load More
           </button>
