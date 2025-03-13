@@ -70,7 +70,7 @@ export const HomeScreen = () => {
         <Navbar movieSectionRef={movieSectionRef}/>
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full text-white items-center bg-black/70 justify-center shimmer -z-10'> Loading...</div>)}
         
-        <div className="absolute top-0 left-0 w-full h-full bg-black/30 xl:bg-black/20 -z-40" />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/20 -z-40" />
           <img 
             src={imageSrc} 
             alt='img' 

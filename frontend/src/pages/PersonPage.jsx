@@ -66,16 +66,20 @@ export default function PersonPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-1 flex flex-col ">
-      <div className="max-w-full w-full bg-black-800 p-5 rounded-t-lg shadow-lg flex flex-col sm:flex-row items-center gap-6">
+      <div className="max-w-full w-full bg-black-800 p-5 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-6">
         {/* Profile Image */}
+        <div className="flex justify-center">
         <img
           src={`${ORIGINAL_IMG_BASE_URL}${datap?.profile_path}`}
           alt={datap?.name}
           className="w-48 h-48 rounded-lg object-cover border-4 border-white-500 shadow-lg"
         />
+        </div>
+       
 
         {/* Details Section */}
         <div className="flex-1">
+          <div className="flex flex-col">
           <h1 className="text-3xl font-bold text-yellow-400">{datap?.name}</h1>
           {datap?.also_known_as && (
             <p className="text-gray-300 mt-2 text-sm">
@@ -116,6 +120,8 @@ export default function PersonPage() {
               </a>
             )}
           </div>
+          
+          </div>
         </div>
       </div>
 
@@ -146,7 +152,7 @@ export default function PersonPage() {
           <>
           {movies.slice(0,numitems).map((item, index) => (
           <Link key={item.id || index} to={`/watch/?id=${item?.id}&name=${item?.name || item?.title}`}>
-            <div className="p-2 border rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
+            <div className="p-1 rounded-lg bg-slate-800 shadow-md hover:scale-105 transition-transform">
               <img
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
                 className="w-full h-40 sm:h-48 object-cover rounded-lg mb-2"

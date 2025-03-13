@@ -5,7 +5,7 @@ import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
-import { Plus, Star } from "lucide-react";
+import { Plus, Star,Dot,Play } from "lucide-react";
 
 const TvPage = () => {
   const location = useLocation();
@@ -40,6 +40,10 @@ const TvPage = () => {
     saveScrollPosition();
     navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season.season_number}&episode=${episode}`);
   };
+  const handleNavigation1 = (episode,season) => {
+    saveScrollPosition();
+    navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season}&episode=${episode}`);
+  }
 
   useEffect(() => {
     const storedSeason = sessionStorage.getItem("openseason");
@@ -130,27 +134,78 @@ const TvPage = () => {
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
         <div className="md:absolute lg:max-w-3xl bottom-2 left-3 rounded-t-lg">
-          <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-4 mt-3 text-white">
+        <div className='mt-4 sm:hidden ml-1'>
+            <div className='flex'>
+            <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
+                  {data?.adult ? "18+" : "PG-13"} 
+          </p>
+          <div className='flex items-center'>
+          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average}  </p>
+          <p className='ml-5 flex'>
+          {data?.genres && data?.genres.slice(0,2).map((item, index) => (
+          <div key={item.id} className="flex items-center text-white">
+            {(index!==2 && index!==0) && (<Dot />)} 
+            <span>{item.name}</span>
+         </div>
+         
+            ))}
+          </p>
+          </div>
+            </div>
+
+            <div className="mt-3">
+            <p>{data?.first_air_date} - {data?.last_air_date}</p>
+            <p className="flex mt-3">
+        
+            <p className="">Seasons: {data?.number_of_seasons}</p>
+            <p className="ml-2">Episodes: {data?.number_of_episodes}</p>
+            </p>
+            
+            </div>
+          <button className='flex w-full justify-center p-2 bg-blue-600 items-center mt-4 hover:bg-blue-800 px-2 rounded-md'
+            onClick={() => handleNavigation1(1, 1)}
+            >
+            <Play className='size-6 fill-white p-1'/>
+            <p className='font-semibold text-lg'>Play S1 E1</p>
+            </button>
+           
+        </div>
+          <h1 className="text-xl px-1 md:text-2xl xl:text-3xl font-bold mb-4 mt-3 text-white">
             {data?.name}
           </h1>
-          <p className="text-sm md:text-base mb-3 max-w pb-3 border-b-2 border-slate-600">
+          <p className={(window.innerWidth < 768 && data?.overview.length>readov) ? `text-base mb-2 px-1 max-w pb-2` : `text-sm px-1 md:text-base mb-2 max-w pb-2` }>
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
             {readov<data?.overview.length && (
                <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(data?.overview.length)}>...Read more</button> 
             )}
-           
             </>
           )}
           </p>
-          <p className="flex gap-2 mb-2">
+          <p className="hidden sm:flex gap-2 mb-2">
             {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
+            <p className="flex ml-2 items-center">
+            {data?.genres && data?.genres.slice(0,2).map((item, index) => (
+          <div key={item.id} className="flex items-center text-white">
+            {(index!==2 && index!==0) && (<Dot />)} 
+            <span>{item.name}</span>
+         </div>
+            ))}
+            </p>
           </p>
-        </div>
-      </header>
-      <div className="bg-slate-900 bg-opacity-70 pt-2 md:p-3 rounded-b-lg">
-        <div className="text-md">
+          <div className="hidden sm:flex mt-3">
+            <p>{data?.first_air_date} - {data?.last_air_date}</p>
+            <Dot />
+            <p className="">Seasons: {data?.number_of_seasons}</p>
+            <p className="ml-2">Episodes: {data?.number_of_episodes}</p>
+            </div>
+            <div className="hidden sm:flex">
+
+
+
+            </div>
+          <div className="sm:hidden text-md mb-2">
           <p>
             <strong>Creator:</strong>{" "}
             {Array.isArray(data.created_by) &&
@@ -159,19 +214,15 @@ const TvPage = () => {
               ? data.created_by[0].name
               : "Unknown"}
           </p>
-          <p>
-            <strong>Total Seasons:</strong> {data?.number_of_seasons}
-          </p>
-          <p>
-            <strong>Total Episodes:</strong> {data?.number_of_episodes}
-          </p>
-          <p>
-            <strong>First Air Date:</strong> {data?.first_air_date}
-          </p>
-          <p>
-            <strong>Last Air Date:</strong> {data?.last_air_date}
-          </p>
+         
         </div>
+        <div className="flex items-center">
+        <button className='hidden sm:flex mr-2 justify-center py-1 mt-3 bg-blue-600 items-center hover:bg-blue-800 px-2 rounded-md'
+            onClick={() => handleNavigation1(1, 1)}
+            >
+            <Play className='size-6 fill-white p-1'/>
+            <p className='font-semibold text-base'>Play S1 E1</p>
+            </button>
         <button
           className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 rounded-lg flex items-center'
           onClick={(e) => addWatchList(e, data?.id)}
@@ -179,8 +230,14 @@ const TvPage = () => {
           <Plus className='size-5' />
           <p className='ml-1'>Watch List</p>
         </button>
-      </div>
+        </div>
+        
+        </div>
 
+        
+        
+      </header>
+    
       {imageload && (
          <div className="w-full flex mt-20 justify-center items-center">
          <p className='text-white '>Loading...</p>
@@ -247,12 +304,12 @@ const TvPage = () => {
       </div>
       {/* Similar TV Shows */}
       <div className='text-white max-w-8xl max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl'><h3 className='font-bold'>Similar Tv shows</h3></div>
-      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-6 mt-8 px-4 sm:px-5">
+      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3 mt-8 px-1 md:px-3">
         {datas?.slice(0, numitemsm).map((item, index) => (
           <Link
             key={item.id || index}
             to={'/tv/details' + `/?id=${item?.id}&name=${item?.name || item?.title}`}
-            className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+            className="block bg-gray-800 p-1 rounded-lg shadow-md hover:scale-105 transition-transform"
             onClick={() => window.scroll(0,0)} // Add this onClick handler
           >
             <img
