@@ -16,21 +16,21 @@ def get_movie_recommendations(query):
         tv_keywords = ["tv", "series", "show", "serial", "anime"]
         movie_keywords = ["movie", "animation", "cartoon", "film"]
         if any(keyword in query for keyword in tv_keywords):
-            query += """./nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}" and no slashes in the names.
+            query += """./nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}".
              and no other conversational or engaging text at any cost. Don't give empty json incase if u didn't find any tv shows, just give text.
-             Only must give the response according to my instructions."""
+             Only must give the response according to my instructions.(give only json string if the query contains any tv keyword)"""
             response = model.generate_content(query)
             if "json" not in response.text:
-                print(json.dumps({"nocontext": response.text}))
+                print(json.dumps(response.text))
                 return
             print(response.text[7:-4])# json string
         elif any(keyword in query for keyword in movie_keywords):
-            query += """./nResponse Instructions: Give the movie names in json string format "{"movies": ["movie1","movie2","movie3"]}" and no slashes in the names.
+            query += """./nResponse Instructions: Give the movie names in json string format "{"movies": ["movie1","movie2","movie3"]}".
                and no other conversational or engaging text in the response. Don't give empty json incase if u didn't find any movies, just give text.
-               Only must give the response according to my instructions above."""
+               Only must give the response according to my instructions above.(give only json string if the query contains the movie keyword)"""
             response = model.generate_content(query)
             if "json" not in response.text:
-                print(json.dumps({"nocontext": response.text}))
+                print(json.dumps(response.text))
                 return
             else:print(response.text[7:-4])  # json string
         else:

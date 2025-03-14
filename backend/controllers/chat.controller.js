@@ -24,7 +24,11 @@ export const GetMovieList = async (req, res) => {
                 try {
                     let result1 = ''
                     let contents = ''
-                    const result = JSON.parse(data); // json string to json object
+                    let result = JSON.parse(data); // json string to json object
+                    if (typeof result === "string") {
+                        result = JSON.parse(result);  // Parse again if still string
+                    }
+                    console.log("after parsing: "+result)
                     if("movies" in result) {
                         content = "movie"
                         contents = "movies"
