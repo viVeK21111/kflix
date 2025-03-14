@@ -35,15 +35,26 @@ function WatchPage() {
   const [readov,setreadov] = useState(300);
   const [srcIndex,setSrcIndex] = useState(0);
   const [selectopen,setselectopen] = useState(false);
+  const [isLightsOut, setIsLightsOut] = useState(false);
 
   useEffect(() => {
-    if(window.innerWidth >= 768 && !isplay && !Season) {
-      setBgColorClass('bg-slate-950');
-    }
-    else {
-      setBgColorClass('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
-    }
-  },[isplay,window.innerWidth])
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && !isplay && !Season) {
+          setBgColorClass(isLightsOut ? 'bg-black' : 'bg-zinc-950');
+      } else {
+          setBgColorClass(isLightsOut ? 'bg-black' : 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
+      }
+  };
+
+  // Initial check
+  handleResize();
+
+  // Add event listener
+  window.addEventListener('resize', handleResize);
+
+  // Cleanup to avoid memory leaks
+  return () => window.removeEventListener('resize', handleResize);
+  }, [isplay,Season,isLightsOut])
 
  
 
@@ -84,10 +95,9 @@ function WatchPage() {
 
    const Lightsout = (e) => {
     e.preventDefault();
-      if(bgColorClass==='bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900') setBgColorClass('bg-black');
-      else setBgColorClass('bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
-      if(text==='text-white') setText('text-black');
-      else setText('text-white');
+    setIsLightsOut((prev) => !prev); 
+    setBgColorClass((prev) => prev === 'bg-black' ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900' : 'bg-black');
+    setText((prev) => prev === 'text-white' ? 'text-black' : 'text-white');
    }
    let sources;
    if(!Season) {
@@ -102,11 +112,11 @@ function WatchPage() {
    }
    else {
     sources = [
-      { name: "Source1 (Filmu)", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
-      { name: "Source2 (pstream)", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
-      { name: "Source3 (Vidbinge)-brave browser", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
-      { name: "Source4 (rive)-brave browser", url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
-      { name: "Source5 (embed.su)-brave browser", url: `https://embed.su/embed/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
+      { name: "Source2 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
+      { name: "Source3 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source4 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
+      { name: "Source5 (embed.su)",description:"brave browser only", url: `https://embed.su/embed/tv/${Id}/${Season}/${Episode}` },
      
     ];
    }
@@ -362,14 +372,19 @@ function WatchPage() {
           )}
           {bgColorClass !== 'bg-black' && (
             <div className='w-full max-w-4xl'>
-              <div className={Season ? `text-center w-full flex flex-col sm:flex-col md:flex-row xl:flex-row justify-center lg:flex-row max-w-4xl mt-10 items-start` : `text-left w-full flex flex-col sm:flex-col md:flex-row xl:flex-row lg:flex-row max-w-4xl mt-10 items-start`}>
+              <div className={!Season ? `text-left w-full flex justify-center items-center md:items-start flex-col md:flex-row max-w-4xl mt-10` : `w-full flex justify-center items-center flex-col max-w-4xl mt-10` }>
                 <img
                   src={`${ORIGINAL_IMG_BASE_URL}${(data?.season && data?.seasons[Season]?.poster_path) || data?.poster_path || data?.backdrop_path || data?.profile_path}`}
                   className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
                   alt={data?.title || data?.name}
                 />
+                <p className={!Season ? `md:hidden` : `mb-3 md:mt-2`}>
+                {(data?.release_date || data?.first_air_date) && (
+                    <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
+                  )}
+                </p>
                 <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
-                  {!Season && <span className='text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
+                  {!Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
                   {!Season && (
                     <button
                       className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
@@ -381,25 +396,13 @@ function WatchPage() {
                   )}
                 </div>
               </div>
-              <div className={Season ? `flex justify-center mb-3 w-full max-w-4xl mt-2`: `w-full max-w-4xl mt-2 mb-2` }>
+              <div className={!Season ? `hidden md:flex w-full max-w-4xl mt-2 mb-2` : `hidden` }>
                 <p>
                 {(data?.release_date || data?.first_air_date) && (
                     <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
                   )}
                 </p>
-            
-            {!Season && (
-              <>
-              <span className='text-white font-medium'>Genres: </span>
-              <p>
-                {data?.genres && data?.genres.map((item, index) => (
-                <span className='gap-2 text-white' key={item.id}> {item.name} </span>
-              ))}
-              </p></>
-              
-            )}
-            
-          </div>
+            </div>
 
             </div>
           )}
@@ -410,7 +413,7 @@ function WatchPage() {
     )}
     </div>
         
-        {bgColorClass!='bg-black'  && !data?.seasons && !Loading && !imageload && (
+        {bgColorClass!=='bg-black'  && !data?.seasons && !Loading && !imageload && (
           <div className='bg-black w-full mt-5'>
                 <div className='flex text-white border-t-2 border-white border-opacity-30 p-1 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">

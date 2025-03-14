@@ -123,7 +123,7 @@ const TvPage = () => {
   };
 
   return (
-    <div className="text-white bg-gradient-to-b from-gray-900 to-black min-h-screen p-2">
+    <div className="text-white bg-slate-900 min-h-screen p-2">
       <header className="relative">
         <img
           className="w-full md:h-[80vh] object-cover object-top rounded-t-lg shadow-2xl"
