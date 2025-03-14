@@ -98,7 +98,7 @@ export default function Chatbot() {
     {!Loading && data && contentType && (
     Array.isArray(data) ? (
   <div className="flex justify-center px-2 xl:px-0 mb-3">
-     <div className="mt-4 max-w-6xl text-white bg-gray-800 p-4 rounded-lg w-full">
+     <div className="mt-4 max-w-6xl text-white bg-gray-800 p-2 rounded-lg w-full">
     <h2 className="font-semibold mb-3 text-lg border-b pb-2">Response:</h2>
     {/* Movie Grid */}
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
@@ -112,13 +112,13 @@ export default function Chatbot() {
             <div className=" rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
               <img 
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`} 
-                className="w-full h-40 sm:h-48 object-cover rounded-t-lg" 
+                className="w-full h-40 object-cover rounded-t-lg" 
                 alt={item?.title || item?.name} 
               />
               <h3 className="text-lg font-bold text-white p-2">{item.title || item.name}</h3>
               <p className="text-sm text-gray-300 pb-2 pl-2">
                 {item?.release_date?.split("-")[0] || item?.first_air_date?.split("-")[0]} | 
-                Rating: <b>{item?.vote_average}</b> | {item?.adult ? "18+" : "PG-13"}
+                Rating: <b>{item?.vote_average.toFixed(2)}</b> | {item?.adult ? "18+" : "PG-13"}
               </p>
             </div>
           </Link>
