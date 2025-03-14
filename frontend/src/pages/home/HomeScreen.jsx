@@ -31,9 +31,9 @@ export const HomeScreen = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.poster_path);
+        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.poster_path || trending?.backdrop_path);
       } else {
-        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.backdrop_path);
+        setImageSrc(ORIGINAL_IMG_BASE_URL + trending?.backdrop_path || trending?.profile_path);
       }
     };
   

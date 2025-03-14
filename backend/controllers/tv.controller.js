@@ -37,6 +37,18 @@ export const getTvDetails = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export const getTvEpisodes = async(req,res) => {
+    const {Id,Season} = req.body;
+    
+    try{
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${Id}/season/${Season}?language=en-US`);
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting tv Episodes: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
 export const getSimilarTv = async(req,res) => {
     const {id} = req.params;
     try {

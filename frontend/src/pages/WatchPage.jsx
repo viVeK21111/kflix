@@ -9,6 +9,7 @@ import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
 import { Plus,Star,Play,Dot,ChevronDown,ChevronUp } from 'lucide-react';
+import axios from 'axios';
 
 function WatchPage() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function WatchPage() {
   const [srcIndex,setSrcIndex] = useState(0);
   const [selectopen,setselectopen] = useState(false);
   const [isLightsOut, setIsLightsOut] = useState(false);
+  const [datae,setDatae] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -56,7 +58,14 @@ function WatchPage() {
   return () => window.removeEventListener('resize', handleResize);
   }, [isplay,Season,isLightsOut])
 
- 
+ useEffect(() => {
+  const getepisodes = async() => {
+    const seasonep = {"Id":Id,"Season":Season};
+    const response = await axios.post("/api/v1/tv/episodes",seasonep);
+    setDatae(response.data.content);
+  }
+  if(Season) getepisodes();
+ },[])
 
   useEffect(() => {
     setisplay(false);
@@ -363,28 +372,27 @@ function WatchPage() {
               </Link>
             </div>
           )}
-          {Season && data?.created_by[0] && (
-            <div className='text-white flex w-full max-w-4xl mt-2'> Created by:
-              <Link to={'/person/details/?id=' + data?.created_by[0].id + "&name=" + data?.created_by[0].name} className='hover:underline hover:text-white'>
-                <p className='font-semibold ml-1'> {data.created_by[0].name} </p>
-              </Link>
+          {Season && datae?.episodes && (
+            <div className='text-white flex w-full max-w-4xl mt-2'> Name:
+                <p className='font-semibold ml-1'> {datae.episodes[Episode-1]?.name} </p>
             </div>
           )}
           {bgColorClass !== 'bg-black' && (
             <div className='w-full max-w-4xl'>
-              <div className={!Season ? `text-left w-full flex justify-center items-center md:items-start flex-col md:flex-row max-w-4xl mt-10` : `w-full flex justify-center items-center flex-col max-w-4xl mt-10` }>
+              <div className={`text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10` }>
                 <img
-                  src={`${ORIGINAL_IMG_BASE_URL}${(data?.season && data?.seasons[Season]?.poster_path) || data?.poster_path || data?.backdrop_path || data?.profile_path}`}
-                  className="w-60 h-60 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
+                  src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season].poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
+                  className="w-72 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
                   alt={data?.title || data?.name}
                 />
                 <p className={!Season ? `md:hidden` : `mb-3 md:mt-2`}>
-                {(data?.release_date || data?.first_air_date) && (
+                {(data?.release_date) && (
                     <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
                   )}
                 </p>
                 <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
                   {!Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{data?.overview}</span>}
+                  {Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-4xl'>{datae?.episodes?.[Episode-1]?.overview}</span>}
                   {!Season && (
                     <button
                       className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'

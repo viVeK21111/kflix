@@ -4,7 +4,7 @@ import {User} from "../models/user.model.js";
 export const searchMovies = async(req,res) => {
     const {query} = req.params;
     try {
-        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/movie?query=${query}&language=en-US&page=1`);
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=true&language=en-US&page=1`);
         const movie = data.results;
         if(movie.length===0) {
             res.json({success:false,message:"No movie found"});
@@ -32,7 +32,7 @@ export const searchMovies = async(req,res) => {
 export const searchTv = async(req,res) => {
     const {query} = req.params;
     try {
-        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/tv?query=${query}&language=en-US&page=1`);
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=true&language=en-US&page=1`);
         const tv = data.results;
         if(tv.length === 0) {
             return res.json({success:false,message:"No tv show found"});
@@ -55,7 +55,7 @@ export const searchTv = async(req,res) => {
 export const searchPeople = async(req,res) => {
     const {query} = req.params;
     try {
-        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/person?query=${query}&language=en-US&page=1`);
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/person?query=${query}&include_adult=true&language=en-US&page=1`);
         const person = data.results;
         if(person.length===0) {
             return res.json({success:false,message:"No person found"});

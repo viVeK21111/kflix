@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { Plus, Star,Dot,Play } from "lucide-react";
+import axios from "axios";
 
 const TvPage = () => {
   const location = useLocation();
@@ -21,7 +22,8 @@ const TvPage = () => {
   const { addTv } = addWatchStore();
   const [scrollRestored, setScrollRestored] = useState(false);
   const [readov,setreadov] = useState(300);
-  
+  const [datae,setDatae] = useState(null);
+  const [selectedSeason, setSelectedSeason] = useState(null); 
   const navigate = useNavigate();
 
   useEffect( ()=> {
@@ -29,7 +31,14 @@ const TvPage = () => {
       window.scroll(0,0);
     } 
   },[])
+  const getEpisode = async(Season) => {
+      const seasonep = {"Id":id,"Season":Season};
+      const response = await axios.post("/api/v1/tv/episodes",seasonep);
+      setDatae(response.data.content);
+      setSelectedSeason(Season);
+   }
 
+   
   // Save scroll position before navigating away
   const saveScrollPosition = () => {
     sessionStorage.setItem("navigating_from_tv_page", "true");
@@ -49,7 +58,9 @@ const TvPage = () => {
     const storedSeason = sessionStorage.getItem("openseason");
     // Fix the condition check
     if (storedSeason !== null && storedSeason !== "0" && storedSeason !== 0) {
+      getEpisode(parseInt(storedSeason));
       setOpenSeason(parseInt(storedSeason));
+      setSelectedSeason(parseInt(storedSeason));
     }
     const isNavigatingBack = sessionStorage.getItem("navigating_from_tv_page") === "true";
     if (isNavigatingBack && !loading && !imageload && !scrollRestored) {
@@ -107,6 +118,7 @@ const TvPage = () => {
     const newOpenSeason = openSeason === seasonNumber ? null : seasonNumber;
     setOpenSeason(newOpenSeason);
     sessionStorage.setItem("openseason", seasonNumber);
+    //sessionStorage.setItem("selectedseason",selectedSeason)
   };
 
   if (loading) {
@@ -256,12 +268,14 @@ const TvPage = () => {
           {data?.seasons?.map((season) => (
             <div
               key={season.id}
-              className="bg-gray-800 p-1 rounded-xl shadow-lg hover:shadow-2xl hover:bg-gray-900"
+              className="bg-sky-950 rounded-xl shadow-lg hover:shadow-2xl hover:bg-sky-900"
             >
               {/* Season Header */}
               <div
                 className="flex items-center justify-between cursor-pointer"
-                onClick={() => toggleSeason(season.season_number)}
+                onClick={() => {toggleSeason(season.season_number);
+                  getEpisode(season.season_number);
+                }}
               >
                 <div className="flex items-center gap-4">
                   <img
@@ -285,18 +299,19 @@ const TvPage = () => {
               </div>
 
               {/* Episodes List (Dropdown) */}
-              {openSeason === season.season_number && (
-                <div className="mt-3 grid grid-cols-4 gap-2 p-2 bg-gray-900 rounded-lg">
-                  {Array.from({ length: season.episode_count }, (_, i) => i + 1).map((episode) => (
-                    <button
-                      key={`${season.id}-${episode}`}
-                      onClick={() => handleNavigation(episode, season)}
-                      className="px-3 py-2 bg-red-700 hover:bg-red-900 rounded-md text-white text-sm text-center"
-                    >
-                      Ep {episode}
-                    </button>
-                  ))}
-                </div>
+              {openSeason === season.season_number  && selectedSeason === season.season_number && (
+               <div className="flex flex-col items-start max-w-2xl">
+                {datae?.episodes?.map((ep, index) => (
+                 <button
+                   key={`${season.id}-${index + 1}`}
+                   onClick={() => handleNavigation(index + 1, season)}
+                   className="px-1 w-full py-2 bg-gray-900  hover:bg-gray-950 border-b border-white border-opacity-15 text-white text-sm"
+                 >
+                   {ep.name || `Episode ${index + 1}`}
+                 </button>
+               ))}
+               </div>
+            
               )}
             </div>
           ))}
