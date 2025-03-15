@@ -307,7 +307,7 @@ const TvPage = () => {
                    onClick={() => handleNavigation(index + 1, season)}
                    className="px-1 w-full py-2 bg-gray-900  hover:bg-gray-950 border-b border-white border-opacity-15 text-white text-sm"
                  >
-                   {ep.name || `Episode ${index + 1}`}
+                  {index+1} . {ep.name || `Episode ${index + 1}`}
                  </button>
                ))}
                </div>
