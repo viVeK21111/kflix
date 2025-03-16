@@ -44,7 +44,7 @@ export default function Chatbot() {
   //console.log("data "+data);
   if(pLoading) {
     return (
-      <p className="flex text-red-600 bg-slate-950 justify-center items-center text-xl h-screen w-full font-bold">
+      <p className="flex text-red-500 bg-slate-950 justify-center items-center text-xl h-screen w-full font-bold">
       I am Batman...!
     </p>
     )

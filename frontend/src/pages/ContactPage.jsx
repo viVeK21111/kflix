@@ -11,6 +11,14 @@ const ContactPage = () => {
     message: '',
   });
   const [msgsent,setmsgsent] = useState(false);
+  const [Loading,setLoading] = useState(true);
+
+  const logoImage = new Image();
+  logoImage.src = '/hero.png';
+
+  logoImage.onload = () => {
+    setLoading(false);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +48,14 @@ const ContactPage = () => {
       alert('An error occurred. Please try again.');
     }
   };
+
+  if(Loading) {
+    return (
+      <p className="flex text-red-500 bg-slate-950 justify-center items-center text-xl h-screen w-full font-bold">
+          Hold my beer...!
+    </p>
+    )
+  }
 
   return (
     <div className="relative contact-bg backdrop-blur justify-center items-center min-h-screen">

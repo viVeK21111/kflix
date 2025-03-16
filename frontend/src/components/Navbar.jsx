@@ -34,11 +34,13 @@ const Navbar = ({ movieSectionRef }) => {
                 <Link to='/contactus' className='hover:underline'>Contact Us</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
+            <Link className='flex ' to='/search'>
                 <div className='flex bg-slate-500 rounded-3xl p-2 font-semibold text-base transition-all duration-400 hover:bg-slate-600 hover:scale-110'>
-                <Link className='flex ' to='/search'>
+              
                 <Search className="size-5 text-white cursor-pointer"/> 
-                </Link>
+               
                 </div>
+                </Link>
                 <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded transition-all duration-300 hover:scale-110 cursor-pointer'/></Link>
 
                 <div className='sm:hidden'>

@@ -55,13 +55,13 @@ const MovieSlider = ({ category }) => {
 			</h2>
 
 			<div className='flex space-x-4 overflow-x-scroll scrollbar-hide' ref={sliderRef}>
-				{content.map((item) => (
+				{content?.map((item) => (
 					<Link to={contentType==='movies' ? `/watch?id=${item?.id}&name=${item?.title || item?.name}` : `tv/details?id=${item.id}&name=${item.name}`} className='min-w-[250px] relative group' key={item.id}>
 						<div className='rounded-lg overflow-hidden'>
 							<img
 								src={SMALL_IMG_BASE_URL + (item.backdrop_path || item.profile_path || item.poster_path)}
 								alt='Movie image'
-								className='h-40 w-full transition-transform duration-300 rounded-xl border-2 ease-in-out group-hover:scale-125'
+								className='h-40 w-full transition-transform duration-300 rounded-xl border border-white border-opacity-60 ease-in-out group-hover:scale-125'
 							/>
 						</div>
 						<p className='mt-2 text-center'>{item.title || item.name}</p>

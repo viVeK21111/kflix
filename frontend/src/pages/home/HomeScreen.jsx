@@ -50,7 +50,7 @@ export const HomeScreen = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center text-black">
+      <div className="h-screen flex bg-slate-900 items-center justify-center text-white">
         <p className="text-xl font-bold">Hold on tight... 🍿</p>
       </div>
     );
