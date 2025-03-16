@@ -10,29 +10,55 @@ const SearchPage = () => {
   const [numitems,setnumitems] = useState(sessionStorage.getItem("numitemss") || 10);
   const [searchType2,setSearchType2] = useState(sessionStorage.getItem('searchType2') || 'movie');
   const [loading,setloading] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
 
   useEffect(() => {
     sessionStorage.setItem('searchType', searchType);
   }, [searchType]);
 
+  useEffect(() => {
+    if(Array.isArray(data) && data.length > 0) {
+      const imagePromises = data
+      .slice(0, numitems)
+      .map(item => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = `${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`;
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      });
+
+    Promise.all(imagePromises)
+      .then(() => setImagesLoaded(true))
+      .catch(() => setImagesLoaded(true));
+    }
+    else {
+      if(data) setImagesLoaded(true);
+    }
+   
+  }, [data, numitems]);
+
 
   const handleSearch = (e) => {
     e.preventDefault();
     setloading(true);
+    setImagesLoaded(false);
     sessionStorage.setItem('searchType2', searchType);
-    setSearchType2(searchType)
+    setSearchType2(searchType);
+    const sortResults = (data) => {
+      return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+    };
+  
     if (query.trim()) {
       if (searchType === 'movie') {
-        getMovie(query.trim()).finally(() => setloading(false));
+        getMovie(query.trim()).then(sortResults).finally(() => setloading(false));
+      } else if (searchType === 'tv') {
+        getTv(query.trim()).then(sortResults).finally(() => setloading(false));
+      } else {
+        getPerson(query.trim()).then(sortResults).finally(() => setloading(false));
       }
-      else if (searchType === 'tv') {
-        getTv(query.trim()).finally(() => setloading(false));
-      }  
-      else {
-        getPerson(query.trim()).finally(() => setloading(false));
-      } 
-      
     }
   };
 
@@ -73,9 +99,13 @@ const SearchPage = () => {
       </form>
       <Link to='/profile' className='flex text-white-400 text-sm mt-3 bg-blue-950 py-1 px-2 rounded-md hover:underline'>Search History</Link>
 
-      
+      {imagesLoaded===false && (
+        <div className='flex text-white justify-center items-center mt-20'> 
+                <p>Loading...</p>
+        </div>
+      )}
       {/* Search Results */}
-      {!Loading && data && (searchType==='movie' && searchType2==='movie') && !loading && (
+      {!Loading && data && imagesLoaded && (searchType==='movie' && searchType2==='movie') && !loading && (
         Array.isArray(data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
@@ -88,8 +118,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-lg opacity-0"} 
-                  onLoad={(e) => e.target.classList.remove('opacity-0')}
+                  className={ "w-full h-52 object-cover rounded-lg"} 
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
@@ -134,7 +163,7 @@ const SearchPage = () => {
           </div>
         )
       )}
-       {!Loading && data && (searchType==='person' && searchType2==='person') && !loading && (
+       {!Loading && data && imagesLoaded && (searchType==='person' && searchType2==='person') && !loading && (
         Array.isArray(data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
@@ -147,8 +176,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-52 h-52 object-cover rounded-lg opacity-0"} 
-                  onLoad={(e) => e.target.classList.remove('opacity-0')}
+                  className={ "w-52 h-52 object-cover rounded-lg"} 
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
@@ -193,7 +221,7 @@ const SearchPage = () => {
           </div>
         )
       )}
-       {!Loading && data && (searchType==='tv' && searchType2==='tv') && !loading && (
+       {!Loading && data && imagesLoaded && (searchType==='tv' && searchType2==='tv') && !loading && (
         Array.isArray(data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
@@ -206,8 +234,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-lg opacity-0"}
-                  onLoad={(e) => e.target.classList.remove('opacity-0')} 
+                  className={ "w-full h-52 object-cover rounded-lg"}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
