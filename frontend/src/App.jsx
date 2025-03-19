@@ -15,6 +15,8 @@ import ProfilePage from './pages/ProfilePage'
 import PersonPage from './pages/PersonPage'
 import WatchlistPage from "./pages/WatchlistPage";
 import ContactPage from "./pages/ContactPage"
+import ChangePassword from "./pages/ChangePassword";
+import SearchHistory from "./pages/SearchHistory";
 
 function App() {
 
@@ -46,6 +48,8 @@ function App() {
       <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/'}/>} />
       <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/'}/>} />
       <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/'}/>} />
+      <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
+      <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
     </Routes>
     <Footer/>
     <Toaster/>

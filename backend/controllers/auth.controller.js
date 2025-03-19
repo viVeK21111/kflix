@@ -86,3 +86,31 @@ export async function authCheck(req,res) {
         res.status(500).json({success:false,message:"internal server error"});
     }
 }
+
+export async function changePassword(req,res) {
+    const {password} = req.body;
+    const salt  = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password,salt);
+    try {
+        await User.findByIdAndUpdate(req.user._id,{
+          password:hashedPassword,
+        });
+        res.json({success:true,message:"password updated"});
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+export async function deleteAccount(req,res) {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.user._id);
+        if(!deletedUser) {
+            return res.status(404).json({sucess:false,message:"account not found"});
+        }
+        return res.status(200).json({success:true,message:"account deleted"});
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}

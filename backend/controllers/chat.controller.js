@@ -1,10 +1,9 @@
 
-import { exec } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { fetchFromTMDB } from "../services/tmdb.service.js";
 import { spawn } from 'child_process'; 
-
+import { User } from "../models/user.model.js";
 
 
 export const GetMovieList = async (req, res) => {
@@ -14,7 +13,16 @@ export const GetMovieList = async (req, res) => {
 
     if(query.length==0){
        return res.status(500).json({success:false,message:"Query can't be empty"});
-    }
+    }   
+        // save query in chathistory
+        
+        await User.findByIdAndUpdate(req.user._id,{
+            $push:{
+                chatHistory:{
+                query : query,
+            }
+        }});
+       
         // Call Python script
         const pythonScriptPath = path.join(__dirname, "Gemini.py"); // Correct script path
         const pythonProcess = spawn('python', [pythonScriptPath, query]); 
