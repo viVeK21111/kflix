@@ -34,6 +34,8 @@ export const searchMovies = async(req,res) => {
 export const searchTv = async(req,res) => {
     const {query} = req.params;
     try {
+        const user = await User.findById(req.user._id);
+        const pref = user?.Preferences?.adult;
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/tv?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
         const tv = data.results;
         if(tv.length === 0) {
@@ -57,6 +59,8 @@ export const searchTv = async(req,res) => {
 export const searchPeople = async(req,res) => {
     const {query} = req.params;
     try {
+        const user = await User.findById(req.user._id);
+        const pref = user?.Preferences?.adult;
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/person?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
         const person = data.results;
         if(person.length===0) {
