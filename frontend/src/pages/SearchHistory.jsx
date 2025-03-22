@@ -2,7 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { Trash2,X} from "lucide-react";
+import { Trash2,X,Search} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
@@ -26,11 +26,18 @@ const [loading,setloading] = useState(true);
     e.preventDefault();
     ClearHistoryid(id);
   }
+  if(loading) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
+        <p>Loading...</p>
+      </div>
+    )
+  }
   return (
     <div className='min-h-screen bg-slate-900'>
         {/* Search History Section */}
       <div className="pt-10 w-full max-w-2xl pl-3 pb-3">
-        <p className='text-white text-xl'>Search History</p>
+        <p className='flex items-center text-white text-xl'><Search size={20}/> <p className='ml-2'>Search History</p></p>
         <p className="flex justify-end items-center pb-2 max-w-2xl ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
 
         {datalocal?.searchHistory?.length > 0 ? (
@@ -42,7 +49,7 @@ const [loading,setloading] = useState(true);
                    <img
                       src={`${ORIGINAL_IMG_BASE_URL}${item?.image}`}
                       alt={item.title}
-                      className="size-16"
+                      className="h-16 w-14"
                     />
                   <div className="flex w-full">
                   <div

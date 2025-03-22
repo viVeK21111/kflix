@@ -61,7 +61,7 @@ const MovieSlider = ({ category }) => {
 							<img
 								src={SMALL_IMG_BASE_URL + (item.backdrop_path || item.profile_path || item.poster_path)}
 								alt='Movie image'
-								className='h-40 w-full transition-transform duration-300 rounded-xl border border-white border-opacity-60 ease-in-out group-hover:scale-125'
+								className='h-36 w-full transition-transform duration-300 rounded-xl border border-white border-opacity-60 ease-in-out group-hover:scale-125'
 							/>
 						</div>
 						<p className='mt-2 text-center'>{item.title || item.name}</p>

@@ -97,7 +97,7 @@ const SearchPage = () => {
           Search
         </button>
       </form>
-      <Link to='/profile' className='flex text-white-400 text-sm mt-3 bg-blue-950 py-1 px-2 rounded-md hover:underline'>Search History</Link>
+      <Link to='/profile/searchHistory' className='flex text-white-400 text-sm mt-3 bg-blue-950 py-1 px-2 rounded-md hover:underline'>Search History</Link>
 
       {imagesLoaded===false && (
         <div className='flex text-white justify-center items-center mt-20'> 

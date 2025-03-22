@@ -21,7 +21,7 @@ def get_movie_recommendations(query):
              Only must give the response according to my instructions.(give only json string if the query contains any tv keyword)"""
             response = model.generate_content(query)
             if "json" not in response.text:
-                print(json.dumps(response.text))
+                print(json.dumps({"nocontext":response.text}))
                 return
             print(response.text[7:-4])# json string
         elif any(keyword in query for keyword in movie_keywords):
@@ -30,7 +30,7 @@ def get_movie_recommendations(query):
                Only must give the response according to my instructions above.(give only json string if the query contains the movie keyword)"""
             response = model.generate_content(query)
             if "json" not in response.text:
-                print(json.dumps(response.text))
+                print(json.dumps({"nocontext":response.text}))
                 return
             else:print(response.text[7:-4])  # json string
         else:

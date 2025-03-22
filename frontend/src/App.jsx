@@ -17,6 +17,8 @@ import WatchlistPage from "./pages/WatchlistPage";
 import ContactPage from "./pages/ContactPage"
 import ChangePassword from "./pages/ChangePassword";
 import SearchHistory from "./pages/SearchHistory";
+import ChatHistory from "./pages/ChatHistory";
+import WatchHistory from "./pages/WatchHistory"
 
 function App() {
 
@@ -50,6 +52,8 @@ function App() {
       <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/'}/>} />
       <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
       <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
+      <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
+      <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
     </Routes>
     <Footer/>
     <Toaster/>

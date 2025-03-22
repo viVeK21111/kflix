@@ -38,6 +38,15 @@ function WatchPage() {
   const [selectopen,setselectopen] = useState(false);
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [datae,setDatae] = useState(null);
+  const [releasedate,setreleasedate] = useState(null);
+
+   useEffect (()=> {
+    if(data && data?.release_date) {
+      const rd = new Date(data?.release_date);
+      setreleasedate(rd);
+      console.log("future movie "+rd.getTime < new Date());
+    } 
+  },[data])
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,6 +56,7 @@ function WatchPage() {
           setBgColorClass(isLightsOut ? 'bg-black' : 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
       }
   };
+ 
 
   // Initial check
   handleResize();
@@ -75,11 +85,12 @@ function WatchPage() {
       window.scrollTo(0, 0);
     }
     else if (Id) {
-      getMoviedetails(Id);
-      getCredits(Id);
-      Promise.all([getMoviedetails(Id), getCredits(Id),getSimilarMovies(Id)]).then(() => setLoading(false)); 
+    
+      Promise.all([getMoviedetails(Id), getCredits(Id),getSimilarMovies(Id)]).then(() => setLoading(false)
+     
+      ); 
       window.scrollTo(0, 0);
-
+    
     }
     setnumitems(5);
     setnumitemsm(4);
@@ -195,13 +206,19 @@ function WatchPage() {
           <p className='flex'><Dot /></p>
           <p className=''>{data?.runtime} min.</p>
           </div>
-           
-          <button className='flex w-full justify-center p-2 bg-red-600 items-center mt-3 hover:bg-red-800 px-2 rounded-md'
-            onClick={() => setisplay(true)}
-            >
-            <Play className='size-6 fill-white p-1'/>
-            <p className='font-semibold text-lg'>Play</p>
-            </button>
+          
+          { releasedate!==null && releasedate.getTime() < new Date().getTime() && 
+          (
+              <button className='flex w-full justify-center p-2 bg-red-600 items-center mt-3 hover:bg-red-800 px-2 rounded-md'
+              onClick={() => setisplay(true)}
+              >
+              <Play className='size-6 fill-white p-1'/>
+              <p className='font-semibold text-lg'>Play</p>
+              </button>
+          )
+
+          }
+        
            
         </div>
         
@@ -265,12 +282,15 @@ function WatchPage() {
           
         
         <div className='hidden sm:flex mt-4'>
-        <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
-            onClick={() => setisplay(true)}
-            >
-            <Play className='size-6 fill-white p-1'/>
-            <p className='font-semibold'>Play</p>
-            </button>
+          {releasedate!==null && releasedate?.getTime() < new Date().getTime() && (
+             <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
+             onClick={() => setisplay(true)}
+             >
+             <Play className='size-6 fill-white p-1'/>
+             <p className='font-semibold'>Play</p>
+             </button>
+          )}
+       
               <button
                        className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center'
                        onClick={(e) => addWatchList(e, data?.id)}
@@ -381,7 +401,7 @@ function WatchPage() {
             <div className='w-full max-w-4xl'>
               <div className={`text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10` }>
                 <img
-                  src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season].poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
+                  src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season]?.poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
                   className="w-72 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
                   alt={data?.title || data?.name}
                 />

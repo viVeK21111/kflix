@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 
 export default function Chatbot() {
-  const [query, setQuery] = useState("");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const queryres = queryParams.get("query");
+  const [query, setQuery] = useState(queryres || "");
   const [Loading,setLoading] = useState(false);
   const [pLoading,setpLoading] = useState(true);
   const {getdata,data,contentType} = chatStore();
@@ -78,7 +81,7 @@ export default function Chatbot() {
       <label className="text-white font-semibold text-lg items-center">Ask Me anything</label>
       <input
       type="text" className="my-5 p-2 bg-black text-white border rounded-lg w-full" placeholder="Whats on your mind...!"
-      value={query}
+      value={query || queryres}
       onChange={(e) => setQuery(e.target.value)}
       />
       </div>

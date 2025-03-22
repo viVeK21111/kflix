@@ -1,8 +1,8 @@
 import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
-import {Link, useNavigate} from 'react-router-dom';
-import { Trash2,Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle } from "lucide-react";
+import {Link} from 'react-router-dom';
+import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
