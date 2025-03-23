@@ -11,7 +11,6 @@ export const generateToken = (userId,res) => {
     maxAge: 15*24*60*60*1000, // in milliseconds
     httpOnly: true, // prevent xss attacks (cross site scripting)
     secure: true, // send cookie only in https (true in deployment)
-    secure: process.env.NODE_ENV === "production",
     sameSite: 'none',
     path : '/',
     });

@@ -14,7 +14,6 @@ import { TvMinimalPlay,Clapperboard } from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
- 
   const {contentType} = useContentStore();
   const [ImageLoad,setImageLoad] = useState(true);
   const movieSectionRef = useRef(null);
