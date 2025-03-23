@@ -12,6 +12,5 @@ export const generateToken = (userId,res) => {
     httpOnly: true, // prevent xss attacks (cross site scripting)
     secure: true, // send cookie only in https (true in deployment)
     sameSite: 'none',
-    path : '/',
     });
 }
