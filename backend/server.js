@@ -35,6 +35,12 @@ app.use('/cronjob',cronroutes)
 //    console.log("server started at https://localhost:5000");
 //    connectDB();
 //});
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+});
 
 app.listen(PORT || 5000, () => { // server defualt listens on 0.0.0.0 (within the network) and also localhost on port
     console.log(`Server started on port:${PORT}`);

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ArrowUp } from 'lucide-react';
+
 
 export default function Chatbot() {
   const location = useLocation();
@@ -16,6 +17,9 @@ export default function Chatbot() {
   const [ContentType, setContentType] = useState(null);
   let { getdata, data, datatext, contentType } = chatStore();
   const [query1, setQuery1] = useState(sessionStorage.getItem("query1") || null);
+  const [submitloading, setsubmitloading] = useState(null);
+  const [conversationHistory, setConversationHistory] = useState([]);
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     if (data) {
@@ -28,6 +32,13 @@ export default function Chatbot() {
       setContentType(contentType);
     }
   }, [data, datatext, contentType]);
+
+  // Add effect to scroll to bottom of chat
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [query1]);
 
   useEffect(() => {
     const logoImage = new Image();
@@ -50,14 +61,58 @@ export default function Chatbot() {
     return () => clearTimeout(timeout);
   }, []);
 
+  // Update conversation history when we get new data
+  useEffect(() => {
+    // Only add to conversation if we have a query and either data or datatext
+    if (query1 && (Data || DataText) && !Loading) {
+      const newEntry = {
+        query: query1,
+        data: Data,
+        datatext: DataText,
+        contentType: ContentType
+      };
+      
+      // Check if this entry is already in the history to avoid duplicates
+      const isDuplicate = conversationHistory.some(
+        item => item.query === query1 && 
+        (item.data === Data || item.datatext === DataText)
+      );
+      
+      if (!isDuplicate) {
+        setConversationHistory(prev => [...prev, newEntry]);
+      }
+    }
+  }, [Data, DataText, Loading]);
+
   const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    
+    setsubmitloading(true);
     setQuery1(query);
-    sessionStorage.setItem("query1",query);
+    sessionStorage.setItem("query1", query);
+    
+    // Clear previous data
     setData(null);
     setDataText(null);
-    e.preventDefault();
+    
     setLoading(true);
-    await getdata({ query }).finally(() => setLoading(false));
+    
+    // Store current query to use after data loads
+    const currentQuery = query;
+    
+    // Clear input for better UX
+    setQuery("");
+    
+    try {
+      await getdata({ query: currentQuery });
+      // Data will be handled by the useEffect that watches data and datatext
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+      setsubmitloading(false);
+    }
   };
 
   if (pLoading) {
@@ -87,63 +142,85 @@ export default function Chatbot() {
       </header>
       
       {/* Main content area - takes up most of the space */}
-      <div className="flex flex-col overflow-auto overflow-x-hidden scrollbar-hide rounded-lg mx-3 lg:mx-32 bg-slate-800 bg-opacity-50">
-      { query1 && (
-          <p className="text-white  ml-auto bg-slate-800 rounded-lg p-2 mt-5 mr-2 mb-2">{query1}</p>
-        )
+      <div 
+        ref={chatContainerRef}
+        className="flex-col overflow-auto bg-slate-800 bg-opacity-70 overflow-x-hidden scrollbar-hide rounded-lg lg:pl-48 lg:mx-0 lg:pr-24 flex-1"
+      >
+        {/* Render conversation history */}
+        {conversationHistory.map((item, index) => (
+          <div key={index} className="mb-4">
+            {/* User query */}
+            <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2">
+              {item.query}
+            </p>
 
-        }
+            {/* Text response */}
+            {item.datatext && (
+              <div className="flex mx-auto p-4 pt-2 text-left items-center">
+                <p className="text-white">{item.datatext}</p>
+              </div>
+            )}
+            
+            {/* Content grid response */}
+            {item.data && item.contentType && (
+              <div className="flex">
+                <div className="p-3 rounded-b-lg w-full">
+                  <h2 className="font-semibold mb-3 text-white text-lg border-b pb-2">
+                    {item.contentType === 'tv' ? "TV Shows" : "Movies"}
+                  </h2>
+                  
+                  {/* Movie/TV Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
+                    {item.data.map((content, idx) => (
+                      (content?.backdrop_path || content?.poster_path) && (
+                        <Link 
+                          key={`${content.id}-${idx}`}
+                          to={`/${item.contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${content?.id}&name=${content?.name || content?.title}`}
+                          onClick={() => window.scroll(0, 0)}
+                        >
+                          <div className="rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
+                            <img 
+                              src={`${ORIGINAL_IMG_BASE_URL}${content?.backdrop_path || content?.poster_path}`} 
+                              className="w-full h-40 object-cover rounded-t-lg" 
+                              alt={content?.title || content?.name} 
+                            />
+                            <h3 className="text-base text-white p-2">{content.title || content.name}</h3>
+                            <p className="text-sm text-gray-400 pb-2 pl-2">
+                              {content?.release_date?.split("-")[0] || content?.first_air_date?.split("-")[0]} | 
+                              Rating: <b>{content?.vote_average.toFixed(2)}</b> | {content?.adult ? "18+" : "PG-13"}
+                            </p>
+                          </div>
+                        </Link>
+                      )
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+        
+        {/* Current query and loading state */}
+        {query1 && submitloading && (
+          <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2">
+            {query1}
+          </p>
+        )}
+        
         {/* Loading indicator */}
         {Loading && (
-          <div className="flex justify-center my-4">
-            <p className="text-white bg-slate-800/70 p-3 rounded-lg">Loading...</p>
-          </div>
-        )}
-        
-        {/* Text response */}
-     
-        {!Loading && DataText && (
-          <div className="flex rounded-t-lg mx-auto p-4 pt-6 text-left items-center">
-            <p className="text-white">{datatext}</p>
-          </div>
-        )}
-        
-        {/* Content grid response */}
-        {!Loading && Data && ContentType && (
-          <div className="flex">
-            <div className="p-3 rounded-b-lg w-full">
-              <h2 className="font-semibold mb-3 text-white text-lg border-b pb-2">{ContentType==='tv'? "Tv Shows" : "Movies"}</h2>
-              
-              {/* Movie/TV Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
-                {Data.map((item, index) => (
-                  <Link 
-                    key={item.id || index} 
-                    to={`/${contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-                    onClick={() => window.scroll(0, 0)}
-                  >
-                    <div className="rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
-                      <img 
-                        src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`} 
-                        className="w-full h-40 object-cover rounded-t-lg" 
-                        alt={item?.title || item?.name} 
-                      />
-                      <h3 className="text-base text-white  p-2">{item.title || item.name}</h3>
-                      <p className="text-sm text-gray-400 pb-2 pl-2">
-                        {item?.release_date?.split("-")[0] || item?.first_air_date?.split("-")[0]} | 
-                        Rating: <b>{item?.vote_average.toFixed(2)}</b> | {item?.adult ? "18+" : "PG-13"}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+          <div className="flex w-full justify-center my-4">
+            <div className="flex items-center space-x-2 bg-slate-900 rounded-lg p-3">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
       </div>
       
       {/* Input form - fixed at the bottom */}
-      <div className="p-4 bg-slate-900 bg-opacity-50 mt-auto">
+      <div className="p-4 bg-slate-900 mt-auto bg-opacity-50">
         <div className="max-w-2xl mx-auto">
           <form onSubmit={onSubmit} className="w-full">
             <div className="flex items-center">
@@ -151,11 +228,14 @@ export default function Chatbot() {
                 type="text" 
                 className="p-3 bg-black text-white border border-red-500 rounded-lg w-full" 
                 placeholder="Ask me anything...!"
-                value={query || queryres}
+                value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                disabled={Loading}
               />
               <button
-                className="ml-2 bg-red-600 p-3 text-white rounded-full hover:bg-red-700"
+                type="submit"
+                className={`ml-2 bg-red-600 p-3 text-white rounded-full ${Loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'}`}
+                disabled={Loading}
               >
                 <ArrowUp />
               </button>

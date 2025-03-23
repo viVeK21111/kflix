@@ -53,16 +53,29 @@ export const GetMovieList = async (req, res) => {
         let result = await model.generateContent(prompt);
         result = result.response.text();
         console.log("result \n"+result);
-        const jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```|([\s\S]*?)({[\s\S]*})/);
-        const introText = (jsonMatch[1] || jsonMatch[3] || "").trim();
+        let introText;
         let result1;
+        let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
         if (jsonMatch) {
-            const jsonString = jsonMatch[2].replace(/```json|```/g, '').trim() || jsonMatch[4].trim();
+            const jsonString = jsonMatch[2].replace(/```json|```/g, '').trim();
+            introText = ((jsonMatch[1]).trim() || "");
             result1 = JSON.parse(jsonString);
-
-        } else {
-            return res.json({success:true,nocontext:introText});
+        } 
+        else {
+            jsonMatch = result.match(/([\s\S]*?)({[\s\S]*})/);
+            if(jsonMatch) {
+                const jsonString = jsonMatch[2].trim();
+                introText = ((jsonMatch[1]).trim() || "");
+                result1 = JSON.parse(jsonString);
+            }
+            else {
+                introText = result;
+                return res.json({success:true,nocontext:introText});
+            }
+            
         }
+        
+       
         let content = ""
         let contents = ""
         if("movies" in result1) {
