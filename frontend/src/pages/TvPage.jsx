@@ -123,7 +123,7 @@ const TvPage = () => {
 
   if (loading) {
     return (
-      <p className="flex text-white bg-slate-800 justify-center items-center text-xl h-screen w-full font-bold">
+      <p className="flex text-white bg-slate-900 justify-center items-center text-xl h-screen w-full font-bold">
         Hold on tight... 🍿
       </p>
     );
@@ -135,17 +135,17 @@ const TvPage = () => {
   };
 
   return (
-    <div className="text-white bg-slate-900 min-h-screen p-2">
+    <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
         <img
-          className="w-full md:h-[80vh] object-cover object-top rounded-t-lg shadow-2xl"
+          className="w-full md:h-[80vh] object-cover object-top shadow-2xl"
           src={imageSrc}
           alt="TV Show"
           onLoad={() => setimageload(false)}
         />
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
-        <div className="md:absolute lg:max-w-3xl bottom-2 left-3 rounded-t-lg">
+        <div className="md:absolute lg:max-w-3xl p-1 md:p-0 bottom-2 left-3 rounded-t-lg">
         <div className='mt-4 sm:hidden ml-1'>
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
@@ -259,7 +259,7 @@ const TvPage = () => {
       {/* Seasons Section */}
       { !imageload && (
         <>
-         <div className="mt-6">
+         <div className="mt-6 p-2">
         <h2 className="text-4xl font-semibold mb-6 text-white border-b-4 border-yellow-400 pb-2">
           Seasons
         </h2>
@@ -318,7 +318,7 @@ const TvPage = () => {
         </div>
       </div>
       {/* Similar TV Shows */}
-      <div className='text-white max-w-8xl max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl'><h3 className='font-bold'>Similar Tv shows</h3></div>
+      <div className='text-white max-w-8xl max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl pl-2'><h3 className='font-bold'>Similar Tv shows</h3></div>
       <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3 mt-8 px-1 md:px-3">
         {datas?.slice(0, numitemsm).map((item, index) => (
           <Link
@@ -343,7 +343,7 @@ const TvPage = () => {
         ))}
       </div>
       {numitemsm < datas?.slice(0, 10).length && (
-        <div className="flex max-w-8xl justify-center items-center mt-6">
+        <div className="flex max-w-8xl justify-center pb-2 items-center mt-6">
           <button
             onClick={() => setnumitemsm(prev => prev + 5)}
             className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"

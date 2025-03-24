@@ -42,7 +42,7 @@ const LoginPage = () => {
           </form>
           <div className='flex m-3'>
             <div className='text-semibold flex text-white text-left mr-2'>Don't have an account?</div>
-            <Link to={'/signup'} className='block text-left text-red-700 underline font-semibold'>Sign Up</Link>
+            <Link to={'/signup'} className='block text-left text-red-700 underline font-semibold'><spawn>Sign Up</spawn></Link>
             </div>
          
       </div>

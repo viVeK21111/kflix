@@ -19,6 +19,20 @@ import ChangePassword from "./pages/ChangePassword";
 import SearchHistory from "./pages/SearchHistory";
 import ChatHistory from "./pages/ChatHistory";
 import WatchHistory from "./pages/WatchHistory"
+import {useLocation}  from  'react-router-dom';
+
+function FooterWithRouteCheck() {
+  // Import useLocation here to ensure it's updated on every route change
+  
+  const location = useLocation();
+  
+  // Don't show footer on chat page
+  if (location.pathname === '/chat') {
+    return null;
+  }
+  
+  return <Footer />;
+}
 
 function App() {
 
@@ -27,6 +41,7 @@ function App() {
     authCheck();
   },[authCheck]);
   console.log("user auth: ",user);
+  const isChatPage = location.pathname === '/chat';
   if(isCheckingauth) {
     return (
       <div className="h-screen ">
@@ -55,9 +70,10 @@ function App() {
       <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
     </Routes>
-    <Footer/>
+    <FooterWithRouteCheck/>
     <Toaster/>
     </>
   );
+  
 }
 export default App;

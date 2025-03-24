@@ -55,7 +55,7 @@ const SignUpPage = () => {
           <div className='text-center text-white text-sm m-3'>By signing up, you agree to our Terms, Data Policy and Cookies Policy.</div>
             <div className='flex'>
             <div className='text-semibold flex text-white text-left mr-2'>Already signed up?</div>
-            <Link to={'/login'} className='block text-left text-red-700 underline font-semibold'>Sign In</Link>
+            <Link to={'/login'} className='block text-left text-red-700 underline font-semibold'> <spawn>Sign In</spawn></Link>
             </div>
       </div>
     </div>

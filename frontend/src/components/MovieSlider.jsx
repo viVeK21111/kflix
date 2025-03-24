@@ -14,7 +14,6 @@ const MovieSlider = ({ category }) => {
 		  sessionStorage.setItem("openseason",null);
 		},[])
 		
-
 	
 	const { contentType } = useContentStore();
 	const [content, setContent] = useState([]);
