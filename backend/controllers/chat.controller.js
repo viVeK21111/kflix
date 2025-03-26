@@ -12,6 +12,8 @@ export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
     const {query} = req.body;
+    const user = User.findById(req.user._id);
+    const username = user.username;
 
     if(query.length==0){
        return res.status(500).json({success:false,message:"Query can't be empty"});
@@ -40,7 +42,7 @@ export const GetMovieList = async (req, res) => {
             prompt += '.\nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}" and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any content or else just text explaining why you cant find)'
         }
         else {
-            prompt+=" \nNote: You are a chatbot called 'Flix' which is being used in movie and tv streaming platform. Address the user query in a freindly manner and ask what they want to watch if required. If user asks any question out of the movies or tv context, try to give response according to the users context."
+            prompt+=` \nNote: You are a chatbot called 'Flix' which is being used in movie and tv streaming platform. Address the user ${username}'s query in a freindly manner and ask what they want to watch if required. If user asks any question out of the movies or tv context, try to give response according to the users context.`
             try {
                 let result = await model.generateContent(prompt);
                 return res.json({success:true,nocontext:result.response.text()});
