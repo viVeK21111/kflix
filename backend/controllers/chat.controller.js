@@ -40,7 +40,7 @@ export const GetMovieList = async (req, res) => {
             prompt += '.\nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}" and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any content or else just text explaining why you cant find)'
         }
         else {
-            prompt+=" \nNote: Chat in a friendly manner, like a chatbot used in movie streaming platform(kflix) and ask user whether he wants to watch some movies or tvshows"
+            prompt+=" \nNote: You are a chatbot called 'Klix' which is being used in movie and tv streaming platform. Address the user query in a freindly manner and ask what they want to watch if required. If user asks any question out of the movies or tv context, try to give response according to the users context."
             try {
                 let result = await model.generateContent(prompt);
                 return res.json({success:true,nocontext:result.response.text()});
