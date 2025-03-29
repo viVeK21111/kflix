@@ -1,4 +1,3 @@
-import e from 'express';
 import {User} from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/generateToken.js';
@@ -19,7 +18,7 @@ export async function signin(req,res) {
             return res.status(400).json({success:false,message:"password incorrect"});
         }
         generateToken(user._id,res);
-        return res.status(200).json({success:true,user:user,message:"signed in successfully"});
+        return res.status(200).json({success:true,user:user,message:`Welcome back ${user.username}`});
     }
     catch(error) {
         console.log("Error in signing in: "+error.message);

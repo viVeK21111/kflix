@@ -1,11 +1,32 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight,Loader } from "lucide-react";
 
 
 const AuthScreen = () => {
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
+    const [Loading,setLoading] = useState(true);
+    const [Loading1,setLoading1] = useState(true);
+      const logoImage = new Image();
+      logoImage.src = '/hero.png';
+      const logo = new Image();
+      logo.src = '/kflix2.png';
+      logoImage.onload = () => {
+        setLoading(false);
+      }
+      logo.onload = () => {
+        setLoading1(false);
+      }
+      if((Loading || Loading1)) {
+        return (
+            <div className="h-screen ">
+            <div className="flex justify-center items-center bg-black h-full">
+            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            </div>
+          </div>
+        )
+      }
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -15,17 +36,17 @@ const AuthScreen = () => {
     return (
         <div className='hero-bg relative'>
             {/* Navbar */}
-            <header className='max-w-6xl mx-0 flex items-center justify-between p-4 pb-10'>
+            <div className='flex items-center justify-between p-2  max-w-6xl ml-2  md:ml-3'>
                 
                 <img src='/kflix2.png' alt='Netflix Logo' className='w-52' /> 
                
                 <Link to={"/login"} className='text-white bg-red-600 py-1 px-2 rounded'>
                     Sign In
                 </Link>
-            </header>
+            </div>
 
             {/* hero section */}
-            <div className='flex flex-col items-center justify-center text-center py-40 text-white max-w-6xl mx-auto'>
+            <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
                 <h1 className='text-2xl md:text-4xl font-bold mb-4'>Unlimited free movies, TV shows, and more</h1>
                 <p className='text-base mb-4'>Watch anywhere at ease.</p>
                 <p className='mb-4'>Ready to watch? Enter your email to create account.</p>
@@ -46,14 +67,14 @@ const AuthScreen = () => {
             </div>
 
             {/* separator */}
-            <div className='h-2 w-full bg-[#232323]' aria-hidden='true' />
+            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
             {/* 1st section */}
-            <div className='py-10 bg-black text-white'>
+            <div className='py-5 bg-black text-white'>
                 <div className='flex max-w-6xl mx-auto items-center justify-center md:flex-row flex-col px-4 md:px-2'>
                     {/* left side */}
                     <div className='flex-1 text-center md:text-left'>
-                        <h2 className='text-4xl md:text-5xl font-extrabold mb-4'>Enjoy on your TV</h2>
+                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Enjoy on your TV</h2>
                         <p className='text-lg md:text-xl'>
                             Watch on Smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.
                         </p>
@@ -75,19 +96,20 @@ const AuthScreen = () => {
             </div>
 
             {/* separator */}
-            <div className='h-2 w-full bg-[#232323]' aria-hidden='true' />
+            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
             {/* 2nd section */}
-            <div className='py-10 bg-black text-white'>
+            
+            <div className='py-5 bg-black text-white'>
                 <div className='flex max-w-6xl mx-auto items-center justify-center md:flex-row flex-col-reverse px-4 md:px-2'>
                     {/* left side */}
                     <div className='flex-1 relative'>
                         <div className='relative'>
-                            <img src='/stranger-things-lg.png' alt='Stranger Things img' className='mt-4' />
+                            <img src='/stranger-things-lg.png' alt='Stranger Things img' className='mt-2' />
 
                             <div
                                 className='flex items-center gap-2 absolute bottom-5 left-1/2 -translate-x-1/2 bg-black
-              w-3/4 lg:w-1/2 h-24 border border-slate-500 rounded-md px-2
+              w-3/4 lg:w-1/2 h-16 border border-slate-500 rounded-md px-2
               '
                             >
                                 <img src='/stranger-things-sm.png' alt='image' className='h-full' />
@@ -105,7 +127,7 @@ const AuthScreen = () => {
                     {/* right side */}
 
                     <div className='flex-1 md:text-left text-center'>
-                        <h2 className='text-4xl md:text-5xl font-extrabold mb-4 text-balance'>
+                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4 text-balance'>
                             Download your shows to watch offline
                         </h2>
                         <p className='text-lg md:text-xl'>
@@ -117,14 +139,14 @@ const AuthScreen = () => {
 
             {/* separator */}
 
-            <div className='h-2 w-full bg-[#232323]' aria-hidden='true' />
+            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
             {/* 3rd section */}
-            <div className='py-10 bg-black text-white'>
+            <div className='py-5 bg-black text-white'>
                 <div className='flex max-w-6xl mx-auto items-center justify-center md:flex-row flex-col px-4 md:px-2'>
                     {/* left side */}
                     <div className='flex-1 text-center md:text-left'>
-                        <h2 className='text-4xl md:text-5xl font-extrabold mb-4'>Watch everywhere</h2>
+                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Watch everywhere</h2>
                         <p className='text-lg md:text-xl'>
                             Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.
                         </p>
@@ -148,7 +170,7 @@ const AuthScreen = () => {
                 </div>
             </div>
 
-            <div className='h-2 w-full bg-[#232323]' aria-hidden='true' />
+            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
         </div>
     );

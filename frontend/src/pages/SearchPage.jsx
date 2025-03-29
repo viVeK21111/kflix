@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
+import { Search,History,Loader } from 'lucide-react';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
@@ -12,12 +13,14 @@ const SearchPage = () => {
   const [loading,setloading] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
+  const [Searchsubmit,setSearchsubmit] = useState(false);
 
   useEffect(() => {
     sessionStorage.setItem('searchType', searchType);
   }, [searchType]);
 
   useEffect(() => {
+    setSearchsubmit(false);
     if(Array.isArray(data) && data.length > 0) {
       const imagePromises = data
       .slice(0, numitems)
@@ -36,6 +39,7 @@ const SearchPage = () => {
     }
     else {
       if(data) setImagesLoaded(true);
+      setSearchsubmit(true);
     }
    
   }, [data, numitems]);
@@ -45,6 +49,7 @@ const SearchPage = () => {
     e.preventDefault();
     setloading(true);
     setImagesLoaded(false);
+    
     sessionStorage.setItem('searchType2', searchType);
     setSearchType2(searchType);
     const sortResults = (data) => {
@@ -53,7 +58,9 @@ const SearchPage = () => {
   
     if (query.trim()) {
       if (searchType === 'movie') {
-        getMovie(query.trim()).then(sortResults).finally(() => setloading(false));
+        getMovie(query.trim()).then(sortResults).finally(() =>
+           setloading(false),
+      );
       } else if (searchType === 'tv') {
         getTv(query.trim()).then(sortResults).finally(() => setloading(false));
       } else {
@@ -63,20 +70,23 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-auto flex flex-col items-center p-1 bg-gray-900 text-white">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-auto flex flex-col items-center p-4">
       {/* Header */}
-      <header className="w-full max-w-6xl flex mx-auto justify-center items-center p-4">
+      <header className="w-full flex justify-center items-center">
         <Link to={'/'}>
           <img src={'/kflix2.png'} alt='Kflix Logo' className='w-40 sm:w-52' />
         </Link>
+        <Link to='/profile/searchHistory' className='flex ml-auto text-gray-400 transition-all duration-300 hover:scale-110 cursor-pointer text-sm mt-3 bg-white bg-opacity-10 py-1 px-2 rounded-md hover:underline'><History/></Link>
+
       </header>
       
+      
       {/* Search Section */}
-      <form onSubmit={handleSearch} className="flex max-w-xl mt-10 w-full px-3">
+      <form onSubmit={handleSearch} className="flex max-w-2xl mt-28 md:mt-20 w-full px-3">
         <select
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
-          className="p-2 rounded-lg bg-gray-800 text-white border mr-2 border-gray-700 w-24 sm:w-40"
+          className="p-2 rounded-lg bg-gray-800 outline-none focus:ring-0 text-white border mr-2 border-gray-700 w-24 sm:w-28"
         >
           <option value="movie">Movies</option>
           <option value="tv">Tv Show</option>
@@ -87,22 +97,19 @@ const SearchPage = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter search term..."
-          className="p-2 rounded-l-lg text-black w-full flex-1"
+          className="py-3 px-2 rounded-l-lg bg-slate-700 outline-none focus:ring-0 text-white w-full flex-1"
           required
         />
         <button
           type="submit"
-          className="p-2 bg-blue-600 hover:bg-blue-700 rounded-r-lg font-semibold"
+          className="px-3 bg-slate-600 hover:bg-slate-500 rounded-r-lg font-semibold"
         >
-          Search
+          <Search size={25} />
         </button>
       </form>
-      <Link to='/profile/searchHistory' className='flex text-white-400 text-sm mt-3 bg-blue-950 py-1 px-2 rounded-md hover:underline'>Search History</Link>
 
-      {imagesLoaded===false && (
-        <div className='flex text-white justify-center items-center mt-20'> 
-                <p>Loading...</p>
-        </div>
+      {(imagesLoaded===false && Searchsubmit===false) && (
+        <div className="flex justify-center h-screen mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
       )}
       {/* Search Results */}
       {!Loading && data && imagesLoaded && (searchType==='movie' && searchType2==='movie') && !loading && (
@@ -132,7 +139,7 @@ const SearchPage = () => {
                   </p>
                 )}
                 {item.popularity && searchType === 'person' && (
-                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
+                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
                 )}
               </Link>
               )
@@ -150,7 +157,7 @@ const SearchPage = () => {
                       return updatedNumItems;
                   });
               }}
-                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-all"
+                className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
               >
                 Load More
               </button>
@@ -190,7 +197,7 @@ const SearchPage = () => {
                   </p>
                 )}
                 {item.popularity && searchType === 'person' && (
-                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
+                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
                 )}
               </Link>
               )
@@ -208,7 +215,7 @@ const SearchPage = () => {
                     return updatedNumItems;
                 });
             }}
-                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-all"
+                className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
               >
                 Load More
               </button>
@@ -248,7 +255,7 @@ const SearchPage = () => {
                   </p>
                 )}
                 {item.popularity && searchType === 'person' && (
-                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
+                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
                 )}
               </Link>
               )
@@ -266,7 +273,7 @@ const SearchPage = () => {
                       return updatedNumItems;
                   });
               }}
-                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-all"
+                className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
               >
                 Load More
               </button>

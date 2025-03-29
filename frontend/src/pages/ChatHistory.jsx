@@ -78,7 +78,7 @@ const [loading,setloading] = useState(true);
             )}
           </>
         ) : (
-          <p className="text-gray-400 text-center">No search history found.</p>
+          <p className="text-gray-400 text-center">No Chat history found.</p>
         )}
       </div>
     </div>

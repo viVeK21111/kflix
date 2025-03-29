@@ -7,10 +7,8 @@ import {useContentStore} from '../../store/content'
 import MovieSlider from '../../components/MovieSlider';
 import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
 import { useState,useEffect,useRef } from 'react';
-import { Clock } from 'lucide-react';
 import {addWatchStore} from '../../store/watchStore';
-import {Star} from 'lucide-react';
-import { TvMinimalPlay,Clapperboard } from 'lucide-react';
+import { TvMinimalPlay,Clapperboard,Loader,Star,Clock } from 'lucide-react';
 
 export const HomeScreen = () => {
   const {trending,loading} = useGetTrendingContent();
@@ -49,8 +47,10 @@ export const HomeScreen = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex bg-slate-900 items-center justify-center text-white">
-        <p className="text-xl font-bold">Hold on tight... 🍿</p>
+      <div className="h-screen ">
+            <div className="flex justify-center items-center bg-black h-full">
+            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            </div>
       </div>
     );
   }

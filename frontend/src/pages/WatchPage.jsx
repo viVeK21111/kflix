@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Plus,Star,Play,Dot,ChevronDown,ChevronUp } from 'lucide-react';
+import { Plus,Star,Play,Dot,ChevronDown,ChevronUp,Loader } from 'lucide-react';
 import axios from 'axios';
 
 function WatchPage() {
@@ -81,13 +81,17 @@ function WatchPage() {
     setisplay(false);
     setLoading(true);
     if(Season) {
-      getTvdetails(Id).finally(()=> setLoading(false));
+      getTvdetails(Id).finally(()=> {
+      setLoading(false);
+      });
       window.scrollTo(0, 0);
     }
     else if (Id) {
-    
-      Promise.all([getMoviedetails(Id), getCredits(Id),getSimilarMovies(Id)]).then(() => setLoading(false)
+      Promise.all([getMoviedetails(Id), getCredits(Id),getSimilarMovies(Id)]).then(() => {
+      setLoading(false);
      
+      }
+      
       ); 
       window.scrollTo(0, 0);
     
@@ -159,7 +163,7 @@ function WatchPage() {
       }
       return (
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
-    <div className='p-1 md:p-0 '>
+    <div className=''>
     {(isplay || Season) && (
       <header className='flex items-center justify-center p-4'>
       <Link to={'/'} className='flex items-center'>
@@ -168,9 +172,11 @@ function WatchPage() {
     </header>
     )}
      
-      {Loading &&  (
-        <div className="w-full flex mt-20 justify-center items-center">
-        <p className='text-white '>Loading...</p>
+      {(Loading || imageload) && !Season &&  (
+        <div className="h-screen ">
+        <div className="flex justify-center items-center bg-black h-full">
+        <Loader className="animate-spin text-red-600 w-10 h-10"/>
+        </div>
       </div>
       )}
 
@@ -181,7 +187,7 @@ function WatchPage() {
           onLoad={() => setimageload(false)}
           ></img>
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
-          <div className="md:absolute text-white lg:max-w-3xl  bottom-5 left-3">
+          <div className="md:absolute text-white lg:max-w-3xl p-1  bottom-5 left-3">
           <div className='mt-4 sm:hidden ml-1'>
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
@@ -311,7 +317,7 @@ function WatchPage() {
       {/* Video Container */}
       {(isplay || Season) &&  (
         
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center p-2 lg:p-0'>
         <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
         {/* Video Player */}
         <iframe
@@ -369,7 +375,7 @@ function WatchPage() {
         </button>
       </div>
      
-        <div className="mt-8 text-center px-1 lg:px-0">
+        <div className="mt-5 text-center px-1 lg:px-0">
           <h1 className={`flex items-center lg:text-2xl md:text-xl text-left  gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
             Now Playing: <span className='font-extralight'>{Name} </span>
           </h1>
@@ -443,7 +449,7 @@ function WatchPage() {
         
         {bgColorClass!=='bg-black'  && !data?.seasons && !Loading && !imageload && (
           <div className='bg-black w-full mt-5'>
-                <div className='flex text-white border-t-2 border-white border-opacity-30 p-1 text-xl'><h3 className='font-bold'>Cast</h3></div>
+                <div className='flex text-white border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
                   {datac?.cast?.slice(0,numitems).map((item, index) => (
                     <Link
@@ -486,27 +492,32 @@ function WatchPage() {
           </button>
         </div>
       )}
-        <div className='text-white w-full  border-t-2 border-white border-opacity-30 p-1 mt-3 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
-        <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-8 px-2 md:px-4">
+        <div className='text-white w-full  border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
+        <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3">
                   {datas?.slice(0,numitemsm).map((item, index) => (
-                    <Link 
-                      key={item.id || index} 
-                      to={'/watch/'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
-                      className="block bg-gray-800 bg-opacity-60 p-1 rounded-lg shadow-md hover:scale-105 transition-transform"
-                    >
-                      <img 
-                        src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                        className="w-full h-48 object-cover rounded-lg" 
-                        alt={item?.title || item?.name} 
-                      />
-                      <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
-                        {item.title || item.name}
-                      </h3>
-                      
-                      {item?.popularity && (
-                        <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
-                      )}
-                    </Link>
+                    (item?.backdrop_path || item?.poster_path || item?.profile_path) &&
+                      (
+                        <Link 
+                        key={item.id || index} 
+                        to={'/watch/'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
+                        className="block bg-gray-800 bg-opacity-60 p-1 rounded-lg shadow-md hover:scale-105 transition-transform"
+                      >
+                        <img 
+                          src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+                          className="w-full h-48 object-cover rounded-lg" 
+                          alt={item?.title || item?.name} 
+                        />
+                        <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                          {item.title || item.name}
+                        </h3>
+                        
+                        {item?.popularity && (
+                          <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
+                        )}
+                      </Link>
+                      )
+                    
+                   
                   ))}
                 </div>
                 {numitemsm < datas?.slice(0,10).length && (

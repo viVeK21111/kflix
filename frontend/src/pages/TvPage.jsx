@@ -5,7 +5,7 @@ import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
-import { Plus, Star,Dot,Play } from "lucide-react";
+import { Plus, Star,Dot,Play,Loader } from "lucide-react";
 import axios from "axios";
 
 const TvPage = () => {
@@ -88,6 +88,7 @@ const TvPage = () => {
   
   useEffect(() => {
     setLoading(true);
+    setimageload(true);
     if(id) {
     Promise.all([
       getTvdetails(id),
@@ -123,9 +124,11 @@ const TvPage = () => {
 
   if (loading) {
     return (
-      <p className="flex text-white bg-slate-900 justify-center items-center text-xl h-screen w-full font-bold">
-        Hold on tight... 🍿
-      </p>
+      <div className="h-screen ">
+            <div className="flex justify-center items-center bg-black h-full">
+            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            </div>
+      </div>
     );
   }
 
@@ -251,9 +254,11 @@ const TvPage = () => {
       </header>
     
       {imageload && (
-         <div className="w-full flex mt-20 justify-center items-center">
-         <p className='text-white '>Loading...</p>
-       </div>
+          <div className="h-screen ">
+          <div className="flex justify-center items-center bg-black h-full">
+          <Loader className="animate-spin text-red-600 w-10 h-10"/>
+          </div>
+        </div>
       )}
 
       {/* Seasons Section */}
@@ -337,7 +342,7 @@ const TvPage = () => {
             </h3>
 
             {item?.popularity && (
-              <p className="text-xs sm:text-sm text-gray-400">Popularity: {item.popularity}</p>
+              <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
             )}
           </Link>
         ))}

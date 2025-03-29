@@ -3,6 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {Loader} from 'lucide-react';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -51,9 +52,11 @@ const ContactPage = () => {
 
   if(Loading) {
     return (
-      <p className="flex text-red-500 bg-slate-950 justify-center items-center text-xl h-screen w-full font-bold">
-          Hold my beer...!
-    </p>
+      <div className="h-screen ">
+      <div className="flex justify-center items-center bg-black h-full">
+      <Loader className="animate-spin text-red-600 w-10 h-10"/>
+      </div>
+</div>
     )
   }
 

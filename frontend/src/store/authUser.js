@@ -24,7 +24,7 @@ export const userAuthStore = create((set)=> ({
         try {
             const response = await axios.post('/api/v1/auth/signin',credentails);
             set({user:response.data.user,isSigningIn:true})
-            toast.success("signed in successfully")
+            toast.success(response.data.message || "Sign in successfully")
         } catch (error) {
             toast.error(error.response.data.message || "an error occured");
             set({isSigningIn:false,user:null})

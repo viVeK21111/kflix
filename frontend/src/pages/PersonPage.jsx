@@ -4,7 +4,7 @@ import { PersonStore } from "../store/PersonStore"; // Assuming store import
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants"; // Import Image base URL
 import { DetailsStore } from "../store/tvdetails";
 import { Link } from 'react-router-dom';
-import { use } from "react";
+import {Loader} from 'lucide-react'
 
 export default function PersonPage() {
   const { datap, getPersonDetails, datac, getPersonCredits } = PersonStore();
@@ -58,27 +58,29 @@ export default function PersonPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white text-lg">
-        Loading...
+      <div className="h-screen ">
+      <div className="flex justify-center items-center bg-black h-full">
+      <Loader className="animate-spin text-white w-10 h-10"/>
       </div>
+</div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-1 flex flex-col ">
-      <div className="max-w-full w-full bg-black-800 p-5 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-6">
+    <div className="min-h-screen bg-slate-800 text-white flex flex-col ">
+      <div className="max-w-full w-full bg-black-800 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-4">
         {/* Profile Image */}
-        <div className="flex justify-center">
+        <div className="flex justify-center p-3">
         <img
           src={`${ORIGINAL_IMG_BASE_URL}${datap?.profile_path}`}
           alt={datap?.name}
-          className="w-48 h-48 rounded-lg object-cover border-4 border-white-500 shadow-lg"
+          className="w-60 h-60 rounded-lg object-cover border border-gray-600 shadow-lg"
         />
         </div>
        
 
         {/* Details Section */}
-        <div className="flex-1">
+        <div className="flex-1 p-3">
           <div className="flex flex-col">
           <h1 className="text-3xl font-bold text-yellow-400">{datap?.name}</h1>
           {datap?.also_known_as && (
@@ -86,15 +88,15 @@ export default function PersonPage() {
               <b>Also Known As:</b> {datap?.also_known_as.slice(0, 4).join(", ")}
             </p>
           )}
-          <p className="mt-2 text-white-400 text-base">
-          <b>Born</b>: {datap?.birthday} {!datap?.deathday && (datap?.birthday && <span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} 
+          <p className="flex mt-2 text-white-400 text-base">
+          <p className="font-semibold">Born:</p> <p className="ml-2 text-gray-300">{datap?.birthday} {!datap?.deathday && (datap?.birthday && <span>({new Date().getFullYear() - (datap?.birthday?.split("-")[0] || 0)} years)</span>)} </p>
         </p>
-        <p className="mt-2"><b>Place:</b> {datap?.place_of_birth}</p> 
+        <p className="flex mt-2"><p className="font-semibold">Place:</p><p className="ml-2 text-gray-300">{datap?.place_of_birth}</p> </p> 
           {datap?.deathday && (
-            <p className="text-base"> <b>Death:</b> {datap.deathday} <span>({datap.deathday.split("-")[0] - (datap?.birthday?.split("-")[0] || 0)} years)</span> </p>
+            <p className="flex text-base mt-2"> <p className="font-semibold">Died:</p><p className="ml-2 text-gray-300">{datap.deathday} <span>({datap.deathday.split("-")[0] - (datap?.birthday?.split("-")[0] || 0)} years)</span> </p> </p>
           )}
           {datap?.known_for_department && (
-            <p className="mt-2"><b>Department:</b> {datap.known_for_department}</p>
+            <p className="flex mt-2"><p className="font-semibold">Department</p>:<p className="ml-2 text-gray-300 font-semibold"> {datap.known_for_department}</p></p>
           )}
 
           {/* Links */}
@@ -114,7 +116,7 @@ export default function PersonPage() {
                 href={`https://www.imdb.com/name/${datap.imdb_id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-2 bg-yellow-500 text-black font-bold rounded-lg hover:bg-yellow-700 transition-all"
+                className="px-3 py-2 bg-yellow-500 text-black font-bold rounded-lg hover:bg-yellow-600 transition-all"
               >
                 IMDB
               </a>
@@ -126,7 +128,7 @@ export default function PersonPage() {
       </div>
 
       {/* Biography Section */}
-      <div className="max-w-full bg-gray-800 p-3 md:p-4 rounded--blg shadow-lg">
+      <div className="max-w-full bg-[#2e2f2e] p-3 md:p-4 rounded--blg shadow-lg">
         <h2 className="text-xl font-semibold text-white mb-2">Biography</h2>
         <p className="text-gray-300 text-base leading-relaxed">
           {datap?.biography.length < readov ? datap?.biography : ( 
@@ -142,27 +144,29 @@ export default function PersonPage() {
       </div>
 
       {/* Movies Section */}
-      <div className="w-full max-w-4xl text-xl mt-3"> 
-        <p className="font-semibold">Movies Known For: </p>
+      <div className="bg-slate-900">
+      <div className="w-full  max-w-4xl text-xl mt-3"> 
+        <p className="ml-3 font-semibold">Movies Known For: </p>
       </div>
-      <div className="mt-6 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {loading1 ? (
-          <div><p>Loading...</p></div>
-        ):(
+      {loading1 && (
+          <div className="flex justify-center h-screen mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
+        )}
+      <div className="mt-6 mb-3 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+       
           <>
           {movies.slice(0,numitems).map((item, index) => (
           <Link key={item.id || index} to={`/watch/?id=${item?.id}&name=${item?.name || item?.title}`}>
-            <div className="p-1 rounded-lg bg-slate-800 shadow-md hover:scale-105 transition-transform">
+            <div className="rounded-lg bg-slate-800  shadow-md hover:scale-105 transition-transform">
               <img
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
-                className="w-full h-40 sm:h-48 object-cover rounded-lg mb-2"
+                className="w-full h-40 sm:h-48 object-cover rounded-t-lg mb-2"
                 alt={item?.title || item?.name}
               />
-              <h3 className="text-sm sm:text-base font-bold text-white mb-1 truncate">
+              <h3 className="pl-2 text-sm sm:text-base font-bold text-white mb-1 truncate">
                 {item.title || item.name}
               </h3>
               {(item.release_date || item.first_air_date) && (
-                <p className="text-xs sm:text-sm text-gray-300">
+                <p className="text-xs sm:text-sm text-gray-300 pl-2 pb-3">
                   {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
                   | Rating: <b>{item.vote_average}</b> 
                   | {item.adult ? "18+" : "PG-13"}
@@ -173,18 +177,21 @@ export default function PersonPage() {
         ))}
        
        </>
-       )}
+       
       </div>
       {numitems < movies.length && (
               <div className="flex w-full justify-center mt-4 mb-3">
                 <button
                   onClick={() => setnumitems(prev => prev + 4)} // Show 6 more items
-                  className="px-3 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all"
+                  className="px-3 py-2 bg-white bg-opacity-20 text-white font-semibold rounded-lg hover:bg-opacity-30 transition-all"
                 >
                   Load More
                 </button>
               </div>
             )}
+      </div>
+      
+     
     </div>
   );
 }

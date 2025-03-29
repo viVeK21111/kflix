@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ArrowUp, History } from 'lucide-react';
+import { ArrowUp, History,Loader } from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
 
 export default function ChatPage() {
@@ -21,6 +21,7 @@ export default function ChatPage() {
   const [submitloading, setsubmitloading] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const chatContainerRef = useRef(null);
+  const [formEnd, setFormEnd] = useState(false);
 
   useEffect(() => {
     if (data) setData(data);
@@ -41,6 +42,7 @@ export default function ChatPage() {
       }, 0);
     } 
   }, [query1]);
+  
 
 
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function ChatPage() {
   }, [Data, DataText, Loading]);
 
   const onSubmit = async (e) => {
+    setFormEnd(true);
     e.preventDefault();
     if (!query.trim()) return;
     setQuery1(query); // Set query1 immediately to trigger scroll
@@ -85,9 +88,12 @@ export default function ChatPage() {
 
   if (pLoading) {
     return (
-      <p className="flex text-red-500 bg-slate-950 justify-center items-center text-xl h-screen w-full font-bold">
-        I am Batman...!
-      </p>
+        <div className="flex flex-col w-screen h-screen justify-center items-center bg-black">
+            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            <p className="text-red-500  text-xl font-bold">
+              I am Batman...!
+            </p>
+            </div>
     );
   }
 
@@ -113,25 +119,35 @@ export default function ChatPage() {
       {/* Chat content area - scrollable */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-hide px-4 lg:px-48"
+        className="flex-1 overflow-y-auto  px-4 lg:px-48"
+        style={{
+          scrollbarColor: 'rgb(53, 52, 52) #1e1d1d'
+        }}
       >
 
 
-        {!Data && !query1 && (
-          <div className="flex justify-center my-20 text-white">
-            <p>Welcome to flix chat powered by gemini 2.0 Flash</p>
-          </div>
-        )}
         {conversationHistory.map((item, index) => (
           <div key={index} className="mb-4">
-            <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2">
-              {item.query}
+            <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2 ">
+              <p className="bg-white bg-opacity-10 px-3 py-2 rounded-xl">{item.query}</p>
             </p>
             {item.datatext && (
-              <div className="flex mx-auto p-4 pt-2 text-left items-center">
-                <p className="text-white">{item.datatext}</p>
-              </div>
-            )}
+  <div className="flex mx-auto p-4 pt-2 text-left items-center">
+    <div className="text-white whitespace-pre-wrap max-w-5xl">
+      {/* Using a div with dangerouslySetInnerHTML to render formatted text */}
+      <div 
+        dangerouslySetInnerHTML={{
+          __html: item.datatext
+            // Replace Markdown with HTML equivalents
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text
+            .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic text
+            .replace(/^\s*\*\s*(.*)$/gm, '• $1<br/>') // Bullet points
+            .replace(/\n/g, '<br/>') // Line breaks
+        }}
+      />
+    </div>
+  </div>
+)}
             {item.data && item.contentType && (
               <div className="p-3 rounded-b-lg w-full">
                 <h2 className="font-semibold mb-3 text-white text-lg border-b pb-2">
@@ -168,12 +184,12 @@ export default function ChatPage() {
 
         {query1 && submitloading && (
           <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2">
-            {query1}
+            <p className="bg-white bg-opacity-10 px-3 py-2 rounded-xl">{query1}</p>
           </p>
         )}
 
         {Loading && (
-          <div className="flex w-full justify-center my-4">
+          <div className="flex w-full justify-center mt-4 mb-48">
             <div className="flex items-center space-x-2 bg-white bg-opacity-10 rounded-lg p-3">
               <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
               <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -184,8 +200,11 @@ export default function ChatPage() {
       </div>
 
       {/* Input form - fixed at the bottom */}
-      <div className="pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0">
+      <div className={(formEnd || DataText) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0 sm:bottom-80`}>
         <div className="max-w-2xl p-1 mx-auto">
+          {(!formEnd && !DataText) && (
+            <p className="text-white flex justify-center pb-3 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
+          )}
           <form onSubmit={onSubmit} className="w-full">
             <div className="flex items-center">
               <input

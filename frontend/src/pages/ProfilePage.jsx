@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -80,9 +80,11 @@ export default function ProfilePage(){
   }
   if(loading) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
-        <p>Loading...</p>
+      <div className="h-screen ">
+      <div className="flex justify-center items-center bg-black h-full">
+      <Loader className="animate-spin text-white w-10 h-10"/>
       </div>
+</div>
     )
   }
   return (
