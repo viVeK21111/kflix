@@ -14,7 +14,13 @@ const SearchPage = () => {
   const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
   const [Searchsubmit,setSearchsubmit] = useState(false);
-
+  const [Loading1,setLoading1] = useState(true);
+  const logo = new Image();
+  logo.src = '/kflix2.png';
+ 
+  logo.onload = () => {
+    setLoading1(false);
+  }
   useEffect(() => {
     sessionStorage.setItem('searchType', searchType);
   }, [searchType]);
@@ -68,9 +74,18 @@ const SearchPage = () => {
       }
     }
   };
+  if( Loading1) {
+    return (
+        <div className="h-screen ">
+        <div className="flex justify-center items-center bg-black h-full">
+        <Loader className="animate-spin text-red-600 w-10 h-10"/>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-auto flex flex-col items-center p-4">
+    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center p-4">
       {/* Header */}
       <header className="w-full flex justify-center items-center">
         <Link to={'/'}>
@@ -109,7 +124,7 @@ const SearchPage = () => {
       </form>
 
       {(imagesLoaded===false && Searchsubmit===false) && (
-        <div className="flex justify-center h-screen mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
+        <div className="flex justify-center mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
       )}
       {/* Search Results */}
       {!Loading && data && imagesLoaded && (searchType==='movie' && searchType2==='movie') && !loading && (
@@ -121,18 +136,18 @@ const SearchPage = () => {
                 <Link 
                 key={item.id || index} 
                 to={`/${'watch'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-                className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                className="block bg-[#172c47] rounded-lg shadow-md hover:scale-105 transition-transform"
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-lg"} 
+                  className={ "w-full h-52 object-cover rounded-t-lg"} 
                   alt={item?.title || item?.name} 
                 />
-                <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                <h3 className="text-sm px-2 sm:text-base font-bold text-white pt-2 truncate">
                   {item.title || item.name}
                 </h3>
                 {(item.release_date || item.first_air_date) && (
-                  <p className="text-xs sm:text-sm text-gray-400">
+                  <p className="text-xs sm:text-sm pb-4 p-2 text-gray-400">
                     {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
                     | Rating: <b>{item.vote_average}</b> 
                     | {item.adult ? "18+" : "PG-13"}
@@ -179,25 +194,19 @@ const SearchPage = () => {
                 <Link 
                 key={item.id || index} 
                 to={`/${'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-                className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                className="block bg-gray-800 rounded-lg shadow-md hover:scale-105 transition-transform"
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-52 h-52 object-cover rounded-lg"} 
+                  className={ "w-52 h-52 object-cover rounded-t-lg"} 
                   alt={item?.title || item?.name} 
                 />
-                <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                <h3 className="text-sm sm:text-base px-2 font-bold text-white mt-2 truncate">
                   {item.title || item.name}
                 </h3>
-                {(item.release_date || item.first_air_date) && (
-                  <p className="text-xs sm:text-sm text-gray-400">
-                    {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                    | Rating: <b>{item.vote_average}</b> 
-                    | {item.adult ? "18+" : "PG-13"}
-                  </p>
-                )}
+               
                 {item.popularity && searchType === 'person' && (
-                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
+                  <p className="text-xs p-2 sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
                 )}
               </Link>
               )
@@ -237,18 +246,18 @@ const SearchPage = () => {
                 <Link 
                 key={item.id || index} 
                 to={`/${'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-                className="block bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                className="block bg-[#172c47] rounded-lg shadow-md hover:scale-105 transition-transform"
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-lg"}
+                  className={ "w-full h-52 object-cover rounded-t-lg"}
                   alt={item?.title || item?.name} 
                 />
-                <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
+                <h3 className="text-sm sm:text-base font-bold text-white px-2 mt-2 truncate">
                   {item.title || item.name}
                 </h3>
                 {(item.release_date || item.first_air_date) && (
-                  <p className="text-xs sm:text-sm text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-400 p-2 ">
                     {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
                     | Rating: <b>{item.vote_average}</b> 
                     | {item.adult ? "18+" : "PG-13"}

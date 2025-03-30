@@ -2,7 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { Trash2,X,Search} from "lucide-react";
+import { Trash2,X,Search,Loader} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
@@ -28,9 +28,11 @@ const [loading,setloading] = useState(true);
   }
   if(loading) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
-        <p>Loading...</p>
-      </div>
+     <div className="h-screen ">
+           <div className="flex justify-center items-center bg-black h-full">
+           <Loader className="animate-spin text-white w-10 h-10"/>
+           </div>
+     </div>
     )
   }
   return (

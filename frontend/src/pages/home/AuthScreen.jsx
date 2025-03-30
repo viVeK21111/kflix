@@ -48,7 +48,7 @@ const AuthScreen = () => {
             {/* hero section */}
             <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
                 <h1 className='text-2xl md:text-4xl font-bold mb-4'>Unlimited free movies, TV shows, and more</h1>
-                <p className='text-base mb-4'>Watch anywhere at ease.</p>
+                <p className='hidden sm:flex text-base mb-4'>Watch anywhere at ease.</p>
                 <p className='mb-4'>Ready to watch? Enter your email to create account.</p>
 
                 <form className='flex flex-col md:flex-row gap-4 w-64 md:w-1/2 mb-20' onSubmit={handleFormSubmit}>

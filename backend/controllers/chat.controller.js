@@ -11,7 +11,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
-    const {query} = req.body;
+    const {query,history} = req.body;
     const user = User.findById(req.user._id);
     const username = user.username;
 
@@ -25,12 +25,34 @@ export const GetMovieList = async (req, res) => {
                 query : query,
             }
         }});
+        const systemInstruction = `
+      You are a chatbot named 'Flix' on a movie and TV streaming platform. 
+      Address the user (${username}) in a friendly manner. 
+      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", "movie3"]}. 
+      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2", "tv3"]}. 
+      If no specific content is found, explain why in plain text but still include an empty JSON (e.g., {"movies": []} or {"tv": []}). 
+      For non-movie/TV queries, respond helpfully in the user's context and ask what they want to watch if appropriate.
+    `;
 
         const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",systemInstruction });
+        const conversationHistory = history || []; // Default to empty if no history
+        const formattedHistory = conversationHistory.map(item => [
+        { role: 'user', parts: [{ text: item.query }] },
+        { role: 'model', parts: [{ text: item.datatext || 'No response' }] },
+        ]).flat();
+        const chat = model.startChat({
+            history: formattedHistory,
+            generationConfig: {
+              maxOutputTokens: 500, // Adjust as needed
+              temperature: 0.7,
+            },
+          });
 
         let prompt = query.toLowerCase();
-
+        try {
+        let result = await chat.sendMessage(prompt);
+        /*
         const moviestring = ["movie","cinema","film"]
         const tvstring = ["tv","show","anime","series","serial","cartoon"]
         
@@ -53,8 +75,10 @@ export const GetMovieList = async (req, res) => {
         }
         try {
         let result = await model.generateContent(prompt);
+        */
+
         result = result.response.text();
-        console.log("result \n"+result);
+        //console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);

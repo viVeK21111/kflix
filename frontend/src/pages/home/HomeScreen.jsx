@@ -91,7 +91,7 @@ export const HomeScreen = () => {
           </p>
       
           
-          {trending && trending?.overview && window.innerWidth >= 768 && ( <p className='mt-2 text-base bg-slate-900 bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
+          {trending && trending?.overview && window.innerWidth >= 768 && ( <p className='mt-2 text-base bg-opacity-90 md:bg-opacity-70 lg:bg-opacity-70 xl:bg-opacity-70 p-1 rounded'> {trending?.overview.length > 250 ? trending?.overview.slice(0, 250) + "..." : trending?.overview} </p>)}
             
   
             <div className='absolute flex items-center mt-3'>
@@ -127,7 +127,7 @@ export const HomeScreen = () => {
          </div>
       </div>
       
-      <div  ref={movieSectionRef} className="px-0 mx-0 flex flex-col gap-10 bg-black py-10 ">
+      <div  ref={movieSectionRef} className="px-0 mx-0 flex flex-col gap-10 bg-black py-8 ">
         {contentType==="movies" ? 
         MOVIE_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)
         : TV_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)}

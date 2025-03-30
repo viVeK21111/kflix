@@ -19,7 +19,7 @@ export default function ChatPage() {
   let { getdata, data, datatext, contentType } = chatStore();
   const [query1, setQuery1] = useState(sessionStorage.getItem("query1") || null);
   const [submitloading, setsubmitloading] = useState(null);
-  const [conversationHistory, setConversationHistory] = useState([]);
+  const [conversationHistory, setConversationHistory] = useState(JSON.parse(sessionStorage.getItem("conversationHistory")) || []);
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
 
@@ -51,6 +51,17 @@ export default function ChatPage() {
     logoImage.onload = () => setpLoading(false);
     logoImage.onerror = () => setpLoading(false);
     const timeout = setTimeout(() => setpLoading(false), 3000);
+    if(conversationHistory.length>0) {
+    // Use a slight delay to ensure DOM updates are complete
+    setTimeout(() => {
+      if(chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'instant'
+          });
+        }
+    },300);
+    }
     return () => clearTimeout(timeout);
   }, []);
 
@@ -60,7 +71,10 @@ export default function ChatPage() {
       const isDuplicate = conversationHistory.some(
         item => item.query === query1 && (item.data === Data || item.datatext === DataText)
       );
-      if (!isDuplicate) setConversationHistory(prev => [...prev, newEntry]);
+      if (!isDuplicate) {
+        setConversationHistory(prev => [...prev, newEntry]);
+        sessionStorage.setItem("conversationHistory", JSON.stringify([...conversationHistory, newEntry]));
+      }
     }
   }, [Data, DataText, Loading]);
 
@@ -77,7 +91,12 @@ export default function ChatPage() {
     const currentQuery = query;
     setQuery("");
     try {
-      await getdata({ query: currentQuery });
+      if(conversationHistory.length > 0) {
+        await getdata({ query: currentQuery,history:conversationHistory });
+      }
+      else {
+        await getdata({ query: currentQuery });
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -200,9 +219,9 @@ export default function ChatPage() {
       </div>
 
       {/* Input form - fixed at the bottom */}
-      <div className={(formEnd || DataText) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0 sm:bottom-80`}>
+      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0 sm:bottom-80`}>
         <div className="max-w-2xl p-1 mx-auto">
-          {(!formEnd && !DataText) && (
+          {(!formEnd && !DataText && conversationHistory.length===0) && (
             <p className="text-white flex justify-center pb-3 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
           )}
           <form onSubmit={onSubmit} className="w-full">

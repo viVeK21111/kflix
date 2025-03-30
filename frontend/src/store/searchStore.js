@@ -18,7 +18,7 @@ export const searchStore = create((set)=> ({
             //toast.success("tv fetched success");
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -35,7 +35,7 @@ export const searchStore = create((set)=> ({
             
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -52,7 +52,7 @@ export const searchStore = create((set)=> ({
             //toast.success("person fetched success");
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
             return;
         }

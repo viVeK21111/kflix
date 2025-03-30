@@ -11,7 +11,7 @@ export const SimilarStore = create((set)=> ({
             const response = await axios.get(`/api/v1/movies/similar/${id}`);
             if("message" in response.data) {
                 set({datas:response.data.message,isLoading:false});
-                toast.success("no movie fetched");
+              //  toast.success("no movie fetched");
                 return;
             }
             set({datas:response.data.content,isLoading:false});
@@ -27,7 +27,7 @@ export const SimilarStore = create((set)=> ({
             const response = await axios.get(`/api/v1/tv/similar/${id}`);
             if("message" in response.data) {
                 set({datas:response.data.message,isLoading:false});
-                toast.success("no tv fetched");
+                //toast.success("no tv fetched");
                 return;
             }
             set({datas:response.data.content,isLoading:false});

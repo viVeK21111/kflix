@@ -12,7 +12,7 @@ export const DetailsStore = create((set)=> ({
             set({data:response.data.content,isLoading:false});
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -23,7 +23,7 @@ export const DetailsStore = create((set)=> ({
             set({data:response.data.content,isLoading:false});
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -35,7 +35,7 @@ export const DetailsStore = create((set)=> ({
             return response.data.content;
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             return null;
         }
     },

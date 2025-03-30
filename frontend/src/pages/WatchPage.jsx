@@ -183,7 +183,7 @@ function WatchPage() {
       { !isplay && !Loading && !Season && (
         <div className='relative'>
           <img src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path || data?.poster_path}`}
-          className='w-full object-top object-cover h-full md:h-[85vh]  shadow-2xl'
+          className='w-full object-top object-cover h-full md:h-[86vh]  shadow-2xl'
           onLoad={() => setimageload(false)}
           ></img>
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
@@ -279,15 +279,21 @@ function WatchPage() {
             <p >Watch List</p>
               </button>
               {datac && !Season && (
-            <div className='text-white sm:hidden text-base flex w-full max-w-4xl mt-4'> Director:
-              <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
+            <div className='text-white sm:hidden text-base w-full max-w-4xl mt-4'> 
+              <p className='flex'>Director: <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
                 <p className=' font-semibold ml-2'> {dir} </p>
-              </Link>
+              </Link></p>
+              { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 &&(
+                 <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
+              )
+              }
+             
             </div>
           )}
           
         
-        <div className='hidden sm:flex mt-4'>
+        <div className='hidden sm:flex mt-4 sm:mb-2 md:mb-0'>
+          
           {releasedate!==null && releasedate?.getTime() < new Date().getTime() && (
              <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
              onClick={() => setisplay(true)}
@@ -298,12 +304,16 @@ function WatchPage() {
           )}
        
               <button
-                       className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center'
+                       className={releasedate!==null && releasedate?.getTime() < new Date().getTime() ? `bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center`:`bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1  px-2 rounded-lg flex items-center`}
                        onClick={(e) => addWatchList(e, data?.id)}
                      >
                        <Plus className='size-5' />
                        <p className='ml-1'>Watch List</p>
               </button>
+              { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
+                 <p className='flex ml-3 items-center'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
+              )
+              }
         </div>
         </div>
         
@@ -405,7 +415,7 @@ function WatchPage() {
           )}
           {bgColorClass !== 'bg-black' && (
             <div className='w-full max-w-4xl'>
-              <div className={`text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10` }>
+              <div className={datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10`: `text-left w-full flex justify-center items-center md:items-start md:justify-center flex-col md:flex-row max-w-4xl mt-10`}>
                 <img
                   src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season]?.poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
                   className="w-72 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
@@ -448,7 +458,7 @@ function WatchPage() {
     </div>
         
         {bgColorClass!=='bg-black'  && !data?.seasons && !Loading && !imageload && (
-          <div className='bg-black w-full mt-5'>
+          <div className='bg-black w-full mt-5 sm:mt-0'>
                 <div className='flex text-white border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
                   {datac?.cast?.slice(0,numitems).map((item, index) => (
@@ -483,7 +493,7 @@ function WatchPage() {
           </div>
         )}
          {numitems >= 10 && (
-        <div className="flex w-full justify-center max-w-8xl mt-6">
+        <div className="flex w-full justify-center max-w-8xl mt-6 mb-3">
           <button
             onClick={() => setnumitems(5)}
             className="px-2 py-1 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
@@ -492,7 +502,7 @@ function WatchPage() {
           </button>
         </div>
       )}
-        <div className='text-white w-full  border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
+        <div className='text-white w-full  border-t-2 border-white border-opacity-30 pl-4 pt-5 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
         <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3">
                   {datas?.slice(0,numitemsm).map((item, index) => (
                     (item?.backdrop_path || item?.poster_path || item?.profile_path) &&
@@ -534,7 +544,7 @@ function WatchPage() {
         <div className="flex w-full justify-center mt-6">
           <button
             onClick={() => setnumitemsm(4)}
-            className="px-2 py-1 mb-2 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
+            className="px-2 py-1 mb-3 text-base font-semibold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
           >
             Load Less
           </button>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import axios from "axios";
-import { SquareX } from 'lucide-react';
+import { SquareX,Loader } from 'lucide-react';
 import toast from "react-hot-toast";
 
 const WatchlistPage = () => {
@@ -69,7 +69,13 @@ const WatchlistPage = () => {
       </div>
 
       {/* Loading State */}
-      {loading && <p className="text-white text-lg mt-6">Loading...</p>}
+      {loading && (
+    
+        <div className="flex justify-center w-full items-center mt-16 h-full">
+        <Loader className="animate-spin text-white w-8 h-8"/>
+        </div>
+     
+      )}
 
       {/* Error Message */}
       {error && <p className="text-red-500 mt-6">{error}</p>}

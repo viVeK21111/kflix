@@ -15,7 +15,7 @@ const Footer = () => {
 					
 					</div>
 					
-					<p>Copyrights Reserved @2025</p>
+					<p>KFlix @2025</p>
 					<p className="flex">
 					<a
 						href='https://github.com/viVeK21111/netflix_clone'

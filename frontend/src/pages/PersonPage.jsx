@@ -130,10 +130,14 @@ export default function PersonPage() {
       {/* Biography Section */}
       <div className="max-w-full bg-[#2e2f2e] p-3 md:p-4 rounded--blg shadow-lg">
         <h2 className="text-xl font-semibold text-white mb-2">Biography</h2>
+        {datap?.biography?.length===0 &&(
+              <p className="flex justify-center">No Biography</p>
+            )}
         <p className="text-gray-300 text-base leading-relaxed">
           {datap?.biography.length < readov ? datap?.biography : ( 
               <> 
             {datap?.biography.slice(0, readov)}
+            
             {readov<datap?.biography.length && (
                <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(prev => prev+300)}>...Read more</button> 
             )}
@@ -155,25 +159,28 @@ export default function PersonPage() {
        
           <>
           {movies.slice(0,numitems).map((item, index) => (
-          <Link key={item.id || index} to={`/watch/?id=${item?.id}&name=${item?.name || item?.title}`}>
-            <div className="rounded-lg bg-slate-800  shadow-md hover:scale-105 transition-transform">
-              <img
-                src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
-                className="w-full h-40 sm:h-48 object-cover rounded-t-lg mb-2"
-                alt={item?.title || item?.name}
-              />
-              <h3 className="pl-2 text-sm sm:text-base font-bold text-white mb-1 truncate">
-                {item.title || item.name}
-              </h3>
-              {(item.release_date || item.first_air_date) && (
-                <p className="text-xs sm:text-sm text-gray-300 pl-2 pb-3">
-                  {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                  | Rating: <b>{item.vote_average}</b> 
-                  | {item.adult ? "18+" : "PG-13"}
-                </p>
-              )}
-            </div>
-          </Link>
+            (item?.backdrop_path || item?.poster_path) && (
+              <Link key={item.id || index} to={`/watch/?id=${item?.id}&name=${item?.name || item?.title}`}>
+              <div className="rounded-lg bg-slate-800  shadow-md hover:scale-105 transition-transform">
+                <img
+                  src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
+                  className="w-full h-40 sm:h-48 object-cover rounded-t-lg mb-2"
+                  alt={item?.title || item?.name}
+                />
+                <h3 className="pl-2 text-sm sm:text-base font-bold text-white mb-1 truncate">
+                  {item.title || item.name}
+                </h3>
+                {(item.release_date || item.first_air_date) && (
+                  <p className="text-xs sm:text-sm text-gray-300 pl-2 pb-3">
+                    {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
+                    | Rating: <b>{item.vote_average}</b> 
+                    | {item.adult ? "18+" : "PG-13"}
+                  </p>
+                )}
+              </div>
+            </Link>
+            )
+         
         ))}
        
        </>

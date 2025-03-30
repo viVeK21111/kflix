@@ -17,7 +17,7 @@ const TvPage = () => {
   const [loading, setLoading] = useState(true);
   const [openSeason, setOpenSeason] = useState(null);
   const [numitemsm, setnumitemsm] = useState(5);
-  const [imageSrc, setImageSrc] = useState("");
+  const [imageSrc, setImageSrc] = useState(null);
   const [imageload, setimageload] = useState(true);
   const { addTv } = addWatchStore();
   const [scrollRestored, setScrollRestored] = useState(false);
@@ -37,6 +37,7 @@ const TvPage = () => {
       setDatae(response.data.content);
       setSelectedSeason(Season);
    }
+
 
    
   // Save scroll position before navigating away
@@ -98,13 +99,34 @@ const TvPage = () => {
     });
   }
   }, [id]);
+  
+  useEffect(() => {
+    if(imageSrc) {
+      const img = new Image();
+      img.src = imageSrc;
+      img.onload = () => {
+        setTimeout(() => {
+          setimageload(false);
+        }, 1000);
+       
+      };
+      img.onerror = () => {
+        setTimeout(() => {
+          setimageload(false);
+        }, 1000);
+        
+      };
+    }
+  },[imageSrc]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setImageSrc(ORIGINAL_IMG_BASE_URL + (data?.backdrop_path || data?.poster_path));
+       
       } else {
         setImageSrc(ORIGINAL_IMG_BASE_URL + (data?.backdrop_path || data?.poster_path));
+        
       }
     };
 
@@ -122,8 +144,10 @@ const TvPage = () => {
     //sessionStorage.setItem("selectedseason",selectedSeason)
   };
 
-  if (loading) {
+  if ((loading || imageload)) {
+  
     return (
+      
       <div className="h-screen ">
             <div className="flex justify-center items-center bg-black h-full">
             <Loader className="animate-spin text-red-600 w-10 h-10"/>
@@ -141,10 +165,11 @@ const TvPage = () => {
     <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
         <img
-          className="w-full md:h-[80vh] object-cover object-top shadow-2xl"
+          className="w-full md:h-[85vh] object-cover object-top shadow-2xl"
           src={imageSrc}
           alt="TV Show"
-          onLoad={() => setimageload(false)}
+         onload = {() => setimageload(false)}
+         onerror = {() => setimageload(false)}
         />
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
@@ -220,7 +245,7 @@ const TvPage = () => {
 
 
             </div>
-          <div className="sm:hidden text-md mb-2">
+          <div className="sm:hidden pl-1 text-md mb-2">
           <p>
             <strong>Creator:</strong>{" "}
             {Array.isArray(data.created_by) &&
@@ -239,12 +264,23 @@ const TvPage = () => {
             <p className='font-semibold text-base'>Play S1 E1</p>
             </button>
         <button
-          className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 rounded-lg flex items-center'
+          className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 ml-1 rounded-lg flex items-center'
           onClick={(e) => addWatchList(e, data?.id)}
         >
           <Plus className='size-5' />
           <p className='ml-1'>Watch List</p>
         </button>
+        <div className="hidden sm:flex items-center mt-3 pl-3 text-md">
+          <p>
+            <strong>Creator:</strong>{" "}
+            {Array.isArray(data.created_by) &&
+            data.created_by.length > 0 &&
+            data.created_by[0].name
+              ? data.created_by[0].name
+              : "Unknown"}
+          </p>
+         
+        </div>
         </div>
         
         </div>
@@ -253,19 +289,13 @@ const TvPage = () => {
         
       </header>
     
-      {imageload && (
-          <div className="h-screen ">
-          <div className="flex justify-center items-center bg-black h-full">
-          <Loader className="animate-spin text-red-600 w-10 h-10"/>
-          </div>
-        </div>
-      )}
+     
 
       {/* Seasons Section */}
       { !imageload && (
         <>
-         <div className="mt-6 p-2">
-        <h2 className="text-4xl font-semibold mb-6 text-white border-b-4 border-yellow-400 pb-2">
+         <div className="mt-5 p-2">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-white border-b-2 border-yellow-400 pb-2">
           Seasons
         </h2>
 
@@ -323,9 +353,10 @@ const TvPage = () => {
         </div>
       </div>
       {/* Similar TV Shows */}
-      <div className='text-white max-w-8xl max-w border-t-4 border-yellow-400 pt-2 mt-5 text-xl pl-2'><h3 className='font-bold'>Similar Tv shows</h3></div>
-      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3 mt-8 px-1 md:px-3">
+      <div className='text-white max-w-8xl max-w border-t border-yellow-400 mt-5  text-xl pl-4 pt-4'><h3 className='font-bold'>Similar Tv shows</h3></div>
+      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3  mt-5 pb-3 px-2 md:px-3">
         {datas?.slice(0, numitemsm).map((item, index) => (
+          (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
           <Link
             key={item.id || index}
             to={'/tv/details' + `/?id=${item?.id}&name=${item?.name || item?.title}`}
@@ -345,13 +376,14 @@ const TvPage = () => {
               <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
             )}
           </Link>
+          )
         ))}
       </div>
       {numitemsm < datas?.slice(0, 10).length && (
         <div className="flex max-w-8xl justify-center pb-2 items-center mt-6">
           <button
             onClick={() => setnumitemsm(prev => prev + 5)}
-            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all"
+            className="px-2 py-1 bg-white bg-opacity-10 hover:bg-opacity-20 text-white font-semibold rounded-lg transition-all"
           >
             Load More
           </button>
