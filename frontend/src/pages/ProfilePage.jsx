@@ -92,7 +92,7 @@ export default function ProfilePage(){
     <div className="min-h-screen bg-zinc-900 text-white flex flex-col">
   
       {/* User Profile Section */}
-      <div className="flex bg-black p-6 rounded-t-lg shadow-md w-full py-10">
+      <div className="flex bg-black p-6 shadow-md w-full py-10">
         <img
           src={datalocal?.image || "/a1.jpg"}
           alt="Profile"

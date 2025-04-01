@@ -1,10 +1,13 @@
 import React from 'react'
 
+
 const WatchHistory = () => {
   return (
-    <div className='h-screen flex items-center text-lg justify-center text-white bg-slate-900'>
-        page under development
-    </div>
+     <div className='flex flex-col min-h-screen justify-center items-center bg-slate-900'>
+           <img className='h-44' src='https://www.svgrepo.com/show/426192/cogs-settings.svg'></img>
+           <p className='text-white font-semibold mt-3 text-2xl'>Page under Development</p>
+     </div>
+  
   )
 }
 

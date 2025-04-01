@@ -64,7 +64,7 @@ const WatchlistPage = () => {
       </header>
 
       {/* Section Title */}
-      <div className="text-white w-full max-w-6xl mt-8 text-2xl sm:text-3xl font-extrabold">
+      <div className="text-white w-full max-w-6xl mt-8 text-2xl font-extrabold">
         <h3>🎬 Your Watchlist</h3>
       </div>
 

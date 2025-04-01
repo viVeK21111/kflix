@@ -153,9 +153,7 @@ const SearchPage = () => {
                     | {item.adult ? "18+" : "PG-13"}
                   </p>
                 )}
-                {item.popularity && searchType === 'person' && (
-                  <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
-                )}
+               
               </Link>
               )
              

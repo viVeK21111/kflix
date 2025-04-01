@@ -265,7 +265,7 @@ function WatchPage() {
           <p className=''>{data?.runtime} min.</p>
           {datac && !Season && (
             <div className='text-white flex items-center ml-2'> Dir.
-              <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
+              <Link to={dir!='Unknown'? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
                 <p className=' font-semibold ml-2'> {dir} </p>
               </Link>
             </div>
@@ -280,7 +280,7 @@ function WatchPage() {
               </button>
               {datac && !Season && (
             <div className='text-white sm:hidden text-base w-full max-w-4xl mt-4'> 
-              <p className='flex'>Director: <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
+              <p className='flex'>Director: <Link to={dir!='Unknown'? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
                 <p className=' font-semibold ml-2'> {dir} </p>
               </Link></p>
               { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 &&(
@@ -403,7 +403,7 @@ function WatchPage() {
         <div className='w-full max-w-4xl px-1'>
           {datac && !Season && (
             <div className='text-white flex w-full max-w-4xl mt-1 mb-1'> Director:
-              <Link to={'/person/details/?id=' + directorId + "&name=" + dir} className='hover:underline hover:text-white'>
+              <Link to={dir!=='Unknown' ? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
                 <p className='font-semibold ml-1'> {dir} </p>
               </Link>
             </div>
@@ -415,7 +415,7 @@ function WatchPage() {
           )}
           {bgColorClass !== 'bg-black' && (
             <div className='w-full max-w-4xl'>
-              <div className={datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10`: `text-left w-full flex justify-center items-center md:items-start md:justify-center flex-col md:flex-row max-w-4xl mt-10`}>
+              <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row max-w-4xl mt-10` ):(data?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row max-w-4xl mt-10`: `text-left w-full flex items-center justify-center flex-col max-w-4xl mt-10`)}>
                 <img
                   src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season]?.poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
                   className="w-72 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
@@ -440,7 +440,7 @@ function WatchPage() {
                   )}
                 </div>
               </div>
-              <div className={!Season ? `hidden md:flex w-full max-w-4xl mt-2 mb-2` : `hidden` }>
+              <div className={(!Season && data?.overview.length>0) ? `hidden md:flex w-full max-w-4xl mt-2 mb-2` : (data?.overview?.length==0 ? `hidden md:flex justify-center w-full max-w-4xl mt-2 mb-2`:`hidden`) }>
                 <p>
                 {(data?.release_date || data?.first_air_date) && (
                     <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
@@ -460,7 +460,7 @@ function WatchPage() {
         {bgColorClass!=='bg-black'  && !data?.seasons && !Loading && !imageload && (
           <div className='bg-black w-full mt-5 sm:mt-0'>
                 <div className='flex text-white border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Cast</h3></div>
-                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-1 sm:px-5">
+                  <div className="w-full grid grid-cols-2 pb-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 sm:px-5">
                   {datac?.cast?.slice(0,numitems).map((item, index) => (
                     <Link
                       key={item.id || index} 
