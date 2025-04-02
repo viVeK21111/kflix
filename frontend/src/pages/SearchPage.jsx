@@ -132,7 +132,7 @@ const SearchPage = () => {
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
             {data.slice(0,numitems).map((item, index) => (
-              (item?.backdrop_path_path || item?.poster_path) && (
+              (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link 
                 key={item.id || index} 
                 to={`/${'watch'}/?id=${item?.id}&name=${item?.name || item?.title}`}
@@ -240,7 +240,7 @@ const SearchPage = () => {
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
             {data.slice(0,numitems).map((item, index) => (
-              (item?.backdrop_path_path || item?.poster_path) && (
+              (item?.backdrop_path || item?.poster_path || item?.poster_path) && (
                 <Link 
                 key={item.id || index} 
                 to={`/${'tv/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}

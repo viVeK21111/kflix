@@ -126,8 +126,8 @@ export default function ChatPage() {
           </div>
         </Link>
         <div className="ml-auto flex items-center">
-          <Link className="ml-auto text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
-            <History />
+          <Link className="ml-auto hover:bg-white hover:bg-opacity-5 hover:p-1 rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+            <History size={22} />
           </Link>
           <Link to={'/profile'}>
             <img src={user.image} alt='avatar' className='h-7 ml-2 rounded transition-all duration-300 hover:scale-110 cursor-pointer' />

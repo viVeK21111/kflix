@@ -223,8 +223,8 @@ const TvPage = () => {
             </>
           )}
           </p>
-          <p className="hidden sm:flex gap-2 mb-2">
-            {data?.adult ? "18+" : "PG-13"} | <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
+          <p className="hidden sm:flex items-center gap-2 mb-2">
+            <p className="bg-white bg-opacity-15 p-1 rounded-lg flex items-center ">{data?.adult ? "18+" : "PG-13"}</p> <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
             <p className="flex ml-2 items-center">
             {data?.genres && data?.genres.slice(0,2).map((item, index) => (
           <div key={item.id} className="flex items-center text-white">
@@ -237,8 +237,8 @@ const TvPage = () => {
           <div className="hidden sm:flex mt-3">
             <p>{data?.first_air_date} - {data?.last_air_date}</p>
             <Dot />
-            <p className="">Seasons: {data?.number_of_seasons}</p>
-            <p className="ml-2">Episodes: {data?.number_of_episodes}</p>
+            <p className="flex"><p className="font-semibold mr-1">Seasons:</p> {data?.number_of_seasons}</p>
+            <p className="ml-2 flex"><p className="font-semibold mr-1">Episodes:</p>  {data?.number_of_episodes}</p>
             </div>
             <div className="hidden sm:flex">
 
@@ -294,8 +294,8 @@ const TvPage = () => {
       {/* Seasons Section */}
       { !imageload && (
         <>
-         <div className="mt-5 p-2">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-white border-b-2 border-yellow-400 pb-2">
+         <div className="mt-3 p-2">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-white border-b border-white pb-2">
           Seasons
         </h2>
 
@@ -353,7 +353,7 @@ const TvPage = () => {
         </div>
       </div>
       {/* Similar TV Shows */}
-      <div className='text-white max-w-8xl max-w border-t border-yellow-400 mt-5  text-xl pl-4 pt-4'><h3 className='font-bold'>Similar Tv shows</h3></div>
+      <div className='text-white max-w-8xl max-w border-t border-white mt-5  text-xl pl-4 pt-4'><h3 className='font-bold'>Similar Tv shows</h3></div>
       <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3  mt-5 pb-3 px-2 md:px-3">
         {datas?.slice(0, numitemsm).map((item, index) => (
           (item?.backdrop_path || item?.poster_path || item?.profile_path) && (

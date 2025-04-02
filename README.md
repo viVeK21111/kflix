@@ -33,10 +33,10 @@ Streaming by filmu
 -> TMDB api for movie data <br>
 
 ### Features
--> All movies and tv shows for free <br>
+-> All movies and tv shows are for free <br>
 (Note: This site doesn't store any movies or tv shows, all are grabbed from third party streaming services)<br>
--> User profile with search history <br>
--> Watchlist to save movies <br>
+-> User profile with Settings which includes Security,History,Contact us <br>
+-> Watchlist to save movies or Tv shows <br>
 -> Gemini llm chat for the user to search any movie or tv with specific details or based on users taste <br>
 -> Dedicated Search to search tv,movies or person <br>
 -> User authentication (only if loggedin the user can access the content) <br>

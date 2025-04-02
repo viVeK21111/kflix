@@ -100,7 +100,7 @@ export const HomeScreen = () => {
 							className='bg-red-600 hover:bg-red-800 text-white font-semibold px-1 py-1 md:px-2 rounded  flex
 							 items-center'
 						>
-              {contentType==='movies' && (<div className='flex '>
+              {contentType==='movies' && (<div className='flex'>
               <Clapperboard className='size-6  p-1' />
               <p className='font-semibold'>View</p>
 						 </div>)
@@ -127,7 +127,7 @@ export const HomeScreen = () => {
          </div>
       </div>
       
-      <div  ref={movieSectionRef} className="px-0 mx-0 flex flex-col gap-10 bg-black py-8 ">
+      <div  ref={movieSectionRef} className="px-0 mx-0 flex flex-col gap-10 bg-black py-6 ">
         {contentType==="movies" ? 
         MOVIE_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)
         : TV_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)}

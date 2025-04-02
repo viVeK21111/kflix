@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import { Lightbulb } from 'lucide-react';
+import { Lightbulb,Youtube } from 'lucide-react';
 import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
 import { useEffect } from 'react';
@@ -39,6 +39,7 @@ function WatchPage() {
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [datae,setDatae] = useState(null);
   const [releasedate,setreleasedate] = useState(null);
+  const [trialerId,setTrailerId]  = useState(null);
 
    useEffect (()=> {
     if(data && data?.release_date) {
@@ -74,8 +75,16 @@ function WatchPage() {
     const response = await axios.post("/api/v1/tv/episodes",seasonep);
     setDatae(response.data.content);
   }
+  const getTrailerId = async() => {
+    const trailerId = await axios.get(`/api/v1/movies/trailers/${Id}`);
+    const tid = trailerId?.data?.content.find((item) => item.type === "Trailer" && item.site === "YouTube") || trailerId?.data?.content.find((item) => item.type === "Teaser" && item.site === "YouTube");
+    setTrailerId(tid?.key);
+  }
   if(Season) getepisodes();
- },[])
+  else {
+      getTrailerId()
+  }
+ },[Id])
 
   useEffect(() => {
     setisplay(false);
@@ -215,7 +224,7 @@ function WatchPage() {
           
           { releasedate!==null && releasedate.getTime() < new Date().getTime() && 
           (
-              <button className='flex w-full justify-center p-2 bg-red-600 items-center mt-3 hover:bg-red-800 px-2 rounded-md'
+              <button className='flex w-full justify-center p-2 bg-red-600 items-center mt-3 hover:bg-red-800 rounded-md'
               onClick={() => setisplay(true)}
               >
               <Play className='size-6 fill-white p-1'/>
@@ -271,6 +280,7 @@ function WatchPage() {
             </div>
           )}
           </div>
+
           <button
               className='sm:hidden bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg flex items-center'
               onClick={(e) => addWatchList(e, data?.id)}
@@ -287,6 +297,7 @@ function WatchPage() {
                  <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )
               }
+            <div className='sm:hidden flex items-center mt-3'> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><p className='flex items-center'><img className='h-8' src='/youtube.png'></img><p className='ml-1'>Watch Trailer</p></p></Link> </div>
              
             </div>
           )}
@@ -310,6 +321,7 @@ function WatchPage() {
                        <Plus className='size-5' />
                        <p className='ml-1'>Watch List</p>
               </button>
+              <div className='flex items-center ml-2  hover:scale-105 transition-transform'> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><img className='h-9' src='/youtube.png'></img></Link> </div>
               { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
                  <p className='flex ml-3 items-center'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )
