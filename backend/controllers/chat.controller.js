@@ -30,8 +30,9 @@ export const GetMovieList = async (req, res) => {
       Address the user by his name '${username}' in a friendly manner. 
       If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", "movie3"]}. 
       If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2", "tv3"]}. 
-      If no specific content is found, explain why in plain text but still include an empty JSON (e.g., {"movies": []} or {"tv": []}). 
-      For non-movie/TV queries, respond helpfully in the user's context and ask what they want to watch if appropriate.
+      For normal conversations, respond helpfully with respect to user's context and ask whether they want to watch anything.
+      If no specific content is found which is asked by the user, chat in engaging manner why you can't find it. 
+      
     `;
 
         const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
