@@ -25,6 +25,7 @@ const TvPage = () => {
   const [datae,setDatae] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(null); 
   const navigate = useNavigate();
+  const [seasonLoading, setSeasonLoading] = useState(true);
 
   useEffect( ()=> {
     if(openSeason===null || openSeason==="0" || sessionStorage.getItem("navigating_from_tv_page") === null) {
@@ -32,10 +33,25 @@ const TvPage = () => {
     } 
   },[])
   const getEpisode = async(Season) => {
+        if(selectedSeason!=Season) setSeasonLoading(true);
+        else {
+          setSeasonLoading(false);
+        }
+  
+      try {
       const seasonep = {"Id":id,"Season":Season};
       const response = await axios.post("/api/v1/tv/episodes",seasonep);
-      setDatae(response.data.content);
+      setDatae(response.data.content)
+      }
+      catch (error) {
+        console.error("Error fetching episodes:",error);
+        setDatae(null);
+      }
+      
+    finally {
+      setSeasonLoading(false)
       setSelectedSeason(Season);
+    }
    }
 
 
@@ -90,6 +106,7 @@ const TvPage = () => {
   useEffect(() => {
     setLoading(true);
     setimageload(true);
+    setSeasonLoading(true);
     if(id) {
     Promise.all([
       getTvdetails(id),
@@ -320,7 +337,7 @@ const TvPage = () => {
                         : `${ORIGINAL_IMG_BASE_URL}${data?.poster_path}`
                     }
                     alt={season?.name}
-                    className="w-16 h-20 object-cover rounded-lg"
+                    className="w-16 h-20 object-cover rounded-tl-lg"
                   />
                   <h3 className="text-xl font-bold text-white">{season?.name}</h3>
                 </div>
@@ -332,6 +349,11 @@ const TvPage = () => {
                   <ChevronDownIcon className="text-white w-6 h-6" />
                 )}
               </div>
+              {(seasonLoading && openSeason === season.season_number) && (
+                <div className="flex justify-center items-center bg-gray-900 h-12">
+                  <Loader className="animate-spin text-white w-5 h-5" />
+                </div>
+              )}
 
               {/* Episodes List (Dropdown) */}
               {openSeason === season.season_number  && selectedSeason === season.season_number && (

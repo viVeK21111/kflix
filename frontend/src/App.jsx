@@ -8,7 +8,7 @@ import {Toaster} from 'react-hot-toast';
 import { userAuthStore } from "./store/authUser";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
-import WatchPage from "./pages/WatchPage"; 
+import WatchPage2 from "./pages/WatchPage2"; 
 import TvPage from "./pages/TvPage";
 import SearchPage from './pages/SearchPage'
 import ProfilePage from './pages/ProfilePage'
@@ -19,6 +19,7 @@ import ChangePassword from "./pages/ChangePassword";
 import SearchHistory from "./pages/SearchHistory";
 import ChatHistory from "./pages/ChatHistory";
 import WatchHistory from "./pages/WatchHistory"
+import MoviePage from "./pages/MoviePage";
 import {useLocation}  from  'react-router-dom';
 
 function FooterWithRouteCheck() {
@@ -58,7 +59,8 @@ function App() {
       <Route path='/signup' element ={!user ? <SignUpPage /> : <Navigate to={'/'}/>} />
       <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
       <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
-      <Route path="/watch" element = {user ? <WatchPage/> :  <Navigate to={'/'}/>} />
+      <Route path="/movie" element = {user ? <MoviePage/> :  <Navigate to={'/'}/>} />
+      <Route path="/watch" element = {user ? <WatchPage2/> :  <Navigate to={'/'}/>} />
       <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
       <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/'}/>} />
       <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />

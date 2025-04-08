@@ -46,7 +46,7 @@ const [loading,setloading] = useState(true);
           <>
             <div className="flex flex-col gap-1">
               {datalocal.searchHistory.slice().reverse().slice(0, visibleItems).map((item, index) => ( // applying empty slice() to not directly modify the original array
-                <Link to={`/${item?.type === 'movie' ? 'watch' : item?.type === 'tv' ? 'tv/details' : 'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}>
+                <Link to={`/${item?.type === 'movie' ? 'movie' : item?.type === 'tv' ? 'tv/details' : 'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}>
                    <div className="flex">
                    <img
                       src={`${ORIGINAL_IMG_BASE_URL}${item?.image}`}

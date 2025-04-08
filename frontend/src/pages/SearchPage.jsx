@@ -85,7 +85,7 @@ const SearchPage = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center p-4">
+    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center p-2">
       {/* Header */}
       <header className="w-full flex justify-center items-center">
         <Link to={'/'}>
@@ -130,12 +130,12 @@ const SearchPage = () => {
       {!Loading && data && imagesLoaded && (searchType==='movie' && searchType2==='movie') && !loading && (
         Array.isArray(data) ? (
           <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 lg:px-3 mb-3">
             {data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link 
                 key={item.id || index} 
-                to={`/${'watch'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+                to={`/${'movie'}/?id=${item?.id}&name=${item?.name || item?.title}`}
                 className="block bg-[#172c47] rounded-lg shadow-md hover:scale-105 transition-transform"
               >
                 <img 

@@ -160,7 +160,7 @@ export default function PersonPage() {
           <>
           {movies.slice(0,numitems).map((item, index) => (
             (item?.backdrop_path || item?.poster_path) && (
-              <Link key={item.id || index} to={`/watch/?id=${item?.id}&name=${item?.name || item?.title}`}>
+              <Link key={item.id || index} to={`/movie/?id=${item?.id}&name=${item?.name || item?.title}`}>
               <div className="rounded-lg bg-slate-800  shadow-md hover:scale-105 transition-transform">
                 <img
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}

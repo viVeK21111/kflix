@@ -68,13 +68,13 @@ export default function ChatPage() {
   useEffect(() => {
     if (query1 && (Data || DataText) && !Loading) {
       const newEntry = { query: query1, data: Data, datatext: DataText, contentType: ContentType };
-      const isDuplicate = conversationHistory.some(
-        item => item.query === query1 && (item.data === Data || item.datatext === DataText)
-      );
-      if (!isDuplicate) {
+      //const isDuplicate = conversationHistory.some(
+        //item => item.query === query1 && (item.data === Data || item.datatext === DataText)
+      //);
+      //if (!isDuplicate) {
         setConversationHistory(prev => [...prev, newEntry]);
         sessionStorage.setItem("conversationHistory", JSON.stringify([...conversationHistory, newEntry]));
-      }
+      //}
     }
   }, [Data, DataText, Loading]);
 
@@ -126,7 +126,7 @@ export default function ChatPage() {
           </div>
         </Link>
         <div className="ml-auto flex items-center">
-          <Link className="ml-auto hover:bg-white hover:bg-opacity-5 hover:p-1 rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+          <Link className="ml-auto  rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
           </Link>
           <Link to={'/profile'}>
@@ -177,7 +177,7 @@ export default function ChatPage() {
                     (content?.backdrop_path || content?.poster_path) && (
                       <Link
                         key={`${content.id}-${idx}`}
-                        to={`/${item.contentType === 'movies' ? 'watch' : 'tv/details'}/?id=${content?.id}&name=${content?.name || content?.title}`}
+                        to={`/${item.contentType === 'movies' ? 'movie' : 'tv/details'}/?id=${content?.id}&name=${content?.name || content?.title}`}
                         onClick={() => window.scroll(0, 0)}
                       >
                         <div className="rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">

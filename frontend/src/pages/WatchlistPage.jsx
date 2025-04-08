@@ -90,7 +90,7 @@ const WatchlistPage = () => {
         {datac?.slice(0, numitems).map((item, index) => (
           <Link
             key={item.id || index}
-            to={item.type === 'movie' ? `/watch?id=${item?.id}&name=${item?.title}` : `/tv/details?id=${item?.id}&name=${item?.title}`}
+            to={item.type === 'movie' ? `/movie?id=${item?.id}&name=${item?.title}` : `/tv/details?id=${item?.id}&name=${item?.title}`}
             className="group relative block bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <button 

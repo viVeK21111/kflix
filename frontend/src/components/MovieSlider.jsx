@@ -3,7 +3,7 @@ import { useContentStore } from "../store/content";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { SMALL_IMG_BASE_URL } from "../utils/constants";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight,Loader } from "lucide-react";
 
 const MovieSlider = ({ category }) => {
 	useEffect( () => {
@@ -18,6 +18,7 @@ const MovieSlider = ({ category }) => {
 	const { contentType } = useContentStore();
 	const [content, setContent] = useState([]);
 	const [showArrows, setShowArrows] = useState(false);
+	const [contentLoading, setContentLoading] = useState(true);
 
 	const sliderRef = useRef(null);
 
@@ -26,9 +27,19 @@ const MovieSlider = ({ category }) => {
 	const formattedContentType = contentType === "movies" ? "Movies" : "TV Shows";
 
 	useEffect(() => {
+		setContentLoading(true);
 		const getContent = async () => {
-			const res = await axios.get(`/api/v1/${contentType}/category/${category}`);
-			setContent(res.data.content);
+			try {
+				const res = await axios.get(`/api/v1/${contentType}/category/${category}`);
+				setContent(res.data.content);
+			}
+			catch (error) {
+				console.error("Error fetching content:", error);
+			}
+			finally {
+				setContentLoading(false);
+			}
+			
 		};
 
 		getContent();
@@ -53,9 +64,14 @@ const MovieSlider = ({ category }) => {
 				{formattedCategoryName} {formattedContentType}
 			</h2>
 
+			{contentLoading && (
+				<div className='flex justify-center items-center bg-black h-full'>	
+					<Loader className='animate-spin text-white w-8 h-8' />
+				</div>
+			)}
 			<div className='flex space-x-4 overflow-x-scroll scrollbar-hide' ref={sliderRef}>
 				{content?.map((item) => (
-					<Link to={contentType==='movies' ? `/watch?id=${item?.id}&name=${item?.title || item?.name}` : `tv/details?id=${item.id}&name=${item.name}`} className='min-w-[250px] relative group' key={item.id}>
+					<Link to={contentType==='movies' ? `/movie?id=${item?.id}&name=${item?.title || item?.name}` : `tv/details?id=${item.id}&name=${item.name}`} className='min-w-[250px] relative group' key={item.id}>
 						<div className='rounded-lg overflow-hidden'>
 							<img
 								src={SMALL_IMG_BASE_URL + (item.backdrop_path || item.profile_path || item.poster_path)}
