@@ -127,8 +127,9 @@ export default function PersonPage() {
         </div>
       </div>
 
-      {/* Biography Section */}
-      <div className="max-w-full bg-[#2e2f2e] p-3 md:p-4 rounded--blg shadow-lg">
+      {/* Biography Section bg-[#2e2f2e] */}
+      
+      <div className="max-w-full bg-[#282a26] bg-opacity-60 border-b border-gray-700 p-3 md:p-4 rounded--blg shadow-lg">
         <h2 className="text-xl font-semibold text-white mb-2">Biography</h2>
         {datap?.biography?.length===0 &&(
               <p className="flex justify-center">No Biography</p>

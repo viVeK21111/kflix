@@ -1,5 +1,2 @@
-watchhistory(Optional)
-
-Extensive testing
-deploy vercel+render
-
+-> auto suggestions in search
+->

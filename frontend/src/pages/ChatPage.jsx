@@ -68,13 +68,13 @@ export default function ChatPage() {
   useEffect(() => {
     if (query1 && (Data || DataText) && !Loading) {
       const newEntry = { query: query1, data: Data, datatext: DataText, contentType: ContentType };
-      //const isDuplicate = conversationHistory.some(
-        //item => item.query === query1 && (item.data === Data || item.datatext === DataText)
-      //);
-      //if (!isDuplicate) {
+      const isDuplicate = conversationHistory.some( // preventing duplicates at the end when returned to the chat page
+        item => ( item.datatext === DataText)
+      );
+      if (!isDuplicate) {
         setConversationHistory(prev => [...prev, newEntry]);
         sessionStorage.setItem("conversationHistory", JSON.stringify([...conversationHistory, newEntry]));
-      //}
+      }
     }
   }, [Data, DataText, Loading]);
 
@@ -138,7 +138,7 @@ export default function ChatPage() {
       {/* Chat content area - scrollable */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto  px-4 lg:px-48"
+        className="flex-1 overflow-y-auto  px-4 lg:px-72"
         style={{
           scrollbarColor: 'rgb(53, 52, 52) #1e1d1d'
         }}
@@ -147,7 +147,7 @@ export default function ChatPage() {
 
         {conversationHistory.map((item, index) => (
           <div key={index} className="mb-4">
-            <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2 ">
+            <p className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2 mb-5">
               <p className="bg-white bg-opacity-10 px-3 py-2 rounded-xl">{item.query}</p>
             </p>
             {item.datatext && (

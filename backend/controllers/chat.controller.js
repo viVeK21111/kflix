@@ -28,9 +28,10 @@ export const GetMovieList = async (req, res) => {
         const systemInstruction = `
       You are a chatbot named 'Flix' on a movie and TV streaming platform. 
       Address the user by his name '${username}' in a friendly manner. 
-      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", "movie3"]}. 
-      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2", "tv3"]}. 
-      For normal conversations, respond helpfully with respect to user's context and ask whether they want to watch anything.
+      Your task is to assist the user in finding movies or TV shows based on their queries.
+      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", .... , "movie(n)"]} Give atleast 5 or based on the user preference. 
+      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2",...., "tv(n)"]} Give atleast 5 or based on user preference. 
+      For normal greetings or conversations, respond with a friendly message and ask the user what they would like to watch.
       If no specific content is found which is asked by the user, chat in engaging manner why you can't find it. 
       
     `;
@@ -79,7 +80,7 @@ export const GetMovieList = async (req, res) => {
         */
 
         result = result.response.text();
-        //console.log("result \n"+result);
+        console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -101,6 +102,7 @@ export const GetMovieList = async (req, res) => {
             }
             
         }
+       
         
        
         let content = ""

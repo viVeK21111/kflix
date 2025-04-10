@@ -184,12 +184,12 @@ function WatchPage() {
       
      
 
-      <div className='w-full max-w-4xl sm:flex sm:px-1 flex-wrap justify-between items-center'>
+      <div className='flex w-full sm:max-w-4xl sm:px-1 flex-wrap justify-between items-center'>
       <div className='flex w-full max-w-4xl items-center mt-2'>
       <div className='relative w-48'>
       
       <div
-        className="appearance-none bg-slate-800 hover:bg-slate-700  text-white px-3 py-2 rounded-t-md cursor-pointer flex justify-between items-center"
+        className="appearance-none bg-slate-800 hover:bg-slate-700  text-white px-2 md:px-3 py-2 rounded-t-md cursor-pointer flex justify-between items-center"
         onClick={handleSelectChange}
       > 
         
@@ -204,7 +204,7 @@ function WatchPage() {
           {sources.map((source, index) => (
             <div
               key={index}
-              className="flex w-full items-center justify-start p-2 border-b border-white border-opacity-10 cursor-pointer hover:bg-slate-700"
+              className="flex w-full items-center justify-start p-1 sm:p-2 border-b border-white border-opacity-10 cursor-pointer hover:bg-slate-700"
               onClick={(e) => handleSourceChange(e,index)}
             >
               <div>
@@ -217,32 +217,39 @@ function WatchPage() {
         </div>
       )}
       </div>
-        <button className={`flex items-center ml-auto text-sm md:text-base px-2 p-1 md:p-2 rounded-md border-black ${text} bg-blue-900 hover:bg-blue-950`} onClick={Lightsout}>
+        <button className={`flex items-center ml-auto text-base px-2 py-1 rounded-md border-black ${text} bg-blue-900 hover:bg-blue-950`} onClick={Lightsout}>
           <Lightbulb size={21} color={text === 'text-white' ? 'white' : 'black'} />Lights off
         </button>
       </div>
      
-        <div className="mt-5 text-center px-1 lg:px-0">
+        <div className="mt-5 text-center lg:px-0">
           <h1 className={`flex items-center lg:text-2xl md:text-xl text-left  gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
             Now Playing: <span className='font-extralight'>{Name} </span>
           </h1>
-          { Season && (
-          <p className='flex text-white text-sm md:text-base font-mono max-w-4xl'>{`Season ${Season} Episode ${Episode}`}</p>
-          )
-          }
+          
         </div>
+      
         {datac && !Season && (
-            <div className='text-white flex w-full max-w-4xl mt-1 mb-3'> Director:
+            <div className='text-white flex w-full  mt-1 mb-3'> Director:
               <Link to={dir!=='Unknown' ? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
                 <p className='font-semibold ml-1'> {dir} </p>
               </Link>
             </div>
           )}
+            { Season && (
+          <p className='hidden sm:flex text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
+          )
+          }
            {Season && datae?.episodes && (
-            <div className='text-white flex w-full max-w-4xl mt-2 mb-3'> Name:
+            <div className='text-white flex w-full max-w-4xl  mt-2 mb-2'> Name:
                 <p className='font-semibold ml-1'> {datae.episodes[Episode-1]?.name} </p>
             </div>
           )}
+           { Season && (
+          <p className='sm:hidden text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
+          )
+          }
+         
        
       </div>
 
