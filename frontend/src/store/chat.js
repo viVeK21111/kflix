@@ -7,10 +7,10 @@ export const chatStore = create((set)=> ({
     isLoading:true,
     contentType:null,
     datatext:null,
-    getdata: async({query,history})=> {
+    getdata: async({query,history,aimodel})=> {
         set({isLoading:true})
         try {
-            const response = await axios.post("/api/v1/chat/movie/llm",{query,history});
+            const response = await axios.post("/api/v1/chat/movie/llm",{query,history,aimodel});
             if(!(response.data.success)) {
                 return toast.error(response.data.message);
             }

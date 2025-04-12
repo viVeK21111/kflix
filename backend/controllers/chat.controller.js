@@ -7,11 +7,12 @@ import { User } from "../models/user.model.js";
 import dotenv from 'dotenv';
 dotenv.config();
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Groq } from 'groq-sdk';
 
 export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
-    const {query,history} = req.body;
+    const {query,history,aimodel} = req.body;
     const user = await User.findById(req.user._id);
     const username = user?.username;
 
@@ -35,52 +36,87 @@ export const GetMovieList = async (req, res) => {
       If no specific content is found which is asked by the user, chat in engaging manner why you can't find it. 
       
     `;
-
-        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",systemInstruction });
         const conversationHistory = history || []; // Default to empty if no history
-        const formattedHistory = conversationHistory.map(item => [
-        { role: 'user', parts: [{ text: item.query }] },
-        { role: 'model', parts: [{ text: item.datatext || 'No response' }] },
-        ]).flat();
-        const chat = model.startChat({
-            history: formattedHistory,
-            generationConfig: {
-              maxOutputTokens: 500, // Adjust as needed
-              temperature: 0.7,
-            },
-          });
 
-        let prompt = query.toLowerCase();
-        try {
-        let result = await chat.sendMessage(prompt);
-        /*
-        const moviestring = ["movie","cinema","film"]
-        const tvstring = ["tv","show","anime","series","serial","cartoon"]
         
-        if(moviestring.some(x => prompt.includes(x))) {
-            prompt += '.\nResponse Instructions: Give the movie names in json string format "{"movies": ["movie1","movie2","movie3"]} and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any movies or else just text explaining why you cant find)'
-        }
+        let prompt = query.toLowerCase();
+        let result;
+        let modelname = "llama-3.3-70b-versatile";
 
-        else if(tvstring.some(x=> prompt.includes(x))) {
-            prompt += '.\nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}" and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any content or else just text explaining why you cant find)'
+       
+
+        if(aimodel==="Gemini") {
+            console.log(`${aimodel} model called`)
+            const formattedHistory = conversationHistory.map(item => [
+                { role: 'user', parts: [{ text: item.query }] },
+                { role: 'model', parts: [{ text: item.datatext || 'No response' }] },
+            ]).flat();
+            try {
+                const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+                const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",systemInstruction });
+                const chat = model.startChat({
+                    history: formattedHistory,
+                    generationConfig: {
+                      maxOutputTokens: 500, // Adjust as needed
+                      temperature: 0.7,
+                    },
+                  });
+              
+                result = await chat.sendMessage(prompt);
+                result = result.response.text();
+            }
+           catch (error) {
+                return res.status(500).json({success:false,message:error.message});
+            }
+    
         }
         else {
-            prompt+=` \nNote: You are a chatbot called 'Flix' which is being used in movie and tv streaming platform. Address the user ${username}'s query in a freindly manner and ask what they want to watch if required. If user asks any question out of the movies or tv context, try to give response according to the users context.`
-            try {
-                let result = await model.generateContent(prompt);
-                return res.json({success:true,nocontext:result.response.text()});
+            if(aimodel==="llama-3.3") {
+                console.log(`${aimodel} model called`)
+                modelname = "llama-3.3-70b-versatile"
             }
-           catch(error) {
-            return res.status(500).json({success:false,message:error.message});
-           }
-        }
-        try {
-        let result = await model.generateContent(prompt);
-        */
+            else if(aimodel==="llama-4-scout"){
+                console.log(`${aimodel} model called`)
+                modelname = "meta-llama/llama-4-scout-17b-16e-instruct"
+            }
+            else if(aimodel==="deepseek-r1") {
+                console.log(`${aimodel} model called`)
+                modelname = "deepseek-r1-distill-llama-70b"
+            }
+            const messages = []
+            messages.push({ role: 'system', content: systemInstruction.trim() });
+            if (conversationHistory && Array.isArray(conversationHistory)) {
+                conversationHistory.forEach((entry) => {
+                  if (entry.query) {
+                    messages.push({ role: 'user', content: entry.query });
+                  }
+                  if (entry.datatext) {
+                    messages.push({ role: 'assistant', content: entry.datatext });
+                  }
+                });
+            }
+            messages.push({ role: 'user', content: prompt });
+            const groq = new Groq({ apiKey: process.env.YOUR_SECRET });
+            try {
+                const response = await groq.chat.completions.create({
+                  model: modelname,
+                  messages: messages,
+                  temperature: 0.7,
+                });
 
-        result = result.response.text();
-        console.log("result \n"+result);
+                result = response.choices[0].message.content;
+                result = result.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
+               
+
+              } catch (error) {
+                return res.status(500).json({success:false,message:error.message});
+              }
+        
+        }
+
+        
+        try {
+       // console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -102,7 +138,6 @@ export const GetMovieList = async (req, res) => {
             }
             
         }
-       
         
        
         let content = ""
@@ -140,7 +175,30 @@ export const GetMovieList = async (req, res) => {
 }
 
 
+         /*
+        const moviestring = ["movie","cinema","film"]
+        const tvstring = ["tv","show","anime","series","serial","cartoon"]
+        
+        if(moviestring.some(x => prompt.includes(x))) {
+            prompt += '.\nResponse Instructions: Give the movie names in json string format "{"movies": ["movie1","movie2","movie3"]} and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any movies or else just text explaining why you cant find)'
+        }
 
+        else if(tvstring.some(x=> prompt.includes(x))) {
+            prompt += '.\nResponse Instructions: Give tvshows names in json string format "{"tv": ["tv1","tv2","tv3"]}" and have a lite engaging conversation before giving json.\n Note(must give json in the response by finding any content or else just text explaining why you cant find)'
+        }
+        else {
+            prompt+=` \nNote: You are a chatbot called 'Flix' which is being used in movie and tv streaming platform. Address the user ${username}'s query in a freindly manner and ask what they want to watch if required. If user asks any question out of the movies or tv context, try to give response according to the users context.`
+            try {
+                let result = await model.generateContent(prompt);
+                return res.json({success:true,nocontext:result.response.text()});
+            }
+           catch(error) {
+            return res.status(500).json({success:false,message:error.message});
+           }
+        }
+        try {
+        let result = await model.generateContent(prompt);
+        */
         /*
         // Call Python script
         const pythonScriptPath = path.join(__dirname, "Gemini.py"); // Correct script path

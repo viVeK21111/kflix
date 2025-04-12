@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ArrowUp, History,Loader } from 'lucide-react';
+import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown  } from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
+import { use } from "react";
 
 export default function ChatPage() {
   const { user } = userAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const queryres = queryParams.get("query");
   const [query, setQuery] = useState(queryres || "");
@@ -22,6 +24,7 @@ export default function ChatPage() {
   const [conversationHistory, setConversationHistory] = useState(JSON.parse(sessionStorage.getItem("conversationHistory")) || []);
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
+  const [ModelType,setModelType] = useState("Gemini");
 
   useEffect(() => {
     if (data) setData(data);
@@ -79,6 +82,9 @@ export default function ChatPage() {
   }, [Data, DataText, Loading]);
 
   const onSubmit = async (e) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.delete("query");
+    navigate({ pathname: '/chat', search: searchParams.toString() }, { replace: true });
     setFormEnd(true);
     e.preventDefault();
     if (!query.trim()) return;
@@ -92,10 +98,10 @@ export default function ChatPage() {
     setQuery("");
     try {
       if(conversationHistory.length > 0) {
-        await getdata({ query: currentQuery,history:conversationHistory });
+        await getdata({ query: currentQuery,history:conversationHistory,aimodel:ModelType });
       }
       else {
-        await getdata({ query: currentQuery });
+        await getdata({ query: currentQuery,aimodel:ModelType });
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -118,13 +124,29 @@ export default function ChatPage() {
 
   return (
     <div style={{ backgroundColor: "#1e1d1d" }} className="h-screen w-full flex flex-col">
-      <header className="flex justify-center xl:justify-start p-4">
-        <Link to={'/chat'} className="flex items-center">
+      <header className="flex justify-center xl:justify-start p-4 border-b border-gray-800">
+        
+        <div className="mr-auto flex items-center rounded-lg p-1 bg-white bg-opacity-0 hover:cursor-pointer hover:bg-opacity-5">
+        <select
+          value={ModelType}
+          onChange={(e) => setModelType(e.target.value)}
+          className="p-2 hover:cursor-pointer rounded-lg bg-white bg-opacity-0 outline-none focus:ring-0 text-gray-300 font-semibold mr-2 "
+        >
+          <option className="bg-[#1e1d1d]" value="Gemini">Gemini 2.0 Flash</option>
+          <option className="bg-[#1e1d1d]" value="llama-3.3"> Llama-3.3 </option>
+          <option className="bg-[#1e1d1d]" value="llama-4-scout">Llama-4-scout </option>
+          <option className="bg-[#1e1d1d]" value="deepseek-r1">deepseek-r1</option>
+
+        </select>
+        
+        </div>
+        <div className=" hidden md:flex justify-center items-center">
           <div className="flex items-center">
-            <img src={'/chat.png'} alt="chat" className="w-10" />
-            <h1 className="text-3xl ml-2 font-bold text-red-500">Flix Chat</h1>
+             <BotMessageSquare className="text-gray-600 w-10 h-10" />
+            <h1 className="text-3xl ml-2 font-bold text-gray-600">Flix Chat</h1>
           </div>
-        </Link>
+        </div>
+        
         <div className="ml-auto flex items-center">
           <Link className="ml-auto  rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
@@ -180,7 +202,7 @@ export default function ChatPage() {
                         to={`/${item.contentType === 'movies' ? 'movie' : 'tv/details'}/?id=${content?.id}&name=${content?.name || content?.title}`}
                         onClick={() => window.scroll(0, 0)}
                       >
-                        <div className="rounded-lg bg-slate-900 shadow-md hover:scale-105 transition-transform">
+                        <div className="rounded-lg bg-[#28292a] shadow-md hover:scale-105 transition-transform">
                           <img
                             src={`${ORIGINAL_IMG_BASE_URL}${content?.backdrop_path || content?.poster_path}`}
                             className="w-full h-40 object-cover rounded-t-lg"
@@ -220,9 +242,9 @@ export default function ChatPage() {
 
       {/* Input form - fixed at the bottom */}
       <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0 sm:bottom-80`}>
-        <div className="max-w-2xl p-1 mx-auto">
+        <div className="max-w-2xl p-1 mx-auto ">
           {(!formEnd && !DataText && conversationHistory.length===0) && (
-            <p className="text-white flex justify-center pb-3 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
+            <p className="text-white flex justify-center pb-4 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
           )}
           <form onSubmit={onSubmit} className="w-full">
             <div className="flex items-center">

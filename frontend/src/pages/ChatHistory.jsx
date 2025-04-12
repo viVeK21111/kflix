@@ -32,11 +32,14 @@ const [loading,setloading] = useState(true);
     )
   }
   return (
-    <div className='min-h-screen bg-slate-900'>
+    <div className='min-h-screen ' style={{ backgroundColor: "#1e1d1d" }}>
         {/* Search History Section */}
-      <div className="pt-10 w-full max-w-2xl pl-3 pb-3">
-        <p className='flex items-center text-white text-xl mb-5'><MessagesSquare/> <p className='ml-2'>chat History</p></p>
+      <div  className="pt-10 w-full  pb-3">
+        <header className='border-b border-gray-700 mb-5'>
+        <p className='flex items-center text-white text-xl mb-5'><MessagesSquare className='ml-3'/> <p className='ml-2'>chat History</p></p>
 
+        </header>
+        <div className='max-w-2xl ml-2'>
         {datalocal?.chatHistory?.length > 0 ? (
           <>
             <div className="flex flex-col gap-1">
@@ -47,7 +50,7 @@ const [loading,setloading] = useState(true);
                   <div className="flex w-full">
                   <div
                   key={index}
-                  className="w-full flex bg-gray-800 hover:bg-slate-700 p-2 mr-2 md:mx-0 rounded-lg shadow-md "
+                  className="w-full flex bg-white bg-opacity-5 hover:bg-opacity-10 p-2 mr-2 md:mx-0 rounded-lg shadow-md "
                 >
                   <div>
                   <h3 className="text-base font-bold text-white">{item?.query}</h3>
@@ -72,7 +75,7 @@ const [loading,setloading] = useState(true);
               <div className="text-center mt-6">
                 <button
                   onClick={() => setVisibleItems(prev => prev + 6)} // Show 6 more items
-                  className="px-3 py-2 bg-white bg-opacity-20 text-white font-semibold rounded-lg hover:bg-opacity-25 transition-all"
+                  className="px-3 py-2 bg-white bg-opacity-10 text-white font-semibold rounded-lg hover:bg-opacity-15 transition-all"
                 >
                   Load More
                 </button>
@@ -82,6 +85,8 @@ const [loading,setloading] = useState(true);
         ) : (
           <p className="text-gray-400 text-center">No Chat history found.</p>
         )}
+        </div>
+        
       </div>
     </div>
   )
