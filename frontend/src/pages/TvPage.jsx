@@ -37,11 +37,13 @@ const TvPage = () => {
         else {
           setSeasonLoading(false);
         }
-  
+     
       try {
+       
       const seasonep = {"Id":id,"Season":Season};
       const response = await axios.post("/api/v1/tv/episodes",seasonep);
       setDatae(response.data.content)
+
       }
       catch (error) {
         console.error("Error fetching episodes:",error);
@@ -62,13 +64,25 @@ const TvPage = () => {
     sessionStorage.setItem("tv_page_scroll_position", window.scrollY.toString());
   };
 
-  const handleNavigation = (episode, season) => {
+  const handleNavigation = (episode, season,tepisodes) => {
     saveScrollPosition();
-    navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season.season_number}&episode=${episode}`);
+    navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season.season_number}&episode=${episode}&tepisodes=${tepisodes}`);
   };
-  const handleNavigation1 = (episode,season) => {
+  const handleNavigation1 = async(episode,season) => {
     saveScrollPosition();
-    navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season}&episode=${episode}`);
+    sessionStorage.setItem("openseason", season);
+    try {
+      setSeasonLoading(true);
+      const seasonep = {"Id":id,"Season":season};
+      const response = await axios.post("/api/v1/tv/episodes",seasonep);
+      navigate(`/watch/?id=${data?.id}&name=${data?.name}&season=${season}&episode=${episode}&tepisodes=${response?.data?.content?.episodes?.length}`);
+    }
+   finally{
+      setSelectedSeason(season);
+      setOpenSeason(season);
+      setSeasonLoading(false)
+    }
+    
   }
 
   useEffect(() => {
@@ -220,6 +234,7 @@ const TvPage = () => {
             
             </div>
           <button className='flex w-full justify-center p-2 bg-blue-600 items-center mt-4 hover:bg-blue-800 px-2 rounded-md'
+             
             onClick={() => handleNavigation1(1, 1)}
             >
             <Play className='size-6 fill-white p-1'/>
@@ -361,7 +376,7 @@ const TvPage = () => {
                 {datae?.episodes?.map((ep, index) => (
                  <button
                    key={`${season.id}-${index + 1}`}
-                   onClick={() => handleNavigation(index + 1, season)}
+                   onClick={() => handleNavigation(index + 1, season, datae.episodes.length)}
                    className="px-1 w-full py-2 bg-gray-900  hover:bg-gray-950 border-b border-white border-opacity-15 text-white text-sm"
                  >
                   {index+1} . {ep.name || `Episode ${index + 1}`}

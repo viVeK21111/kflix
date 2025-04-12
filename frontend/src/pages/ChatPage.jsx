@@ -24,7 +24,7 @@ export default function ChatPage() {
   const [conversationHistory, setConversationHistory] = useState(JSON.parse(sessionStorage.getItem("conversationHistory")) || []);
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
-  const [ModelType,setModelType] = useState("Gemini");
+  const [ModelType,setModelType] = useState(sessionStorage.getItem("ModelType") || "Gemini" );
 
   useEffect(() => {
     if (data) setData(data);
@@ -82,9 +82,12 @@ export default function ChatPage() {
   }, [Data, DataText, Loading]);
 
   const onSubmit = async (e) => {
+    sessionStorage.setItem("ModelType", ModelType);
     const searchParams = new URLSearchParams(location.search);
-    searchParams.delete("query");
-    navigate({ pathname: '/chat', search: searchParams.toString() }, { replace: true });
+    if(searchParams.has("query")) {
+      searchParams.delete("query");
+      navigate({ pathname: '/chat', search: searchParams.toString() }, { replace: true });
+    }
     setFormEnd(true);
     e.preventDefault();
     if (!query.trim()) return;

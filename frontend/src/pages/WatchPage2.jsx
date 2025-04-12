@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 
 import { addWatchStore } from '../store/watchStore';
-import { Plus,ChevronDown,ChevronUp,Loader } from 'lucide-react';
+import { Plus,ChevronDown,ChevronUp,Loader,ChevronLeft,ChevronRight } from 'lucide-react';
 import axios from 'axios';
 
 function WatchPage() {
@@ -26,8 +26,9 @@ function WatchPage() {
 
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
-  const Season = queryParams.get('season')
-  const Episode = queryParams.get('episode')
+  const Season = parseInt(queryParams.get('season'));
+  const Episode = parseInt(queryParams.get('episode'));
+  const tEpisodes = parseInt(queryParams.get('tepisodes'));
   localStorage.setItem("numitems",6);
   const {addWatch} = addWatchStore();
   const [isplay,setisplay] = useState(false);
@@ -241,12 +242,45 @@ function WatchPage() {
           )
           }
            {Season && datae?.episodes && (
-            <div className='text-white flex w-full max-w-4xl  mt-2 mb-2'> Name:
-                <p className='font-semibold ml-1'> {datae.episodes[Episode-1]?.name} </p>
+            <div className='text-white flex items-center w-full max-w-4xl  mt-2 mb-2'>
+                <p className='font-semibold ml-1 mt-2'> Name: {datae.episodes[Episode-1]?.name} </p>
+              <div className='hidden sm:flex  ml-auto'>
+              
+             {Episode < tEpisodes && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15 '>
+                 <p className='flex items-center'>Next Ep <ChevronRight className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
+             {Episode > 1 && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 ml-2 '>
+                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
+             </div>
             </div>
           )}
            { Season && (
-          <p className='sm:hidden text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
+            <>
+             <p className='sm:hidden text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
+             <div className='flex sm:hidden sm:mt-3'>
+              
+             {Episode < tEpisodes && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15 '>
+                 <p className='flex items-center'>Next Ep <ChevronRight className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
+             {Episode > 1 && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 ml-2 '>
+                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
+             </div>
+             
+            </>
           )
           }
          

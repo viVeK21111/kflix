@@ -29,12 +29,12 @@ export const GetMovieList = async (req, res) => {
         const systemInstruction = `
       You are a chatbot named 'Flix' on a movie and TV streaming platform. 
       Address the user by his name '${username}' in a friendly manner. 
-      Your task is to assist the user in finding movies or TV shows based on their queries.
-      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", .... , "movie(n)"]} Give atleast 5 or based on the user preference. 
-      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2",...., "tv(n)"]} Give atleast 5 or based on user preference. 
+      Your task is to assist the user in finding movies or TV shows only if the user ask about movies or tv shows.
+      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", .... , "movie(n)"]} Give atleast 5 movie names or based on the user preference. 
+      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2",...., "tv(n)"]} Give atleast 5 tv shows or based on user preference. 
       For normal greetings or conversations, respond with a friendly message and ask the user what they would like to watch.
-      If no specific content is found which is asked by the user, chat in engaging manner why you can't find it. 
-      
+      If no specific content is found or explicit prompt is found, chat in engaging manner why you can't find it. 
+      If the user asks any question outside of movies or TV context, try to give a response according to the user's context.
     `;
         const conversationHistory = history || []; // Default to empty if no history
 
@@ -84,7 +84,7 @@ export const GetMovieList = async (req, res) => {
                 modelname = "deepseek-r1-distill-llama-70b"
             }
             const messages = []
-            messages.push({ role: 'system', content: systemInstruction.trim() });
+            messages.push({ role: 'system', content: systemInstruction });
             if (conversationHistory && Array.isArray(conversationHistory)) {
                 conversationHistory.forEach((entry) => {
                   if (entry.query) {
@@ -116,7 +116,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       // console.log("result \n"+result);
+       console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -164,7 +164,7 @@ export const GetMovieList = async (req, res) => {
             resf.push(movie[0]);
         }
         if(resf.length===0) {
-            return res.json({success:false,message:`Sorry,No ${content} found`});
+            return res.json({success:true,introText:`Sorry,No ${content} found`});
         }
         console.log("tmdb content fetched successfully");
         return res.json({success:true,introText:introText,content:resf,contentType:contents});

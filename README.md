@@ -16,7 +16,7 @@ To host on local network ipv4, change the url in vite.config to your ipv4.
 
 ![Homescreen](/homepage2.png)
 <br><br>
-AI powered chat (By Gemini 2.0 Flash )
+AI powered chat by multiple LLMs
 <br><br>
 ![chat page2](/chatf1.png)
 <br><br>
