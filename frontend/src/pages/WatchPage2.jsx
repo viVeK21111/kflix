@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import { Lightbulb,Youtube } from 'lucide-react';
+import { Lightbulb,CircleArrowLeft, CircleChevronLeft  } from 'lucide-react';
 import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
 import { useEffect } from 'react';
@@ -26,9 +26,12 @@ function WatchPage() {
 
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
-  const Season = parseInt(queryParams.get('season'));
-  const Episode = parseInt(queryParams.get('episode'));
-  const tEpisodes = parseInt(queryParams.get('tepisodes'));
+  let Season = queryParams.get('season');
+  if(Season) Season = parseInt(Season);
+  let Episode = queryParams.get('episode');
+  if(Episode) Episode = parseInt(Episode);
+  let tEpisodes = queryParams.get('tepisodes');
+  if(tEpisodes) tEpisodes = parseInt(tEpisodes);
   localStorage.setItem("numitems",6);
   const {addWatch} = addWatchStore();
   const [isplay,setisplay] = useState(false);
@@ -153,10 +156,22 @@ function WatchPage() {
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
     <div className=''>
     
-      <header className='flex items-center justify-center p-4'>
+      <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40 lg:mb-1 ${!Season ? 'py-3' : 'py-0'}`:`flex items-center bg-black lg:mb-1 ${!Season ? 'py-3' : 'py-0'}`}>
       <Link to={'/'} className='flex items-center'>
-        <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
+        <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
       </Link>
+
+      {Season && (
+        <div className='ml-auto flex items-center p-2 hover:scale-105 transition-transform'>
+          <Link to={`/tv/details/?id=${Id}&name=${Name}`} className='text-white text-sm md:text-base ml-2 md:ml-4 lg:ml-4 xl:ml-4'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={24}/></p> </Link>
+        </div>
+      )}
+      
+      {!Season && (
+        <div className='ml-auto flex items-center p-2 hover:scale-105 transition-transform'>
+          <Link to={`/movie/?id=${Id}&name=${Name}`} className='text-white text-sm md:text-base ml-2 md:ml-4 lg:ml-4 xl:ml-4 '> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={24}/></p> </Link>
+        </div>
+      )}
     </header>
  
      
@@ -165,7 +180,7 @@ function WatchPage() {
       {/* Video Container */}
   
         
-        <div className='flex flex-col items-center p-2 lg:p-0'>
+        <div className='flex flex-col items-center'>
         <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
         {/* Video Player */}
         <iframe
@@ -185,7 +200,7 @@ function WatchPage() {
       
      
 
-      <div className='flex w-full sm:max-w-4xl sm:px-1 flex-wrap justify-between items-center'>
+      <div className='flex w-full sm:max-w-4xl  flex-wrap justify-between p-2 lg:p-0 items-center'>
       <div className='flex w-full max-w-4xl items-center mt-2'>
       <div className='relative w-48'>
       
@@ -243,7 +258,7 @@ function WatchPage() {
           }
            {Season && datae?.episodes && (
             <div className='text-white flex items-center w-full max-w-4xl  mt-2 mb-2'>
-                <p className='font-semibold ml-1 mt-2'> Name: {datae.episodes[Episode-1]?.name} </p>
+                <p className='font-semibold mt-2'> Name: {datae.episodes[Episode-1]?.name} </p>
               <div className='hidden sm:flex  ml-auto'>
               
              {Episode < tEpisodes && (

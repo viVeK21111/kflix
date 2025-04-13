@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DetailsStore } from "../store/tvdetails";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon,CircleArrowLeft } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { Plus, Star,Dot,Play,Loader } from "lucide-react";
@@ -202,6 +202,16 @@ const TvPage = () => {
          onload = {() => setimageload(false)}
          onerror = {() => setimageload(false)}
         />
+        <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
+        <Link
+          to={`/`}
+          className="text-white text-sm md:text-base bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition"
+        >
+          <p className="flex items-center">
+            <CircleArrowLeft className="" size={24} />
+          </p>
+        </Link>
+      </div>
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
         <div className="md:absolute lg:max-w-3xl p-1 md:p-0 bottom-2 left-3 rounded-t-lg">

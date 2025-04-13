@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Plus,Star,Play,Dot,ChevronDown,ChevronUp,Loader } from 'lucide-react';
+import { Plus,Star,Play,Dot,Loader,CircleArrowLeft } from 'lucide-react';
 import axios from 'axios';
 
 function WatchPage() {
@@ -122,6 +122,7 @@ function WatchPage() {
 
       return (
         <div className={`page min-h-screen ${bgColorClass} bg-zinc-950 overflow-auto`}>
+           
     <div className=''>
   
      
@@ -139,9 +140,21 @@ function WatchPage() {
           className='w-full object-top object-cover h-full md:h-[86vh]  shadow-2xl'
           onLoad={() => setimageload(false)}
           ></img>
+           <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
+        <Link
+          to={`/`}
+          className="text-white text-sm md:text-base bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition"
+        >
+          <p className="flex items-center">
+            <CircleArrowLeft className="" size={24} />
+          </p>
+        </Link>
+      </div>
+          
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
           <div className="md:absolute text-white lg:max-w-3xl p-1  bottom-5 left-3">
           <div className='mt-4 sm:hidden ml-1'>
+            
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
                   {data?.adult ? "18+" : "PG-13"} 
@@ -164,6 +177,7 @@ function WatchPage() {
           <p className=''> {data?.release_date?.split("")} </p>
           <p className='flex'><Dot /></p>
           <p className=''>{data?.runtime} min.</p>
+          
           </div>
           
           { releasedate!==null && releasedate.getTime() < new Date().getTime() && 
@@ -185,6 +199,7 @@ function WatchPage() {
         </div>
         
         <div className='mx-2 md:mx-0'>
+          
         <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-2 mt-3 text-white">
             {data?.title}
           </h1>

@@ -20,9 +20,9 @@ AI powered chat by multiple LLMs
 <br><br>
 ![chat page2](/chatf1.png)
 <br><br>
-Streaming by filmu
+Streaming by Third party services
 <br><br>
-![watch page](/watchpage2.png)
+![watch page](/watchpagetv.png)
 <br>
 
 ### Technology stack
