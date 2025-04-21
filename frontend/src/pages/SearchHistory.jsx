@@ -2,7 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { Trash2,X,Search,Loader} from "lucide-react";
+import { Trash2,X,Search,Loader,House,TvMinimal} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
@@ -37,8 +37,20 @@ const [loading,setloading] = useState(true);
   }
   return (
     <div className='min-h-screen bg-slate-900'>
+       <header className={`flex w-full items-center bg-black bg-opacity-10`}>
+            <div  className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+            </div>
+              <div className='ml-auto flex items-center p-2 '>
+                   
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
+          </header>
         {/* Search History Section */}
       <div className="pt-10 w-full max-w-2xl pl-3 pb-3">
+     
         <p className='flex items-center text-white text-xl'><Search size={20}/> <p className='ml-2'>Search History</p></p>
         <p className="flex justify-end items-center pb-2 max-w-2xl ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
 

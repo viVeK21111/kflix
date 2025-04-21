@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DetailsStore } from "../store/tvdetails";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ChevronDownIcon, ChevronUpIcon,CircleArrowLeft } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon,CircleArrowLeft,House,TvMinimal } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { Plus, Star,Dot,Play,Loader } from "lucide-react";
@@ -195,6 +195,17 @@ const TvPage = () => {
   return (
     <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
+      <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-opacity-75 z-10 w-full `}>
+            <div  className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+            </div>
+              <div className='ml-auto flex items-center p-2 '>
+                   
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
+          </header>
         <img
           className="w-full md:h-[85vh] object-cover object-top shadow-2xl"
           src={imageSrc}
@@ -203,14 +214,7 @@ const TvPage = () => {
          onerror = {() => setimageload(false)}
         />
         <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
-        <Link
-          to={`/`}
-          className="text-white text-sm md:text-base bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition"
-        >
-          <p className="flex items-center">
-            <CircleArrowLeft className="" size={24} />
-          </p>
-        </Link>
+        
       </div>
 
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>

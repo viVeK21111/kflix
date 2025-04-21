@@ -22,7 +22,7 @@ AI powered chat by multiple LLMs
 <br><br>
 Streaming by Third party services
 <br><br>
-![watch page](/watchpagetv.png)
+![watch page](/watchpagetv1.png)
 <br>
 
 ### Technology stack

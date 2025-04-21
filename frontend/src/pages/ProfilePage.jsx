@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader,Github } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -178,6 +178,20 @@ export default function ProfilePage(){
         </div>
         <div className="flex flex-col">
         <Link to={'/contactus'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-700"><Mail size={18}/><p className="ml-2">Contact Us</p></Link>
+        </div>
+        <div className="flex flex-col">
+        <a
+        href='https://github.com/viVeK21111/netflix_clone' 
+        className="flex p-2 border-b  border-white border-opacity-15 hover:bg-slate-700 "
+        target="_blanck"
+        >
+          
+         
+					<Github size={24} />
+					
+          <p className="pl-2">About Us</p>
+					
+				</a>
         </div>
       </div>
       </div>

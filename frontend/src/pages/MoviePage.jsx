@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import { DetailsStore } from '../store/tvdetails';
@@ -7,7 +7,8 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Plus,Star,Play,Dot,Loader,CircleArrowLeft } from 'lucide-react';
+import { Plus,Star,Play,Dot,Loader,CircleArrowLeft,House,TvMinimal } from 'lucide-react';
+
 import axios from 'axios';
 
 function WatchPage() {
@@ -37,6 +38,8 @@ function WatchPage() {
  
   const [releasedate,setreleasedate] = useState(null);
   const [trialerId,setTrailerId]  = useState(null);
+
+  const imgRef = useRef(null);
 
    useEffect (()=> {
     if(data && data?.release_date) {
@@ -119,11 +122,14 @@ function WatchPage() {
     // Cleanup to avoid memory leaks
     return () => window.removeEventListener('resize', handleResize);
     }, []);
+  
 
       return (
         <div className={`page min-h-screen ${bgColorClass} bg-zinc-950 overflow-auto`}>
            
     <div className=''>
+      
+           
   
      
       {(Loading || imageload) &&  (
@@ -135,20 +141,27 @@ function WatchPage() {
       )}
 
       {!Loading && (
-        <div className='relative'>
-          <img src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path || data?.poster_path}`}
+        <div className='relative '>
+           <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-opacity-75 z-10 w-full `}>
+            <div  className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+            </div>
+              <div className='ml-auto flex items-center p-2 '>
+                   
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
+          </header>
+          <img  ref={imgRef} src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path || data?.poster_path}`}
           className='w-full object-top object-cover h-full md:h-[86vh]  shadow-2xl'
-          onLoad={() => setimageload(false)}
+          onLoad={() =>{
+            setimageload(false);
+           
+          }}
           ></img>
            <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
-        <Link
-          to={`/`}
-          className="text-white text-sm md:text-base bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition"
-        >
-          <p className="flex items-center">
-            <CircleArrowLeft className="" size={24} />
-          </p>
-        </Link>
+       
       </div>
           
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
@@ -303,7 +316,7 @@ function WatchPage() {
         
         {!Loading && !imageload && (
           <div className='bg-black w-full mt-5 sm:mt-0'>
-                <div className='flex text-white border-t-2 border-white border-opacity-30 pl-3 pt-5 text-xl'><h3 className='font-bold'>Cast</h3></div>
+                <div className='flex text-white border-t border-white border-opacity-30 pl-3 pt-4 text-xl'><h3 className='font-bold'>Cast</h3></div>
                   <div className="w-full grid grid-cols-2 pb-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 sm:px-5">
                   {datac?.cast?.slice(0,numitems).map((item, index) => (
                     <Link

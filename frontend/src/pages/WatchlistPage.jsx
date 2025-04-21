@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import axios from "axios";
-import { SquareX,Loader } from 'lucide-react';
+import { SquareX,Loader,House,TvMinimal } from 'lucide-react';
 import toast from "react-hot-toast";
 
 const WatchlistPage = () => {
@@ -52,19 +52,25 @@ const WatchlistPage = () => {
   };
 
   const handleLoadLess = () => {
-    setNumItems(6);
+    setNumItems(4);
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 bg-gray-900">
-      <header className='flex items-center p-4'>
-        <Link to={'/'} className='flex items-center'>
-          <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
-        </Link>
-      </header>
+    <div className="w-full min-h-screen flex flex-col items-center bg-gray-900">
+     <header className={`flex w-full items-center bg-black bg-opacity-10`}>
+            <div  className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+            </div>
+              <div className='ml-auto flex items-center p-2 '>
+                   
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
+          </header>
 
       {/* Section Title */}
-      <div className="text-white w-full max-w-6xl mt-8 text-2xl font-extrabold">
+      <div className="text-white w-full px-4 sm:px-6 max-w-6xl mt-8 text-2xl font-extrabold">
         <h3>🎬 Your Watchlist</h3>
       </div>
 
@@ -86,7 +92,7 @@ const WatchlistPage = () => {
       )}
 
       {/* Movie Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mt-6 w-full mb-2 max-w-6xl">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-6xl">
         {datac?.slice(0, numitems).map((item, index) => (
           <Link
             key={item.id || index}

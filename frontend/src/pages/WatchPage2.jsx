@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import { Lightbulb,CircleArrowLeft, CircleChevronLeft  } from 'lucide-react';
+import { Lightbulb,CircleArrowLeft, CircleChevronLeft,House,TvMinimal  } from 'lucide-react';
 import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
 import { useEffect } from 'react';
@@ -156,22 +156,18 @@ function WatchPage() {
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
     <div className=''>
     
-      <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40 lg:mb-1 ${!Season ? 'py-3' : 'py-0'}`:`flex items-center bg-black lg:mb-1 ${!Season ? 'py-3' : 'py-0'}`}>
-      <Link to={'/'} className='flex items-center'>
+      <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40 lg:mb-1 ${!Season ? 'py-2' : 'py-0'}`:`flex items-center bg-black lg:mb-1 ${!Season ? 'py-2' : 'py-0'}`}>
+      <div  className='flex items-center ml-1'>
         <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
-      </Link>
-
-      {Season && (
-        <div className='ml-auto flex items-center p-2 hover:scale-105 transition-transform'>
-          <Link to={`/tv/details/?id=${Id}&name=${Name}`} className='text-white text-sm md:text-base ml-2 md:ml-4 lg:ml-4 xl:ml-4'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={24}/></p> </Link>
+      </div>
+     
+        <div className='ml-auto flex items-center p-2 '>
+             
+          <Link className='hover:bg-slate-800 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+          <Link className='hover:bg-slate-800 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+          <Link to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}` } className='flex items-center text-white text-sm md:text-base ml-3 md:ml-4 lg:ml-4 xl:ml-4 hover:scale-105 transition-transfor'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={22}/></p> </Link>
         </div>
-      )}
       
-      {!Season && (
-        <div className='ml-auto flex items-center p-2 hover:scale-105 transition-transform'>
-          <Link to={`/movie/?id=${Id}&name=${Name}`} className='text-white text-sm md:text-base ml-2 md:ml-4 lg:ml-4 xl:ml-4 '> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={24}/></p> </Link>
-        </div>
-      )}
     </header>
  
      
@@ -181,7 +177,7 @@ function WatchPage() {
   
         
         <div className='flex flex-col items-center'>
-        <div className="w-full max-w-4xl bg-black rounded-lg shadow-2xl overflow-hidden">
+        <div className="w-full max-w-4xl bg-black shadow-2xl overflow-hidden">
         {/* Video Player */}
         <iframe
           allowFullScreen
@@ -258,7 +254,7 @@ function WatchPage() {
           }
            {Season && datae?.episodes && (
             <div className='text-white flex items-center w-full max-w-4xl  mt-2 mb-2'>
-                <p className='font-semibold mt-2'> Name: {datae.episodes[Episode-1]?.name} </p>
+                <p className='flex font-extralight mt-2'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
               <div className='hidden sm:flex  ml-auto'>
               
              {Episode < tEpisodes && (

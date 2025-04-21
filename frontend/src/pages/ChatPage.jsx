@@ -4,7 +4,8 @@ import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown  } from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
-import { use } from "react";
+
+import { Listbox } from "@headlessui/react";
 
 export default function ChatPage() {
   const { user } = userAuthStore();
@@ -24,7 +25,8 @@ export default function ChatPage() {
   const [conversationHistory, setConversationHistory] = useState(JSON.parse(sessionStorage.getItem("conversationHistory")) || []);
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
-  const [ModelType,setModelType] = useState(sessionStorage.getItem("ModelType") || "Gemini" );
+  //const [ModelType,setModelType] = useState(sessionStorage.getItem("ModelType") || "Gemini" );
+  
 
   useEffect(() => {
     if (data) setData(data);
@@ -82,7 +84,7 @@ export default function ChatPage() {
   }, [Data, DataText, Loading]);
 
   const onSubmit = async (e) => {
-    sessionStorage.setItem("ModelType", ModelType);
+    sessionStorage.setItem("ModelType", selectedModel.value);
     const searchParams = new URLSearchParams(location.search);
     if(searchParams.has("query")) {
       searchParams.delete("query");
@@ -101,10 +103,10 @@ export default function ChatPage() {
     setQuery("");
     try {
       if(conversationHistory.length > 0) {
-        await getdata({ query: currentQuery,history:conversationHistory,aimodel:ModelType });
+        await getdata({ query: currentQuery,history:conversationHistory,aimodel:selectedModel.value });
       }
       else {
-        await getdata({ query: currentQuery,aimodel:ModelType });
+        await getdata({ query: currentQuery,aimodel:selectedModel.value });
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -113,6 +115,15 @@ export default function ChatPage() {
       setsubmitloading(false);
     }
   };
+  const models = [
+    { name: "Gemini 2.0 Flash", value: "Gemini" },
+    { name: "Llama-3.3", value: "llama-3.3" },
+    { name: "Llama-4-scout", value: "llama-4-scout" },
+    { name: "deepseek-r1", value: "deepseek-r1" },
+  ];
+  const defaultModelValue = sessionStorage.getItem("ModelType") || "Gemini";
+  const [selectedModel, setSelectedModel] = useState( models.find((model) => model.value === defaultModelValue) || models[0]);
+
 
   if (pLoading) {
     return (
@@ -127,23 +138,34 @@ export default function ChatPage() {
 
   return (
     <div style={{ backgroundColor: "#1e1d1d" }} className="h-screen w-full flex flex-col">
-      <header className="flex justify-center xl:justify-start p-4 border-b border-gray-800">
+      <header className="flex justify-center xl:justify-start p-3 border-b border-gray-800">
         
-        <div className="mr-auto flex items-center rounded-lg p-1 bg-white bg-opacity-0 hover:cursor-pointer hover:bg-opacity-5">
-        <select
-          value={ModelType}
-          onChange={(e) => setModelType(e.target.value)}
-          className="p-2 hover:cursor-pointer rounded-lg bg-white bg-opacity-0 outline-none focus:ring-0 text-gray-300 font-semibold mr-2 "
-        >
-          <option className="bg-[#1e1d1d]" value="Gemini">Gemini 2.0 Flash</option>
-          <option className="bg-[#1e1d1d]" value="llama-3.3"> Llama-3.3 </option>
-          <option className="bg-[#1e1d1d]" value="llama-4-scout">Llama-4-scout </option>
-          <option className="bg-[#1e1d1d]" value="deepseek-r1">deepseek-r1</option>
-
-        </select>
+        <div className=" mr-auto  items-center rounded-lg  bg-white bg-opacity-0 hover:cursor-pointer hover:bg-opacity-5">
+        <Listbox value={selectedModel} onChange={setSelectedModel}>
+        <Listbox.Button className="w-48 flex justify-center items-center rounded-lg text-gray-300 px-4 py-3 text-left font-semibold">
+          {selectedModel.name}
+          <ChevronDown color="white " className="ml-1" size={22}></ChevronDown>
+        </Listbox.Button>
+        
+        <Listbox.Options className="absolute mt-1 font-semibold bg-[#1e1d1d] rounded-lg shadow-lg overflow-y-auto z-10">
+          {models.map((model, idx) => (
+            <Listbox.Option
+              key={idx}
+              value={model}
+              className={({ active }) =>
+                `cursor-pointer p-3 text-base border-b border-gray-700 px-8  ${
+                  active ? "bg-white bg-opacity-20 text-white" : "text-white bg-white bg-opacity-10"
+                }`
+              }
+            >
+              {model.name}
+            </Listbox.Option>
+          ))}
+        </Listbox.Options>
+      </Listbox>
         
         </div>
-        <div className=" hidden md:flex justify-center items-center">
+        <div className=" hidden md:flex items-center mr-20">
           <div className="flex items-center">
              <BotMessageSquare className="text-gray-600 w-10 h-10" />
             <h1 className="text-3xl ml-2 font-bold text-gray-600">Flix Chat</h1>

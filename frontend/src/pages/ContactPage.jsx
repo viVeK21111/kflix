@@ -1,9 +1,9 @@
 import React from 'react'
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {Loader} from 'lucide-react';
+import {Loader,House,TvMinimal} from 'lucide-react';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +13,10 @@ const ContactPage = () => {
   });
   const [msgsent,setmsgsent] = useState(false);
   const [Loading,setLoading] = useState(true);
+
+  useEffect(() => {
+    window.scroll(0,0);
+  })
 
   const logoImage = new Image();
   logoImage.src = '/hero.png';
@@ -62,11 +66,17 @@ const ContactPage = () => {
 
   return (
     <div className="relative contact-bg backdrop-blur justify-center items-center min-h-screen">
-    <header className="w-full max-w-6xl flex mx-auto justify-center items-center p-4">
-        <Link to={'/'}>
-          <img src={'/kflix2.png'} alt='Kflix Logo' className='w-40 sm:w-52' />
-        </Link>
-      </header>
+      <header className={`flex w-full items-center bg-black bg-opacity-50`}>
+            <div  className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+            </div>
+              <div className='ml-auto flex items-center p-2 '>
+                   
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
+          </header>
       <div className='flex justify-center mt-10'>
       <div className="max-w-xl w-full m-3 md:m-0 bg-slate-800 bg-opacity-80 p-5 rounded-lg shadow-md">
     <h2 className="text-2xl font-semibold text-white mb-3 text-center">Contact Us</h2>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal } from 'lucide-react';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
@@ -85,13 +85,18 @@ const SearchPage = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center p-2">
+    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center ">
       {/* Header */}
-      <header className="w-full flex justify-center items-center">
-        <Link to={'/'}>
-          <img src={'/kflix2.png'} alt='Kflix Logo' className='w-40 sm:w-52' />
-        </Link>
-        <Link to='/profile/searchHistory' className='flex ml-auto text-gray-400 transition-all duration-300 hover:scale-110 cursor-pointer text-sm mt-3 bg-white bg-opacity-10 py-1 px-2 rounded-md hover:underline'><History/></Link>
+      <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
+        <div className='mr-auto' >
+          <img src={'/kflix2.png'} alt='Kflix Logo' className='w-36' />
+        </div>
+              <div className='flex ml-auto items-center p-2 '>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+          
+        <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 mr-3 rounded-md'><History className='pr-1' /><p className='font-semibold'>History</p></Link>
 
       </header>
       
