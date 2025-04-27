@@ -17,7 +17,7 @@ export const SimilarStore = create((set)=> ({
             set({datas:response.data.content,isLoading:false});
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+            toast.error(error?.message || "an error occured");
             set({datas:null,isLoading:false});
         }
     },
@@ -33,7 +33,7 @@ export const SimilarStore = create((set)=> ({
             set({datas:response.data.content,isLoading:false});
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+            toast.error(error?.message || "an error occured");
             set({datas:null,isLoading:false});
         }
     },

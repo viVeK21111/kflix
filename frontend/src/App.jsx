@@ -20,6 +20,7 @@ import SearchHistory from "./pages/SearchHistory";
 import ChatHistory from "./pages/ChatHistory";
 import WatchHistory from "./pages/WatchHistory"
 import MoviePage from "./pages/MoviePage";
+import Terms from "./pages/Terms";
 import {useLocation}  from  'react-router-dom';
 
 function FooterWithRouteCheck() {
@@ -71,6 +72,7 @@ function App() {
       <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
+      <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
     </Routes>
     <FooterWithRouteCheck/>
     <Toaster/>

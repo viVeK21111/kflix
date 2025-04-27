@@ -14,7 +14,7 @@ export const ProfileStore = create((set)=> ({
             set({contentType:response.data.contentType});
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+          //  toast.error(error.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -26,7 +26,7 @@ export const ProfileStore = create((set)=> ({
             toast.success("success");
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -38,7 +38,41 @@ export const ProfileStore = create((set)=> ({
             toast.success("success");
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+           // toast.error(error.response.data.message || "an error occured");
+            set({data:null,isLoading:false});
+        }
+    },
+    ClearWatchHistoryMovie:async(id,date)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/watch/removeMovieWatch/${id}/${date}`);
+            console.log(response.data.message);
+            if(response.data.success) {
+                toast.success("success");
+            }
+            else{
+                toast.error("something went wrong");
+            }
+
+        } catch (error) {
+           // toast.error(error.response.data.message || "an error occured");
+            set({data:null,isLoading:false});
+        }
+    },
+    ClearWatchHistoryTv:async(id,date,season,episode)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/watch/removeTvWatch/${id}/${date}/${season}/${episode}`);
+            console.log(response.data.message);
+            if(response.data.success) {
+                toast.success("success");
+            }
+            else{
+                toast.error("something went wrong");
+            }
+
+        } catch (error) {
+            //toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },
@@ -55,7 +89,24 @@ export const ProfileStore = create((set)=> ({
             }
 
         } catch (error) {
-            toast.error(error.response.data.message || "an error occured");
+            //toast.error(error.response.data.message || "an error occured");
+            set({data:null,isLoading:false});
+        }
+    },
+    ClearWatchHistory:async(query)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/search/clearWatchHistory`);
+            console.log(response.data.message);
+            if(response.data.success) {
+                toast.success("success");
+            }
+            else {
+                toast.error("something went wrong");
+            }
+
+        } catch (error) {
+            //toast.error(error.response.data.message || "an error occured");
             set({data:null,isLoading:false});
         }
     },

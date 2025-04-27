@@ -16,7 +16,7 @@ const TvPage = () => {
   const { getTvdetails, data } = DetailsStore();
   const [loading, setLoading] = useState(true);
   const [openSeason, setOpenSeason] = useState(null);
-  const [numitemsm, setnumitemsm] = useState(5);
+  const [numitemsm, setnumitemsm] = useState(4);
   const [imageSrc, setImageSrc] = useState(null);
   const [imageload, setimageload] = useState(true);
   const { addTv } = addWatchStore();
@@ -135,13 +135,13 @@ const TvPage = () => {
     if(imageSrc) {
       const img = new Image();
       img.src = imageSrc;
-      img.onload = () => {
+      img.onLoad = () => {
         setTimeout(() => {
           setimageload(false);
         }, 1000);
        
       };
-      img.onerror = () => {
+      img.onError = () => {
         setTimeout(() => {
           setimageload(false);
         }, 1000);
@@ -195,14 +195,14 @@ const TvPage = () => {
   return (
     <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
-      <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-opacity-75 z-10 w-full `}>
+      <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
             <div  className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </div>
               <div className='ml-auto flex items-center p-2 '>
                    
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-sm sm:text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-sm sm:text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
               </div>
             
           </header>
@@ -210,8 +210,8 @@ const TvPage = () => {
           className="w-full md:h-[85vh] object-cover object-top shadow-2xl"
           src={imageSrc}
           alt="TV Show"
-         onload = {() => setimageload(false)}
-         onerror = {() => setimageload(false)}
+         onLoad = {() => setimageload(false)}
+         onError = {() => setimageload(false)}
         />
         <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
         
@@ -405,7 +405,7 @@ const TvPage = () => {
       </div>
       {/* Similar TV Shows */}
       <div className='text-white max-w-8xl max-w border-t border-white mt-5  text-xl pl-4 pt-4'><h3 className='font-bold'>Similar Tv shows</h3></div>
-      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 sm:gap-3  mt-5 pb-3 px-2 md:px-3">
+      <div className="grid grid-cols-2 max-w-8xl sm:grid-cols-3 md:grid-cols-4  gap-2 sm:gap-3  mt-5 pb-3 px-2 md:px-3">
         {datas?.slice(0, numitemsm).map((item, index) => (
           (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
           <Link
@@ -433,7 +433,7 @@ const TvPage = () => {
       {numitemsm < datas?.slice(0, 10).length && (
         <div className="flex max-w-8xl justify-center pb-2 items-center mt-6">
           <button
-            onClick={() => setnumitemsm(prev => prev + 5)}
+            onClick={() => setnumitemsm(prev => prev + 4)}
             className="px-2 py-1 bg-white bg-opacity-10 hover:bg-opacity-20 text-white font-semibold rounded-lg transition-all"
           >
             Load More

@@ -38,7 +38,7 @@ const AuthScreen = () => {
             {/* Navbar */}
             <div className='flex items-center justify-between p-2  max-w-full ml-2  md:ml-3'>
                 
-                <img src='/kflix2.png' alt='Netflix Logo' className='w-44 sm:w-52' /> 
+                <img src='/kflix2.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
                
                 <Link to={"/login"} className='text-white bg-red-600 hover:bg-red-700 py-1 px-2 rounded'>
                     Sign In

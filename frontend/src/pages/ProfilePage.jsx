@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader,Github } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText  } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -73,7 +73,7 @@ export default function ProfilePage(){
   if(deleted ) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
-        <img className="w-64" src='/kflix2.png'></img>
+        <img className="w-32 sm:w-32 h-14" src='/kflix2.png'></img>
         <p>Sorry to see u go...</p>
       </div>
     )
@@ -180,20 +180,23 @@ export default function ProfilePage(){
         <Link to={'/contactus'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-700"><Mail size={18}/><p className="ml-2">Contact Us</p></Link>
         </div>
         <div className="flex flex-col">
+        <Link to={'terms'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-700"><ReceiptText size={20}/><p className="ml-2">Terms</p></Link>
+        </div>
+        <div className="flex flex-col">
         <a
         href='https://github.com/viVeK21111/netflix_clone' 
-        className="flex p-2 border-b  border-white border-opacity-15 hover:bg-slate-700 "
+        className="flex pl-3 py-2 border-b  border-white border-opacity-15 hover:bg-slate-700 "
         target="_blanck"
         >
-          
-         
-					<Github size={24} />
+					<Github size={22} />
 					
           <p className="pl-2">About Us</p>
 					
 				</a>
         </div>
+
       </div>
+     
       </div>
       
 

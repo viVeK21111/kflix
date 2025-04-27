@@ -24,7 +24,7 @@ const Navbar = ({ movieSectionRef }) => {
     return (
         <header className='max-w mx-auto flex flex-wrap items-center justify-between p-4 h-20'>
             <div className='flex items-center z-50'>
-                <Link to='/'><img src='/kflix2.png' alt='logo' className='w-32 sm:w-40'></img></Link>
+                <Link to='/'><img src='/kflix2.png' alt='logo' className='w-32 sm:w-32 h-14'></img></Link>
             </div>
             <div className='hidden sm:flex items-center ml-5 gap-4 mr-auto z-50'>
                 <button className={`hover:underline ${contentType==='movies'? 'underline':''}`} onClick={() => scrollToMovies('movies')}>Movies</button>

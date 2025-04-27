@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useLocation,useNavigate } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown  } from 'lucide-react';
+import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown,House  } from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
 
 import { Listbox } from "@headlessui/react";
@@ -165,7 +165,7 @@ export default function ChatPage() {
       </Listbox>
         
         </div>
-        <div className=" hidden md:flex items-center mr-20">
+        <div className=" hidden md:flex items-center mr-10">
           <div className="flex items-center">
              <BotMessageSquare className="text-gray-600 w-10 h-10" />
             <h1 className="text-3xl ml-2 font-bold text-gray-600">Flix Chat</h1>
@@ -173,7 +173,9 @@ export default function ChatPage() {
         </div>
         
         <div className="ml-auto flex items-center">
-          <Link className="ml-auto  rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+        <Link className='hover:bg-opacity-10 bg-white bg-opacity-5 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+
+          <Link className="ml-auto bg-white bg-opacity-10 py-1 px-2  rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
           </Link>
           <Link to={'/profile'}>

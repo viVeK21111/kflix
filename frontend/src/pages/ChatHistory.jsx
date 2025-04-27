@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
-import { Trash2,MessagesSquare,Loader} from "lucide-react";
+import { Trash2,MessagesSquare,Loader,House,TvMinimal} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
@@ -34,10 +34,14 @@ const [loading,setloading] = useState(true);
   return (
     <div className='min-h-screen ' style={{ backgroundColor: "#1e1d1d" }}>
         {/* Search History Section */}
-      <div  className="pt-10 w-full  pb-3">
-        <header className='border-b border-gray-700 mb-5'>
+      <div  className="pt-5 w-full  pb-3">
+        <header className='flex border-b border-gray-700 mb-5'>
         <p className='flex items-center text-white text-xl mb-5'><MessagesSquare className='ml-3'/> <p className='ml-2'>chat History</p></p>
-
+        <div className='ml-auto flex pb-3'>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-sm sm:text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-sm sm:text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+              </div>
+            
         </header>
         <div className='max-w-2xl ml-2'>
         {datalocal?.chatHistory?.length > 0 ? (

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 
 import { addWatchStore } from '../store/watchStore';
-import { Plus,ChevronDown,ChevronUp,Loader,ChevronLeft,ChevronRight } from 'lucide-react';
+import { Plus,ChevronDown,ChevronUp,Loader,ChevronLeft,ChevronRight,History } from 'lucide-react';
 import axios from 'axios';
 
 function WatchPage() {
@@ -34,7 +34,6 @@ function WatchPage() {
   if(tEpisodes) tEpisodes = parseInt(tEpisodes);
   localStorage.setItem("numitems",6);
   const {addWatch} = addWatchStore();
-  const [isplay,setisplay] = useState(false);
 
   const [srcIndex,setSrcIndex] = useState(0);
   const [selectopen,setselectopen] = useState(false);
@@ -59,9 +58,29 @@ function WatchPage() {
   if(Season) getepisodes();
  
  },[Id])
+ useEffect(() => {
+  const addToHistory = async() => {
+    try {
+      if(!Season && data) {
+        const res = await axios.post("/api/v1/watch/addWatchMovie",data);
+      }
+      else {
+        if(Season && Episode && Name && datae) {
+        const res = await axios.post(`/api/v1/watch/addWatchTv/${Id}/${Season}/${Name}/${datae?.episodes.length}`,datae?.episodes[Episode-1]);
+        }
+      }
+    }
+    catch (error) {
+      console.error("Error adding to watch history:", error.message);
+    }
+   
+}
+  
+  addToHistory();
+ },[Id,Season,Episode,data,datae]);
+
 
   useEffect(() => {
-    setisplay(false);
     setLoading(true);
     if(Season) {
       getTvdetails(Id).finally(()=> {
@@ -156,22 +175,21 @@ function WatchPage() {
         <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
     <div className=''>
     
-      <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40 lg:mb-1 ${!Season ? 'py-2' : 'py-0'}`:`flex items-center bg-black lg:mb-1 ${!Season ? 'py-2' : 'py-0'}`}>
+      <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40  ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`:`flex items-center bg-black ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`}>
       <div  className='flex items-center ml-1'>
-        <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+        <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
       </div>
      
         <div className='ml-auto flex items-center p-2 '>
              
-          <Link className='hover:bg-slate-800 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-          <Link className='hover:bg-slate-800 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-          <Link to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}` } className='flex items-center text-white text-sm md:text-base ml-3 md:ml-4 lg:ml-4 xl:ml-4 hover:scale-105 transition-transfor'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={22}/></p> </Link>
+          <Link className='hover:bg-slate-800 p-2 rounded-lg text-sm sm:text-base'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+          <Link className='hover:bg-slate-800 p-2 rounded-lg text-sm sm:text-base' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+          <Link to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}` } className='flex items-center text-white text-sm md:text-base ml-3 mr-2 hover:scale-105 transition-transfor'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={22}/></p> </Link>
+          <Link to='/profile/watchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 rounded-md'><History /></Link>
         </div>
       
     </header>
  
-     
-      
     
       {/* Video Container */}
   
@@ -234,12 +252,9 @@ function WatchPage() {
         </button>
       </div>
      
-        <div className="mt-5 text-center lg:px-0">
-          <h1 className={`flex items-center lg:text-2xl md:text-xl text-left  gap-2 whitespace-nowrap font-semibold ${text} mb-3`}>
-            Now Playing: <span className='font-extralight'>{Name} </span>
-          </h1>
-          
-        </div>
+      <h1 className={`flex flex-wrap mt-5 break-words items-center lg:text-2xl md:text-xl text-left gap-2 font-semibold ${text} mb-3`}>
+        Now Playing: <span className='font-extralight break-words'>{Name}</span>
+      </h1>
       
         {datac && !Season && (
             <div className='text-white flex w-full  mt-1 mb-3'> Director:
@@ -253,7 +268,7 @@ function WatchPage() {
           )
           }
            {Season && datae?.episodes && (
-            <div className='text-white flex items-center w-full max-w-4xl  mt-2 mb-2'>
+            <div className='text-white sm:mt-2 flex items-center w-full max-w-4xl  mb-4'>
                 <p className='flex font-extralight mt-2'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
               <div className='hidden sm:flex  ml-auto'>
               

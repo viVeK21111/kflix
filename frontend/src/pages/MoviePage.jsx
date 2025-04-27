@@ -142,14 +142,14 @@ function WatchPage() {
 
       {!Loading && (
         <div className='relative '>
-           <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-opacity-75 z-10 w-full `}>
+           <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
             <div  className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-36' />
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </div>
               <div className='ml-auto flex items-center p-2 '>
                    
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal size={20} className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 text-sm sm:text-base rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                <Link className='hover:bg-white hover:bg-opacity-5 p-2 text-sm sm:text-base rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
               </div>
             
           </header>
@@ -272,7 +272,7 @@ function WatchPage() {
                  <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )
               }
-            <div className='sm:hidden flex items-center mt-3'> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><p className='flex items-center'><img className='h-7' src='/youtube.png'></img><p className='ml-1'>Watch Trailer</p></p></Link> </div>
+            <div className='sm:hidden flex items-center mt-3 '> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><p className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-6' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Watch Trailer</p></p></Link> </div>
              
             </div>
           )}

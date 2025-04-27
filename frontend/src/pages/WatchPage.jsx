@@ -176,7 +176,7 @@ function WatchPage() {
     {(isplay || Season) && (
       <header className='flex items-center justify-center p-4'>
       <Link to={'/'} className='flex items-center'>
-        <img src={'/kflix2.png'} alt='kflix logo' className='w-52' />
+        <img src={'/kflix2.png'} alt='kflix logo' className='w-32 sm:w-32 h-14' />
       </Link>
     </header>
     )}
