@@ -21,13 +21,7 @@ const app = express();
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
 
-app.use(cors({ 
-    origin: "https://kflix-mocha.vercel.app",
-    credentials:true,
-    exposedHeaders: ['Set-Cookie'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'] 
-})); // this allows the frontend url to send requests to the backend
+app.use(cors({ origin: "https://kflix-mocha.vercel.app",credentials:true })); // this allows the frontend url to send requests to the backend
 
 app.use('/api/v1/auth',authRoutes);
 app.use('/api/v1/movies',movieRoutes);
@@ -48,8 +42,6 @@ app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', 'https://kflix-mocha.vercel.app');
     next();
 });
 
