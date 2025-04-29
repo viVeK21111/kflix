@@ -41,6 +41,7 @@ Streaming by Third party services
 -> Dedicated Search to search tv,movies or person <br>
 -> User authentication (only if loggedin the user can access the content) <br>
 -> Similar movies or tv shows are displayed when a particular content is viewed by the user <br>
+-> History (Search History,chat history and Watch history)
 
 ### Deployment 
 Frontend deployed on vercel, backend deployed on render. <br>

@@ -182,8 +182,8 @@ function WatchPage() {
      
         <div className='ml-auto flex items-center p-2 '>
              
-          <Link className='hover:bg-slate-800 p-2 rounded-lg text-sm sm:text-base'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-          <Link className='hover:bg-slate-800 p-2 rounded-lg text-sm sm:text-base' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+          <Link className='hover:bg-slate-800 p-2 rounded-lg text-base'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+          <Link className='hover:bg-slate-800 p-2 rounded-lg text-base' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
           <Link to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}` } className='flex items-center text-white text-sm md:text-base ml-3 mr-2 hover:scale-105 transition-transfor'> <p className='flex items-center'> <CircleArrowLeft className='mr-1' size={22}/></p> </Link>
           <Link to='/profile/watchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 rounded-md'><History /></Link>
         </div>

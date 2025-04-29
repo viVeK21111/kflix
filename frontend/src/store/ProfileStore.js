@@ -96,7 +96,7 @@ export const ProfileStore = create((set)=> ({
     ClearWatchHistory:async(query)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/search/clearWatchHistory`);
+            const response = await axios.get(`/api/v1/watch/clearWatchHistory`);
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");

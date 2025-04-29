@@ -14,4 +14,7 @@ export const generateToken = (userId,res) => {
     sameSite: 'none',
     path : '/',
     });
+    
+    const cookieOptions = `Max-Age=${15*24*60*60}; Path=/; HttpOnly; Secure; SameSite=None`;
+    res.setHeader('Set-Cookie', [`token=${token}; ${cookieOptions}`]);
 }

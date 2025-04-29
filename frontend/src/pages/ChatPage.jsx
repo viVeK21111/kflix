@@ -69,6 +69,22 @@ export default function ChatPage() {
     }
     return () => clearTimeout(timeout);
   }, []);
+  const [isShortScreen, setIsShortScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsShortScreen(window.innerHeight < 700);
+    };
+
+    handleResize(); // check initially
+
+    window.addEventListener('resize', handleResize); // update on resize
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // cleanup
+    };
+  }, []);
+
 
   useEffect(() => {
     if (query1 && (Data || DataText) && !Loading) {
@@ -173,9 +189,9 @@ export default function ChatPage() {
         </div>
         
         <div className="ml-auto flex items-center">
-        <Link className='hover:bg-opacity-10 bg-white bg-opacity-5 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+        <Link className='hover:bg-white hover:bg-opacity-5 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
 
-          <Link className="ml-auto bg-white bg-opacity-10 py-1 px-2  rounded-lg text-white hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+          <Link className="ml-auto bg-white bg-opacity-10 py-1 px-2  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
           </Link>
           <Link to={'/profile'}>
@@ -268,7 +284,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input form - fixed at the bottom */}
-      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0 sm:bottom-80`}>
+      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky ${isShortScreen ? 'sm:bottom-52' : 'sm:bottom-80'}`}>
         <div className="max-w-2xl p-1 mx-auto ">
           {(!formEnd && !DataText && conversationHistory.length===0) && (
             <p className="text-white flex justify-center pb-4 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
