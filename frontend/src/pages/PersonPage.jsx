@@ -20,7 +20,7 @@ export default function PersonPage() {
   const { getMovieDetail } = DetailsStore();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
-  const [readov,setreadov] = useState(300);
+  const [readov,setreadov] = useState(350);
 
   useEffect(() => {
     window.scroll(0,0);

@@ -57,7 +57,7 @@ const [loading,setloading] = useState(true);
      
         <p className='flex items-center text-white text-xl'><TvMinimal size={20}/> <p className='ml-2'>Watch History</p></p>
         {datalocal?.watchHistory?.length > 0 && (
-        <p className="flex justify-end items-center pb-2 max-w-2xl ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearWatchHistory}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
+        <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearWatchHistory}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
 
         )}
 
@@ -84,15 +84,16 @@ const [loading,setloading] = useState(true);
                   </p>
                   {item?.season && (
                     <div>
-                      <p className="text-gray-300 text-sm py-1">
-                     <p className='flex'> <p className='mr-1 font-semibold'>Season:</p>{item?.season}<p className='ml-1 mr-1 font-semibold'>Episode:</p>{item?.episode}</p>
+                      <p className="text-gray-300 flex text-sm py-1">
+                     <p className='flex font-semibold'> <p className=''>S</p>{item?.season}<p className='ml-1'><b className='mr-1'>.</b>E</p>{item?.episode}</p>
+                     <p className='font-semibold ml-1 '>| {item?.title}</p>
                     </p>
-                    <p className='text-white flex'>Name: <p className='font-light ml-1'>{item?.title}</p></p>
+                   
                     </div>
                  
                   )}
-                  <p className="text-gray-300 text-sm mt-1">
-                    <b>Date:</b> {new Date(item?.date).toLocaleDateString()}
+                  <p className="text-gray-400 flex text-sm mt-1">
+                    <p className='font-semibold'></p> {new Date(item?.date).toLocaleDateString()}
                   </p>
                   </div>
                  
@@ -138,4 +139,4 @@ const [loading,setloading] = useState(true);
   )
 }
 
-export default WatchHistory
+export default WatchHistory;

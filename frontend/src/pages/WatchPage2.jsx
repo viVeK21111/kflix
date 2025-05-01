@@ -14,9 +14,11 @@ import axios from 'axios';
 function WatchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search)
-  const {getMoviedetails,getTvdetails,data}  = DetailsStore();
+ // const {getMoviedetails,getTvdetails,data}  = DetailsStore();
   
   const {datac,getCredits} = creditStore();
+  
+  const [datam , setdatam] = useState(null);
   const [bgColorClass, setBgColorClass] = useState(null);
   const [text,setText] = useState('text-white');
   const [dir,setDir] = useState("");
@@ -59,47 +61,57 @@ function WatchPage() {
  
  },[Id])
  useEffect(() => {
-  const addToHistory = async() => {
+  let isMounted = true; // Prevent race conditions
+
+  const addToHistory = async () => {
     try {
-      if(!Season && data) {
-        const res = await axios.post("/api/v1/watch/addWatchMovie",data);
+      if (!Season && datam && isMounted) {
+        await axios.post("/api/v1/watch/addWatchMovie", {
+          id: datam.id,
+          poster_path: datam.poster_path,
+          backdrop_path: datam.backdrop_path,
+          title: datam.title || datam.name,
+        });
+      } else if (Season && Episode && Name && datae && isMounted) {
+        await axios.post(
+          `/api/v1/watch/addWatchTv/${Id}/${Season}/${Name}/${datae?.episodes.length}`,
+          datae?.episodes[Episode - 1]
+        );
       }
-      else {
-        if(Season && Episode && Name && datae) {
-        const res = await axios.post(`/api/v1/watch/addWatchTv/${Id}/${Season}/${Name}/${datae?.episodes.length}`,datae?.episodes[Episode-1]);
-        }
-      }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error adding to watch history:", error.message);
     }
-   
-}
-  
+  };
+
   addToHistory();
- },[Id,Season,Episode,data,datae]);
+
+  return () => {
+    isMounted = false; // Cleanup to prevent updates after unmount
+  };
+ },[Id,Season,Episode,datam,datae]);
 
 
   useEffect(() => {
     setLoading(true);
+
+    const fetchData = async () => {
     if(Season) {
-      getTvdetails(Id).finally(()=> {
-      setLoading(false);
-      });
-      window.scrollTo(0, 0);
-    }
-    else if (Id) {
-      Promise.all([getMoviedetails(Id), getCredits(Id)]).then(() => {
+      const response = await axios.get(`/api/v1/tv/details/${Id}`);
+      setdatam(response.data.content);
       setLoading(false);
      
-      }
-      
-      ); 
-      window.scrollTo(0, 0);
-    
     }
+    else if (Id) {
+      const response = await axios.get(`/api/v1/movies/details/${Id}`);
+      getCredits(Id);
+      setdatam(response.data.content);
+      setLoading(false);
+    }
+  }
+    fetchData();
+    window.scrollTo(0, 0);
 
-  }, [Id, getMoviedetails]);
+  }, [Id]);
 
   function getDirector(crew) {
     const director = crew.find(person => (person.known_for_department==='Directing' && (person.job === "Director" || person.job==='Writer' || person.job==='producer')) || person.job==='Director');
@@ -219,7 +231,7 @@ function WatchPage() {
       <div className='relative w-48'>
       
       <div
-        className="appearance-none bg-slate-800 hover:bg-slate-700  text-white px-2 md:px-3 py-2 rounded-t-md cursor-pointer flex justify-between items-center"
+        className="appearance-none rounded-lg bg-slate-800 hover:bg-slate-700  text-white px-2 md:px-3 py-2 cursor-pointer flex justify-between items-center"
         onClick={handleSelectChange}
       > 
         
@@ -230,7 +242,7 @@ function WatchPage() {
 
       {/* Dropdown List */}
       {selectopen && (
-        <div className="absolute  w-full bg-slate-900  text-white rounded-b-md z-10">
+        <div className="absolute  w-full bg-gray-800  text-white rounded-md z-10">
           {sources.map((source, index) => (
             <div
               key={index}
@@ -252,12 +264,12 @@ function WatchPage() {
         </button>
       </div>
      
-      <h1 className={`flex flex-wrap mt-5 break-words items-center lg:text-2xl md:text-xl text-left gap-2 font-semibold ${text} mb-3`}>
+      <h1 className={`flex flex-wrap mt-5 break-words items-center text-lg md:text-xl lg:text-2xl  text-left gap-2 font-semibold ${text} mb-3`}>
         Now Playing: <span className='font-extralight break-words'>{Name}</span>
       </h1>
       
         {datac && !Season && (
-            <div className='text-white flex w-full  mt-1 mb-3'> Director:
+            <div className='text-white text-sm md:text-base flex w-full  mt-1 mb-3'> Director:
               <Link to={dir!=='Unknown' ? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
                 <p className='font-semibold ml-1'> {dir} </p>
               </Link>
@@ -271,19 +283,19 @@ function WatchPage() {
             <div className='text-white sm:mt-2 flex items-center w-full max-w-4xl  mb-4'>
                 <p className='flex font-extralight mt-2'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
               <div className='hidden sm:flex  ml-auto'>
-              
+              {Episode > 1 && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-2 '>
+                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
              {Episode < tEpisodes && (
                 <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15 '>
                  <p className='flex items-center'>Next Ep <ChevronRight className='ml-1' size={14}/></p>
                 </Link>
              )
             }
-             {Episode > 1 && (
-                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 ml-2 '>
-                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
-                </Link>
-             )
-            }
+             
              </div>
             </div>
           )}
@@ -291,6 +303,12 @@ function WatchPage() {
             <>
              <p className='sm:hidden text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
              <div className='flex sm:hidden sm:mt-3'>
+             {Episode > 1 && (
+                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-2 '>
+                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
+                </Link>
+             )
+            }
               
              {Episode < tEpisodes && (
                 <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15 '>
@@ -298,18 +316,16 @@ function WatchPage() {
                 </Link>
              )
             }
-             {Episode > 1 && (
-                <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 ml-2 '>
-                 <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
-                </Link>
-             )
-            }
+           
+             
              </div>
              
+             
             </>
+
           )
           }
-         
+            <p className={bgColorClass!=='bg-black' ? `text-gray-400 text-sm hidden md:flex py-2` : 'hidden'}><p className='mr-1 font-semibold'>Tip:</p> Change to different source if the one doensn't work</p>
        
       </div>
 
@@ -321,24 +337,24 @@ function WatchPage() {
          
          
             <div className=''>
-              <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row  mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row  mt-10` ):(data?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`: `text-left w-full flex items-center justify-center flex-col mt-10`)}>
+              <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row  mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row  mt-10` ):(datam?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`: `text-left w-full flex items-center justify-center flex-col mt-10`)}>
                 <img
-                  src={`${ORIGINAL_IMG_BASE_URL}${data?.seasons?.[Season]?.poster_path || (data?.poster_path || data?.backdrop_path || data?.profile_path)}`}
+                  src={`${ORIGINAL_IMG_BASE_URL}${datam?.seasons?.[Season]?.poster_path || (datam?.poster_path || datam?.backdrop_path || datam?.profile_path)}`}
                   className="w-80 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
-                  alt={data?.title || data?.name}
+                  alt={datam?.title || datam?.name}
                 />
                 <p className={!Season ? `md:hidden` : `mb-3 md:mt-2`}>
-                {(data?.release_date) && (
-                    <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
+                {(datam?.release_date) && (
+                    <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
                   )}
                 </p>
                 <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
-                  {!Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-6xl'>{data?.overview}</span>}
+                  {!Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-6xl'>{datam?.overview}</span>}
                   {Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-6xl'>{datae?.episodes?.[Episode-1]?.overview}</span>}
                   {!Season && (
                     <button
                       className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
-                      onClick={(e) => addWatchList(e, data?.id)}
+                      onClick={(e) => addWatchList(e, datam?.id)}
                     >
                       <Plus className='size-5' />
                       <p className='ml-1'>Watch Later</p>
@@ -346,10 +362,10 @@ function WatchPage() {
                   )}
                 </div>
               </div>
-              <div className={(!Season && data?.overview.length>0) ? `hidden md:flex w-full xl:pl-12 mt-2 mb-2` : (data?.overview?.length==0 ? `hidden md:flex justify-center w-full  mt-2 mb-2`:`hidden`) }>
+              <div className={(!Season && datam?.overview.length>0) ? `hidden md:flex w-full xl:pl-12 mt-2 mb-2` : (datam?.overview?.length==0 ? `hidden md:flex justify-center w-full  mt-2 mb-2`:`hidden`) }>
                 <p>
-                {(data?.release_date || data?.first_air_date) && (
-                    <p className="text-sm text-gray-300">{data.release_date?.split("-")[0] || data.first_air_date?.split("-")[0]} | Rating: <b> {data?.vote_average}</b> | {data?.adult ? "18+" : "PG-13"} </p>
+                {(datam?.release_date || datam?.first_air_date) && (
+                    <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
                   )}
                 </p>
             </div>

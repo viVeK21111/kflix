@@ -52,8 +52,9 @@ const [loading,setloading] = useState(true);
       <div className="pt-10 w-full max-w-2xl pl-3 pb-3">
      
         <p className='flex items-center text-white text-xl'><Search size={20}/> <p className='ml-2'>Search History</p></p>
-        <p className="flex justify-end items-center pb-2 max-w-2xl ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
-
+        {datalocal?.searchHistory?.length > 0 && (
+        <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
+        )}
         {datalocal?.searchHistory?.length > 0 ? (
           <>
             <div className="flex flex-col gap-1">

@@ -88,17 +88,17 @@ const SearchPage = () => {
     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center ">
       {/* Header */}
       <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
-        <div className='mr-auto' >
-          <img src={'/kflix2.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-        </div>
-              <div className='flex ml-auto items-center p-2 '>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-              </div>
-          
-        <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 mr-3 rounded-md'><History size={22} /></Link>
-
-      </header>
+             <div className='mr-auto' >
+               <img src={'/kflix2.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+             </div>
+                   <div className='flex ml-auto items-center p-2 '>
+                     <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+                     <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+                   </div>
+               
+                   <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 mr-3 rounded-md'><History size={22} /></Link>
+     
+           </header>
       
       
       {/* Search Section */}
@@ -106,7 +106,7 @@ const SearchPage = () => {
         <select
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
-          className="p-3 rounded-lg bg-gray-800 outline-none focus:ring-0 text-white border mr-2 border-gray-700 w-24 sm:w-28"
+          className="p-3 rounded-lg bg-gray-800 outline-none focus:ring-0 text-white border mr-2 border-gray-700 w-24"
         >
           <option value="movie">Movies</option>
           <option value="tv">Tv Show</option>

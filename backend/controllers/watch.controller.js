@@ -12,7 +12,7 @@ export const addWatchHistoryMovie = async (req, res) => {
     
         // check if id exists with today's date
         const alreadyExistsToday = user.watchHistory.some((item) => {
-          if (item.id !== id) return false;
+          if (item.id !== id || item.type!=='movie') return false;
           
           const itemDate = new Date(item.date);
           itemDate.setHours(0, 0, 0, 0); 
@@ -32,7 +32,10 @@ export const addWatchHistoryMovie = async (req, res) => {
             }
         }});
        }
-      return;
+       return res.status(200).json({ 
+        success: true, 
+        message: "Movie added to watch history" 
+    });
         
     }
     catch(error) {
@@ -60,7 +63,7 @@ export const addWatchHistoryTv = async (req, res) => {
     
         // check if id exists with today's date
         const alreadyExistsToday = user.watchHistory.some((item) => {
-          if (item.id !== id) return false;
+          if (item.id !== id || item.type!=='tv') return false;
           
           const itemDate = new Date(item.date);
           itemDate.setHours(0, 0, 0, 0); 
@@ -84,7 +87,10 @@ export const addWatchHistoryTv = async (req, res) => {
                 }
             }});
          }
-         return;
+         return res.status(200).json({ 
+            success: true, 
+            message: "tv added to watch history" 
+        });
         
     }
     catch(error) {
