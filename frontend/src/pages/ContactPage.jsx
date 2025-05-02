@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {Loader,House,TvMinimal} from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,11 @@ const ContactPage = () => {
   });
   const [msgsent,setmsgsent] = useState(false);
   const [Loading,setLoading] = useState(true);
+
+  const SECRET_KEY = import.meta.env.VITE_SECRET_EMAILJS;
+  const SERVICE_KEY = import.meta.env.VITE_SERVIE_EMAILJS;
+  const TEMPLATE_AUTO = import.meta.env.VITE_TEMPLATE_AUTO;
+  const TEMPLATE_GET = import.meta.env.VITE_TEMPLATE_GET;
 
   useEffect(() => {
     window.scroll(0,0);
@@ -47,6 +53,24 @@ const ContactPage = () => {
         email: '',
         message: ''
       });
+      const params = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message
+    };
+    
+
+    emailjs.send(SERVICE_KEY, TEMPLATE_GET, params, SECRET_KEY);
+    console.log('Email sent successfully!');
+
+    const paramsa = {
+      name: formData.name,
+      email: formData.email,
+  };
+  emailjs.send(SERVICE_KEY, TEMPLATE_AUTO, paramsa, SECRET_KEY);
+  console.log('auto reply Email sent successfully!');
+
+
      
     } catch (error) {
       console.error('Error:', error);
