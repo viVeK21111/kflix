@@ -21,7 +21,9 @@ const app = express();
 app.use(express.json()); // allow us to parse req.body
 app.use(cookieParser());
 
-app.use(cors({ origin: "https://kflix-mocha.vercel.app",credentials:true })); // this allows the frontend url to send requests to the backend
+app.use(cors({ origin: "https://kflix-mocha.vercel.app",credentials:true,
+    origin:"https://www.kflix.site",credentials:true, // this allows the frontend url to send requests to the backend
+ })); // this allows the frontend url to send requests to the backend
 
 app.use('/api/v1/auth',authRoutes);
 app.use('/api/v1/movies',movieRoutes);

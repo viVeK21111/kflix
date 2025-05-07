@@ -2,9 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useLocation,useNavigate } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown,House  } from 'lucide-react';
+import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown,House,Mic,CircleUserRound   } from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
-
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Listbox } from "@headlessui/react";
 
 export default function ChatPage() {
@@ -26,7 +26,18 @@ export default function ChatPage() {
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
   //const [ModelType,setModelType] = useState(sessionStorage.getItem("ModelType") || "Gemini" );
-  
+  let {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+
+  useEffect(() => {
+    if(transcript && transcript !== "") {
+    if(!listening) setQuery(prev => prev + " "+ transcript);
+    }
+  },[transcript,listening]);
 
   useEffect(() => {
     if (data) setData(data);
@@ -47,6 +58,8 @@ export default function ChatPage() {
       }, 0);
     } 
   }, [query1]);
+
+  
   
 
 
@@ -117,6 +130,7 @@ export default function ChatPage() {
     setLoading(true);
     const currentQuery = query;
     setQuery("");
+    resetTranscript();
     try {
       if(conversationHistory.length > 0) {
         await getdata({ query: currentQuery,history:conversationHistory,aimodel:selectedModel.value });
@@ -189,13 +203,13 @@ export default function ChatPage() {
         </div>
         
         <div className="ml-auto flex items-center">
-        <Link className='hover:bg-white hover:bg-opacity-5 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+        <Link className='hover:bg-white hover:bg-opacity-5 pb-0 sm:pb-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
 
-          <Link className="ml-auto bg-white bg-opacity-10 py-1 px-2  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+          <Link className="ml-auto flex hover:bg-white hover:py-1 hover:bg-opacity-10 px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
           </Link>
-          <Link to={'/profile'}>
-            <img src={user.image} alt='avatar' className='h-7 ml-2 rounded transition-all duration-300 hover:scale-110 cursor-pointer' />
+          <Link to={'/profile'} className="flex items-center ml-2 rounded-lg text-gray-400  bg-opacity-10 transition-all duration-300 hover:scale-110 cursor-pointer">
+            <CircleUserRound />
           </Link>
         </div>
       </header>
@@ -284,21 +298,41 @@ export default function ChatPage() {
       </div>
 
       {/* Input form - fixed at the bottom */}
-      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky ${isShortScreen ? 'sm:bottom-52' : 'sm:bottom-80'}`}>
+      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky ${isShortScreen ? 'sticky bottom-0 md:bottom-52' : 'sticky bottom-0 md:bottom-80'}`}>
         <div className="max-w-2xl p-1 mx-auto ">
+       
           {(!formEnd && !DataText && conversationHistory.length===0) && (
-            <p className="text-white flex justify-center pb-4 text-lg sm:text-xl mb-60 sm:mb-0 font-semibold">What's on your mind?</p>
+            <div>
+               <div className="flex justify-center md:hidden items-center mb-2">
+             <div className="flex items-center">
+                <BotMessageSquare className="text-gray-600 w-6 h-6" />
+               <h1 className="text-xl ml-2 font-bold text-gray-600">Flix Chat</h1>
+             </div>
+           </div>
+            <p className="text-white flex justify-center pb-4 text-lg sm:text-xl mb-60 md:mb-0 font-semibold">What's on your mind?</p>
+            </div>
+            
           )}
           <form onSubmit={onSubmit} className="w-full">
-            <div className="flex items-center">
+            <div className="relative w-full flex items-center">
               <input
                 type="text"
-                className="p-3 text-white bg-white bg-opacity-5 rounded-lg w-full outline-none focus:ring-0 focus:bg-black"
-                placeholder="Ask me anything...!"
+                className="w-full p-3 pr-10 text-white bg-white bg-opacity-5 rounded-lg outline-none focus:ring-0 focus:bg-black"
+                placeholder={listening ? "Listening..." : "Ask me anything...!"}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 disabled={Loading}
               />
+              {browserSupportsSpeechRecognition && (
+                <button 
+                 type="button" 
+                 className={`absolute right-10 m-5 ${listening ? 'text-red-500 animate-pulse' : 'text-gray-400 hover:text-gray-300'}`}
+                 onClick={SpeechRecognition.startListening}
+               >
+                 <Mic />
+               </button> 
+              )}
+                           
               <button
                 type="submit"
                 className={`ml-2 bg-white p-2 text-black rounded-full ${Loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 transition-transform'}`}
