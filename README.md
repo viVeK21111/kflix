@@ -1,4 +1,14 @@
-### Setting Up
+### Welcome to kFlix
+kflix is a movie and tv streaming platform with AI chatbot integrated for custom recommendation and assitance.  
+
+### Getting started
+
+#### Prequisites
+Setup up your tmdb api key <br>
+Get your gemini api key <br>
+Setup your mongodb account <br>
+Get groq vercel api keys to run multiple models <br>
+
 #### Backend
 ```sh
 npm install
@@ -9,12 +19,12 @@ npm start
 npm install
 npm run dev
 ```
-Note: The site will be running on localhost:5173 or <local_ipv4>:5173.
-Configure vite.config to host on local network.
+Note: The site will be running on localhost:5173 or <local_ipv4>:5173 <br>
+Configure vite.config file to host on local network.
 
-### screenshots
+### Snap shots
 
-![Homescreen](/homepage2.png)
+![Homescreen](/homepage1.png)
 <br><br>
 AI powered chat by multiple LLMs
 <br><br>
@@ -43,11 +53,11 @@ Streaming by Third party services
 -> Similar movies or tv shows are displayed when a particular content is viewed by the user <br>
 -> History (Search History,chat history and Watch history)
 
-### Deployment 
+### Production deployment
 Frontend server deployed on vercel, backend server deployed on render. <br>
-Link: https://kflix-mocha.vercel.app
+Link: https://kflix-mocha.vercel.app <br>
 Custom domain: https://kflix.site
 
 ### Documentation
-In detailed documentation of kflix platform
+In detailed documentation of kflix platform <br>
 Link: https://tinyurl.com/kflixsite
