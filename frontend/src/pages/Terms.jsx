@@ -4,18 +4,18 @@ import {Link} from 'react-router-dom';
 
 export default function Terms() {
        return (
-        <div className='min-h-screen bg-black'>
+        <div className='min-h-screen bg-[#202229]'>
             <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
-        <div className='mr-auto' >
+        <Link to={'/'} className='mr-auto' >
           <img src={'/kflix2.png'} alt='Kflix Logo' className='w-32 h-14' />
-        </div>
+        </Link>
               <div className='flex ml-auto items-center p-2 '>
                 <Link className='hover:bg-white hover:bg-opacity-5 p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
               </div>
 
       </header>
             <div className="pt-7 p-2 text-white">
-      <div className="flex"><p className="font-semibold mr-2">*Note: </p> <p className="font-thin">No movies or tv shows are being stored in this website. All are streamed from third party streamers.</p></div>
+      <div className="flex"><p className="font-semibold mr-2">*Note: </p> <p className="font-thin">No movies or tv shows are being stored in KFlix server. All are streamed from third party streamers.</p></div>
 
       </div>
      <ul className='list-none text-white pl-4'>
@@ -28,7 +28,7 @@ export default function Terms() {
       <li>
       <div>
       <p className='text-white pt-7 font-semibold'>Suggestions</p>
-      <p className='font-thin text-white  pt-2'>All the suggestions and recommendations are always welcomed. And if you have any queries please feel comfortable to reach us through <Link className='text-gray-400' to={'/contactus'}>Contact Us.</Link></p>
+      <p className='font-thin text-white  pt-2'>All the suggestions and recommendations are always welcomed. And if you have any queries please feel comfortable to reach us through <Link className='text-gray-400 hover:underline' to={'/contactus'}>Contact Us.</Link></p>
       </div>
       </li>
      </ul>

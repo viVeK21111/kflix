@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
 import { userAuthStore } from '../store/authUser';
-import {Search,LogOut,Menu} from 'lucide-react';
+import {Search,LogOut,Menu,X,TvMinimal,BotMessageSquare,Tv,Clapperboard } from 'lucide-react';
 import { useContentStore } from '../store/content';
 
 const Navbar = ({ movieSectionRef }) => {
@@ -9,7 +9,6 @@ const Navbar = ({ movieSectionRef }) => {
     
     const toggleMobileMenu = () => {
         setisMobileMenuOpen(!isMobileMenuOpen);
-        
     };
     const {user}  = userAuthStore();
     const {contentType,setContentType} = useContentStore();
@@ -26,10 +25,10 @@ const Navbar = ({ movieSectionRef }) => {
             <div className='flex items-center z-50'>
                 <Link to='/'><img src='/kflix2.png' alt='logo' className='w-32 sm:w-32 h-14'></img></Link>
             </div>
-            <div className='hidden sm:flex items-center ml-5 gap-4 mr-auto z-50'>
+            <div className='hidden md:flex items-center ml-5 gap-4 mr-auto z-50'>
                 <button className={`hover:underline ${contentType==='movies'? 'underline':''}`} onClick={() => scrollToMovies('movies')}>Movies</button>
                 <button className={`hover:underline ${contentType==='tv'? 'underline':""}`}onClick={() => scrollToMovies('tv')}>Tv shows</button>
-                <Link to='/chat' className='hover:underline'>Chat</Link>
+                <Link to='/chat' className='hover:underline'>Flix Chat</Link>
                 <Link to='/watchlist' className='hover:underline'>Watchlist</Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
@@ -42,25 +41,60 @@ const Navbar = ({ movieSectionRef }) => {
                 </Link>
                 <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded transition-all duration-300 hover:scale-110 cursor-pointer'/></Link>
 
-                <div className='sm:hidden'>
-                    <Menu className='size-8 cursor-pointer bg-slate-800 p-1 rounded-lg transition-all duration-400 hover:bg-slate-700 hover:scale-110' onClick={toggleMobileMenu}/>
+                <div className='md:hidden'>
+                    <Menu className='size-8 cursor-pointer bg-slate-700 p-1 rounded-lg transition-all duration-400 hover:scale-110' onClick={toggleMobileMenu}/>
                 </div>
                
             </div>
-            {isMobileMenuOpen && (
-                <div  className='w-full sm:hidden mt-4 z-50 bg-slate-900 border rounded border-gray-800'>
-                    <Link to='/' className='block p-2 hover:bg-slate-600' onClick={ () => {
+           
+               <div className={`fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+               <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                 <h2 className="text-white text-lg font-semibold">Menu</h2>
+                 <button onClick={toggleMobileMenu} className="text-white">
+                   <X size={24} />
+                 </button>
+                        </div>
+               
+                    <Link to='/' className='block p-3 border-b  border-slate-800 hover:bg-slate-600' onClick={ () => {
                     toggleMobileMenu
                     scrollToMovies('movies')
-                    }}>Movies</Link>
-                    <Link to='/' className='block hover:bg-slate-600 p-2 border-t border-slate-700' onClick={() => {
+                    }}>
+                             <p className='flex items-center text-white'>
+                                    <Clapperboard className='h-6 w-5 mr-2'/>
+                                    <p className='font-semibold'>Movies</p>
+                                  </p>
+                    </Link>
+                    <Link to='/' className='block hover:bg-slate-600 p-3 border-b border-slate-800' onClick={() => {
                         toggleMobileMenu
                         scrollToMovies('tv')
-                        }}>Tv shows</Link>
-                    <Link to='/chat' className='block  p-2 border-t hover:bg-slate-600  border-slate-700' onClick={toggleMobileMenu}>Chat</Link>
-                    <Link to='/watchlist' className='block p-2 border-t hover:bg-slate-600  border-slate-700' onClick={toggleMobileMenu}>Watchlist</Link>
+                        }}>
+                             <p className='flex items-center text-white'>
+                                    <Tv className='h-6 w-5 mr-2'/>
+                                    <p className='font-semibold'>Tv shows</p>
+                                  </p>
+
+                    </Link>
+                    <Link to='/chat' className='block  p-3  hover:bg-slate-600 border-b  border-slate-800' onClick={toggleMobileMenu}>
+                    <p className='flex items-center text-white'>
+                                    <BotMessageSquare className='h-7 w-6 mr-2'/>
+                                    <p className='font-semibold'>Flix Chat</p>
+                                  </p>
+                            </Link>
+                    <Link to='/watchlist' className='block p-3 border-b hover:bg-slate-800  border-slate-800' onClick={toggleMobileMenu}>
+                    <p className='flex items-center text-white'>
+                                    <TvMinimal className='h-5 w-5 mr-3'/>
+                                    <p className='font-semibold'>Watchlist</p>
+                                  </p>
+                    </Link>
                 </div>
-            )}
+                
+          
+              {isMobileMenuOpen && (
+                    <div 
+                      className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                      onClick={toggleMobileMenu}
+                    ></div>
+                  )}
         </header>
     );
 }

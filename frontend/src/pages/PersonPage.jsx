@@ -69,9 +69,9 @@ export default function PersonPage() {
   return (
     <div className="min-h-screen bg-slate-800 text-white flex flex-col ">
       <header className={`flex w-full items-center bg-black bg-opacity-10`}>
-            <div  className='flex items-center ml-1'>
+            <Link to={'/'} className='flex items-center ml-1'>
               <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-            </div>
+            </Link>
               <div className='ml-auto flex items-center p-2 '>
                    
                 <Link className='hover:bg-white hover:bg-opacity-5 p-2 text-base rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>

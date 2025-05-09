@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X } from 'lucide-react';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
@@ -17,6 +17,11 @@ const SearchPage = () => {
   const [Loading1,setLoading1] = useState(true);
   const logo = new Image();
   logo.src = '/kflix2.png';
+   const [isMobileMenuOpen,setisMobileMenuOpen] = useState(false);
+      
+      const toggleMobileMenu = () => {
+          setisMobileMenuOpen(!isMobileMenuOpen);
+      };
  
   logo.onload = () => {
     setLoading1(false);
@@ -88,17 +93,59 @@ const SearchPage = () => {
     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center ">
       {/* Header */}
       <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
-             <div className='mr-auto' >
+             <Link to={'/'} className='mr-auto' >
                <img src={'/kflix2.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-             </div>
-                   <div className='flex ml-auto items-center p-2 '>
+             </Link>
+                   <div className='hidden md:flex ml-auto items-center p-2 '>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+                     <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
                    </div>
                
-                   <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2 mr-3 rounded-md'><History size={22} /></Link>
+                   <div className='md:hidden'>
+                    <Menu className='size-8 cursor-pointer p-1 mx-2 rounded-lg ' onClick={toggleMobileMenu}/>
+                </div>
      
            </header>
+      
+               <div className={`fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+               <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                 <h2 className="text-white text-lg font-semibold">Menu</h2>
+                 <button onClick={toggleMobileMenu} className="text-white">
+                   <X size={24} />
+                 </button>
+                        </div>
+               
+                    <div className="flex flex-col ">
+                  <Link onClick={toggleMobileMenu} className='hover:bg-slate-800 border-b border-gray-800 p-4 text-base' to={'/'}>
+                    <p className='flex items-center text-white'>
+                      <House className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Home</p>
+                    </p>
+                  </Link>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-slate-800 p-4 border-b border-gray-800 text-base' to={'/watchlist'}>
+                    <p className='flex items-center text-white'>
+                      <TvMinimal className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Watchlist</p>
+                    </p>
+                  </Link>
+                  
+                  <Link onClick={toggleMobileMenu} to='/profile/searchHistory' className='hover:bg-slate-800  border-b border-gray-800 p-4 text-base'>
+                    <p className='flex items-center text-white'>
+                      <History className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Search History</p>
+                    </p>
+                  </Link>
+                </div>
+                </div>
+                
+          
+              {isMobileMenuOpen && (
+                    <div 
+                      className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                      onClick={toggleMobileMenu}
+                    ></div>
+                  )}
       
       
       {/* Search Section */}

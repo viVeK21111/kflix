@@ -69,9 +69,9 @@ const WatchlistPage = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-gray-900">
       <header className="flex w-full items-center bg-black bg-opacity-10">
-        <div className='flex items-center ml-1'>
+        <Link to={'/'} className='flex items-center ml-1'>
           <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-        </div>
+        </Link>
         <div className='ml-auto flex items-center p-2'>
           <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/'}>
             <p className='flex items-center text-white'>

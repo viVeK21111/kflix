@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useLocation,useNavigate } from "react-router-dom";
 import { chatStore } from "../store/chat";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown,House,Mic,CircleUserRound   } from 'lucide-react';
+import { ArrowUp, History,Loader,BotMessageSquare,ChevronUp,ChevronDown,House,Mic,CircleUserRound,Menu,X} from 'lucide-react';
 import { userAuthStore } from '../store/authUser';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Listbox } from "@headlessui/react";
@@ -25,6 +25,7 @@ export default function ChatPage() {
   const [conversationHistory, setConversationHistory] = useState(JSON.parse(sessionStorage.getItem("conversationHistory")) || []);
   const chatContainerRef = useRef(null);
   const [formEnd, setFormEnd] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   //const [ModelType,setModelType] = useState(sessionStorage.getItem("ModelType") || "Gemini" );
   let {
     transcript,
@@ -59,7 +60,9 @@ export default function ChatPage() {
     } 
   }, [query1]);
 
-  
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
   
 
 
@@ -201,8 +204,14 @@ export default function ChatPage() {
             <h1 className="text-3xl ml-2 font-bold text-gray-600">Flix Chat</h1>
           </div>
         </div>
+         <button 
+              className='ml-auto md:hidden hover:bg-white hover:bg-opacity-10 rounded-lg p-2 text-white mr-2'
+              onClick={toggleMobileMenu}
+              >
+              <Menu size={24} />
+          </button>
         
-        <div className="ml-auto flex items-center">
+        <div className="ml-auto hidden md:flex items-center">
         <Link className='hover:bg-white hover:bg-opacity-5 pb-0 sm:pb-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
 
           <Link className="ml-auto flex hover:bg-white hover:py-1 hover:bg-opacity-10 px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
@@ -213,6 +222,44 @@ export default function ChatPage() {
           </Link>
         </div>
       </header>
+        <div className={`fixed top-0 right-0 w-64 h-full bg-[#1e1d1d] z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                  <h2 className="text-white text-lg font-semibold">Menu</h2>
+                  <button onClick={toggleMobileMenu} className="text-white">
+                    <X size={24} />
+                  </button>
+                </div>
+                
+                <div className="flex flex-col ">
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white border-b border-gray-800 hover:bg-opacity-10 p-4 text-base' to={'/'}>
+                    <p className='flex items-center text-white'>
+                      <House className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Home</p>
+                    </p>
+                  </Link>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-800 p-4 text-base' to={'/profile/chatHistory'}>
+                    <p className='flex items-center text-white'>
+                      <History className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Chat History</p>
+                    </p>
+                  </Link>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-800 p-4 text-base' to={'/profile'}>
+                    <p className='flex items-center text-white'>
+                      <CircleUserRound className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>Profile</p>
+                    </p>
+                  </Link>
+                 
+                </div>
+              </div>
+              
+              {/* Overlay when menu is open */}
+              {mobileMenuOpen && (
+                <div 
+                  className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                  onClick={toggleMobileMenu}
+                ></div>
+              )}
 
       {/* Chat content area - scrollable */}
       <div

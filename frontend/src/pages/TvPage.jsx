@@ -196,9 +196,9 @@ const TvPage = () => {
     <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
       <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
-            <div  className='flex items-center ml-1'>
+            <Link to={'/'} className='flex items-center ml-1'>
               <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-            </div>
+            </Link>
               <div className='ml-auto flex items-center p-2 '>
                    
                 <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
