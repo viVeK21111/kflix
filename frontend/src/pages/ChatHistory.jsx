@@ -1,12 +1,12 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
-import { Trash2,MessagesSquare,Loader,House,TvMinimal} from "lucide-react";
+import { Trash2,MessagesSquare,Loader,House,TvMinimal,X} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
 const [visibleItems, setVisibleItems] = useState(6); // Show max 6 items initially
-const { getdata, data,ClearHistoryquery } = ProfileStore();
+const { getdata, data,ClearHistoryquery,ClearHistoryqueryAll } = ProfileStore();
 const [datalocal,setdatalocal] = useState(null);
 const [loading,setloading] = useState(true);
 
@@ -21,6 +21,10 @@ const [loading,setloading] = useState(true);
   const ClearButtonid = (e,query) => {
     e.preventDefault();
     ClearHistoryquery(query);
+  }
+  const ClearButton = (e) => {
+    e.preventDefault();
+    ClearHistoryqueryAll();
   }
   if(loading) {
     return (
@@ -46,6 +50,8 @@ const [loading,setloading] = useState(true);
         <div className='max-w-2xl ml-2'>
         {datalocal?.chatHistory?.length > 0 ? (
           <>
+                  <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
+
             <div className="flex flex-col gap-1">
               {datalocal.chatHistory.slice().reverse().slice(0, visibleItems).map((item, index) => ( // applying empty slice() to not directly modify the original array
                 <Link to={`/chat?query=${item?.query}`}>

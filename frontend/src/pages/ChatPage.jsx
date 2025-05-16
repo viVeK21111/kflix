@@ -154,7 +154,7 @@ export default function ChatPage() {
     { name: "Llama-4-scout", value: "llama-4-scout" },
     { name: "deepseek-r1", value: "deepseek-r1" },
   ];
-  const defaultModelValue = sessionStorage.getItem("ModelType") || "Gemini";
+  const defaultModelValue = sessionStorage.getItem("ModelType") || "deepseek-r1";
   const [selectedModel, setSelectedModel] = useState( models.find((model) => model.value === defaultModelValue) || models[0]);
 
 

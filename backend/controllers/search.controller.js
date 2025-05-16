@@ -166,3 +166,15 @@ export const removeFromChatHistory = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }
 };
+
+export const clearChatHistory = async(req,res) => {
+    try {
+        await User.findByIdAndUpdate(req.user._id,{
+                chatHistory:[],
+        });
+        res.json({success:true,message:"chat history removed successfully"});
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+};

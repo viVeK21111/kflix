@@ -93,6 +93,23 @@ export const ProfileStore = create((set)=> ({
             set({data:null,isLoading:false});
         }
     },
+     ClearHistoryqueryAll:async(query)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.delete(`/api/v1/search/clearhistoryquery`);
+            console.log(response.data.message);
+            if(response.data.success) {
+                toast.success("success");
+            }
+            else {
+                toast.error("something went wrong");
+            }
+
+        } catch (error) {
+            //toast.error(error.response.data.message || "an error occured");
+            set({data:null,isLoading:false});
+        }
+    },
     ClearWatchHistory:async(query)=> {
         set({isLoading:true})
         try {

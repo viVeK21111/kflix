@@ -1,7 +1,7 @@
 import express from 'express';
 import { protectRoute } from '../middleware/protectRoute.js';
 
-import { searchHistory, searchMovies,searchTv,searchPeople, removeFromSearchHistory,removeFromChatHistory,ClearHistory,getPersonDetails,getPersonCredits } from '../controllers/search.controller.js';
+import { searchHistory, searchMovies,searchTv,searchPeople, removeFromSearchHistory,removeFromChatHistory,ClearHistory,getPersonDetails,getPersonCredits,clearChatHistory } from '../controllers/search.controller.js';
 
 const router = express.Router();
 
@@ -14,5 +14,6 @@ router.delete('/clearhistory',protectRoute,ClearHistory)
 router.get('/person/:id',protectRoute,getPersonDetails)
 router.get('/person/credits/:id',protectRoute,getPersonCredits)
 router.delete('/removehistoryquery/:query',protectRoute,removeFromChatHistory)
+router.delete('/clearhistoryquery',protectRoute,clearChatHistory)
 
 export default router;
