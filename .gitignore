@@ -1,6 +1,6 @@
 K_FLIX.docx
-.env.*
 .env
 *.py
 /backend/node_modules
 /frontend/node_modules
+/frontend/.env
