@@ -237,8 +237,8 @@ function WatchPage() {
         </header>
         
         {/* Mobile Menu Sidebar */}
-        <div className={`fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex justify-between items-center p-4 border-b border-gray-700">
+        <div className={`fixed top-0 right-0 w-64 h-full bg-gray-800 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="flex justify-between items-center p-4 border-b border-gray-600">
             <h2 className="text-white text-lg font-semibold">Menu</h2>
             <button onClick={toggleMobileMenu} className="text-white">
               <X size={24} />
@@ -246,25 +246,25 @@ function WatchPage() {
           </div>
           
           <div className="flex flex-col ">
-            <Link onClick={toggleMobileMenu} className='hover:bg-slate-800 border-b border-gray-800 p-4 text-base' to={'/'}>
+            <Link onClick={toggleMobileMenu} className='hover:bg-slate-700 border-b border-gray-700 p-4 text-base' to={'/'}>
               <p className='flex items-center text-white'>
                 <House className='h-5 w-5 mr-3'/>
                 <p className='font-semibold'>Home</p>
               </p>
             </Link>
-            <Link onClick={toggleMobileMenu} className='hover:bg-slate-800 p-4 border-b border-gray-800 text-base' to={'/watchlist'}>
+            <Link onClick={toggleMobileMenu} className='hover:bg-slate-700 p-4 border-b border-gray-700 text-base' to={'/watchlist'}>
               <p className='flex items-center text-white'>
                 <TvMinimal className='h-5 w-5 mr-3'/>
                 <p className='font-semibold'>Watchlist</p>
               </p>
             </Link>
-            <Link onClick={toggleMobileMenu} to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}`} className='hover:bg-slate-800 p-4 border-b border-gray-800 text-base'>
+            <Link onClick={toggleMobileMenu} to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}`} className='hover:bg-slate-700 p-4 border-b border-gray-700 text-base'>
               <p className='flex items-center text-white'>
                 <CircleArrowLeft className='h-5 w-5 mr-3'/>
                 <p className='font-semibold'>Back to Details</p>
               </p>
             </Link>
-            <Link onClick={toggleMobileMenu} to='/profile/watchHistory' className='hover:bg-slate-800  border-b border-gray-800 p-4 text-base'>
+            <Link onClick={toggleMobileMenu} to='/profile/watchHistory' className='hover:bg-slate-700  border-b border-gray-700 p-4 text-base'>
               <p className='flex items-center text-white'>
                 <History className='h-5 w-5 mr-3'/>
                 <p className='font-semibold'>Watch History</p>

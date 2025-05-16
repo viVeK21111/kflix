@@ -47,15 +47,15 @@ const Navbar = ({ movieSectionRef }) => {
                
             </div>
            
-               <div className={`fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-               <div className="flex justify-between items-center p-4 border-b border-gray-700">
+               <div className={`fixed top-0 right-0 w-64 h-full bg-gray-800 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+               <div className="flex justify-between items-center p-4 border-b border-gray-600">
                  <h2 className="text-white text-lg font-semibold">Menu</h2>
                  <button onClick={toggleMobileMenu} className="text-white">
                    <X size={24} />
                  </button>
                         </div>
                
-                    <Link to='/' className='block p-3 border-b  border-slate-800 hover:bg-slate-600' onClick={ () => {
+                    <Link to='/' className='block p-3 border-b  border-slate-700 hover:bg-slate-600' onClick={ () => {
                     toggleMobileMenu
                     scrollToMovies('movies')
                     }}>
@@ -64,7 +64,7 @@ const Navbar = ({ movieSectionRef }) => {
                                     <p className='font-semibold'>Movies</p>
                                   </p>
                     </Link>
-                    <Link to='/' className='block hover:bg-slate-600 p-3 border-b border-slate-800' onClick={() => {
+                    <Link to='/' className='block hover:bg-slate-600 p-3 border-b border-slate-700' onClick={() => {
                         toggleMobileMenu
                         scrollToMovies('tv')
                         }}>
@@ -74,13 +74,13 @@ const Navbar = ({ movieSectionRef }) => {
                                   </p>
 
                     </Link>
-                    <Link to='/chat' className='block  p-3  hover:bg-slate-600 border-b  border-slate-800' onClick={toggleMobileMenu}>
+                    <Link to='/chat' className='block  p-3  hover:bg-slate-600 border-b  border-slate-700' onClick={toggleMobileMenu}>
                     <p className='flex items-center text-white'>
                                     <BotMessageSquare className='h-7 w-6 mr-2'/>
                                     <p className='font-semibold'>Flix Chat</p>
                                   </p>
                             </Link>
-                    <Link to='/watchlist' className='block p-3 border-b hover:bg-slate-800  border-slate-800' onClick={toggleMobileMenu}>
+                    <Link to='/watchlist' className='block p-3 border-b hover:bg-slate-800  border-slate-700' onClick={toggleMobileMenu}>
                     <p className='flex items-center text-white'>
                                     <TvMinimal className='h-5 w-5 mr-3'/>
                                     <p className='font-semibold'>Watchlist</p>

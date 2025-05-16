@@ -32,9 +32,11 @@ export const GetMovieList = async (req, res) => {
       Your task is to assist the user in finding movies or TV shows only if the user ask about movies or tv shows.
       If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1", "movie2", .... , "movie(n)"]} Give atleast 5 movie names or based on the user preference. 
       If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1", "tv2",...., "tv(n)"]} Give atleast 5 tv shows or based on user preference. 
+      If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1", "movie2",...., "movie(n)"]} or {"tv": ["tv1", "tv2",...., "tv(n)"]}
       For normal greetings or conversations, respond with a friendly message and ask the user what they would like to watch.
       If no specific content is found or explicit prompt is found, chat in engaging manner why you can't find it. 
       If the user asks any question outside of movies or TV context, try to give a response according to the user's context.
+
     `;
         const conversationHistory = history || []; // Default to empty if no history
 
@@ -116,7 +118,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       // console.log("result \n"+result);
+       console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);

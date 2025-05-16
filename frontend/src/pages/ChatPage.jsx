@@ -212,7 +212,7 @@ export default function ChatPage() {
           </button>
         
         <div className="ml-auto hidden md:flex items-center">
-        <Link className='hover:bg-white hover:bg-opacity-5 pb-0 sm:pb-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+        <Link className='hover:bg-white hover:bg-opacity-5 mb-1 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
 
           <Link className="ml-auto flex hover:bg-white hover:py-1 hover:bg-opacity-10 px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
@@ -222,8 +222,8 @@ export default function ChatPage() {
           </Link>
         </div>
       </header>
-        <div className={`fixed top-0 right-0 w-64 h-full bg-[#1e1d1d] z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                <div className="flex justify-between items-center p-4 border-b border-gray-700">
+        <div className={`fixed top-0 right-0 w-64 h-full bg-[#282727] z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="flex justify-between items-center p-4 border-b border-gray-600">
                   <h2 className="text-white text-lg font-semibold">Menu</h2>
                   <button onClick={toggleMobileMenu} className="text-white">
                     <X size={24} />
@@ -231,19 +231,19 @@ export default function ChatPage() {
                 </div>
                 
                 <div className="flex flex-col ">
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white border-b border-gray-800 hover:bg-opacity-10 p-4 text-base' to={'/'}>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white border-b border-gray-700 hover:bg-opacity-10 p-4 text-base' to={'/'}>
                     <p className='flex items-center text-white'>
                       <House className='h-5 w-5 mr-3'/>
                       <p className='font-semibold'>Home</p>
                     </p>
                   </Link>
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-800 p-4 text-base' to={'/profile/chatHistory'}>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-700 p-4 text-base' to={'/profile/chatHistory'}>
                     <p className='flex items-center text-white'>
                       <History className='h-5 w-5 mr-3'/>
                       <p className='font-semibold'>Chat History</p>
                     </p>
                   </Link>
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-800 p-4 text-base' to={'/profile'}>
+                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-700 p-4 text-base' to={'/profile'}>
                     <p className='flex items-center text-white'>
                       <CircleUserRound className='h-5 w-5 mr-3'/>
                       <p className='font-semibold'>Profile</p>
@@ -264,7 +264,7 @@ export default function ChatPage() {
       {/* Chat content area - scrollable */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto  px-4 lg:px-72"
+        className="flex-1 overflow-y-auto  px-4 sm:px-6 md:px-10 lg:px-32 xl:px-56 2xl:px-60"
         style={{
           scrollbarColor: 'rgb(53, 52, 52) #1e1d1d'
         }}
@@ -298,7 +298,7 @@ export default function ChatPage() {
                 <h2 className="font-semibold mb-3 text-white text-lg border-b pb-2">
                   {item.contentType === 'tv' ? "TV Shows" : "Movies"}
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-3">
                   {item.data.map((content, idx) => (
                     (content?.backdrop_path || content?.poster_path) && (
                       <Link
