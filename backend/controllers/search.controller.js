@@ -157,7 +157,7 @@ export const removeFromChatHistory = async(req,res) => {
     try {
         await User.findByIdAndUpdate(req.user._id,{
             $pull:{
-                chatHistory:{query:{ $regex: `^${query.trim()}`}}
+                chatHistory:{query:query}
             }
         });
         res.json({success:true,message:"chat history removed successfully"});

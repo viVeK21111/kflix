@@ -21,7 +21,7 @@ export const ProfileStore = create((set)=> ({
     ClearHistory:async()=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/search/clearhistory`);
+            const response = await axios.delete(`/api/v1/search/clearhistory`);
             console.log(response.data.message);
             toast.success("success");
 
@@ -33,7 +33,7 @@ export const ProfileStore = create((set)=> ({
     ClearHistoryid:async(id)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/search/removehistory/${id}`);
+            const response = await axios.delete(`/api/v1/search/removehistory/${id}`);
             console.log(response.data.message);
             toast.success("success");
 
@@ -45,7 +45,7 @@ export const ProfileStore = create((set)=> ({
     ClearWatchHistoryMovie:async(id,date)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/watch/removeMovieWatch/${id}/${date}`);
+            const response = await axios.delete(`/api/v1/watch/removeMovieWatch/${id}/${date}`);
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");
@@ -62,7 +62,7 @@ export const ProfileStore = create((set)=> ({
     ClearWatchHistoryTv:async(id,date,season,episode)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/watch/removeTvWatch/${id}/${date}/${season}/${episode}`);
+            const response = await axios.delete(`/api/v1/watch/removeTvWatch/${id}/${date}/${season}/${episode}`);
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");
@@ -79,7 +79,7 @@ export const ProfileStore = create((set)=> ({
     ClearHistoryquery:async(query)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/search/removehistoryquery/${query}`);
+            const response = await axios.delete(`/api/v1/search/removehistoryquery/${query}`);
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");
@@ -96,7 +96,7 @@ export const ProfileStore = create((set)=> ({
     ClearWatchHistory:async(query)=> {
         set({isLoading:true})
         try {
-            const response = await axios.get(`/api/v1/watch/clearWatchHistory`);
+            const response = await axios.delete(`/api/v1/watch/clearWatchHistory`);
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");
