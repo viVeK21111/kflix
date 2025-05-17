@@ -71,7 +71,7 @@ const SignUpPage = () => {
             </button>
               </div>
             </div>
-            <button type='submit' className='w-full py-2 px-4 bg-red-500 text-white rounded-md font-semibold hover:bg-red-700'>Sign Up</button>  
+            <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign Up</button>  
           </form>
           {/*<div className='text-center text-white text-sm m-3'>By signing up, you agree to our Terms, Data Policy and Cookies Policy.</div>  */} 
             <div className='flex mt-4'>

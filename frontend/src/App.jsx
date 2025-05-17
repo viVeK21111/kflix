@@ -22,6 +22,8 @@ import WatchHistory from "./pages/WatchHistory"
 import MoviePage from "./pages/MoviePage";
 import Terms from "./pages/Terms";
 import {useLocation}  from  'react-router-dom';
+import ForgotPassword from "./pages/ForgotPassword";
+import ChangePasswordH from "./pages/ChangePasswordH";
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -73,6 +75,8 @@ function App() {
       <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
+      <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
+       <Route path='/changepassword' element = {<ChangePasswordH/>} />
     </Routes>
     <FooterWithRouteCheck/>
     <Toaster/>

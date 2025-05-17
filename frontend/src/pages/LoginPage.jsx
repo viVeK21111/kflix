@@ -60,8 +60,13 @@ const LoginPage = () => {
                 </div>
               
             </div>
-            <button type='submit' className='w-full py-2 px-4 bg-red-500 text-white rounded-md font-semibold hover:bg-red-700'>Sign In</button>  
+            <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign In</button>  
           </form>
+          <div>
+            <div className='text-sm text-white text-left mt-4'>
+              <Link to={'/forgotpassword'} className='text-red-700 underline font-semibold'>Forgot Password?</Link>
+            </div>
+          </div>
           <div className='flex mt-4'>
             <div className='text-semibold flex text-white text-left mr-2'>Don't have an account?</div>
             <Link to={'/signup'} className='block text-left text-red-700 underline font-semibold'><spawn>Sign Up</spawn></Link>

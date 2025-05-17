@@ -91,15 +91,51 @@ export async function changePassword(req,res) {
     const salt  = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
     try {
+      
         await User.findByIdAndUpdate(req.user._id,{
           password:hashedPassword,
         });
+       
         res.json({success:true,message:"password updated"});
     }
     catch(error) {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export async function changePasswordH(req,res) { // password change from forgot password
+    const {password,email} = req.body;
+    const salt  = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password,salt);
+    try {
+        
+            const user = await User.findOne({email:email});
+            user.password = hashedPassword;
+            await user.save();
+       
+        res.json({success:true,message:"password updated"});
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+export async function checkAccount(req,res) {   
+    try {
+        const {email} = req.body;
+        const user = await User.findOne({email:email});
+        if(!user) {
+            return res.status(400).json({success:false,message:"Account not found"});
+       }
+       else {
+        req.user = user;
+        return res.status(200).json({success:true,message:"Account found"});
+       }
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
 
 export async function deleteAccount(req,res) {
     try {
