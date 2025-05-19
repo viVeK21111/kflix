@@ -10,25 +10,49 @@ const WatchlistPage = () => {
   const [datac, setDatac] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectContent, setSelectContent] = useState(sessionStorage.getItem('content') || 'Movie');
-  const [displayCount, setDisplayCount] = useState(10); // How many items to display
-
-  // Calculate content type counts
-  const movieCount = datac?.filter(item => item.type === 'movie').length || 0;
-  const tvCount = datac?.filter(item => item.type === 'tv').length || 0;
+ 
+  const [selectContent, setSelectContent] = useState(() => {
+    const savedContent = sessionStorage.getItem("content");
+    return savedContent || "Movie";
+  });
+  const [displayCount, setDisplayCount] = useState(10);
+ 
+  const movieCount = datac?.filter(item => item.type.toLowerCase() === 'movie').length || 0;
+  const tvCount = datac?.filter(item => item.type.toLowerCase() === 'tv').length || 0;
   
   // Get the current content type count
   const currentTypeCount = selectContent.toLowerCase() === 'movie' ? movieCount : tvCount;
   
-  // Get filtered data based on selected content type
-  const filteredData = datac?.filter(item => item.type === selectContent.toLowerCase()) || [];
+  // Add memoization for filtered data to ensure consistency
+  const filteredData = React.useMemo(() => {
+    if (!datac) return [];
+    
+    const lowerCaseContentType = selectContent.toLowerCase();
+    
+    return datac.filter(item => {
+      const itemType = (item.type || "").toLowerCase();
+      const matches = itemType === lowerCaseContentType;
+      
+      if (!matches && lowerCaseContentType === itemType) {
+        console.warn(`Strange case - type strings should match but don't:`, {
+          itemType,
+          lowerCaseContentType,
+          item
+        });
+      }
+      
+      return matches;
+    });
+  }, [datac, selectContent]);
 
   useEffect(() => {
     const getWatchlist = async () => {
       try {
         const response = await axios.get("api/v1/movies/getWatchlist");
+        
         setDatac(response.data.content);
       } catch (err) {
+        console.error("Watchlist fetch error:", err);
         setError("Failed to fetch watchlist. Try again later.");
       } finally {
         setLoading(false);
@@ -37,9 +61,10 @@ const WatchlistPage = () => {
     getWatchlist();
   }, []);
 
-  // Reset display count when content type changes
+  // Reset display count and re-filter when content type changes
   useEffect(() => {
     setDisplayCount(10);
+  
   }, [selectContent]);
 
   const loadMore = () => {
@@ -54,7 +79,7 @@ const WatchlistPage = () => {
     e.preventDefault();
     const remove = async (id) => {
       try {
-        const response = await axios.get(`api/v1/movies/removeWatch/${id}`);
+        const response = await axios.delete(`api/v1/movies/removeWatch/${id}`);
         if (response.data.success) {
           setDatac(datac.filter((item) => item.id !== id));
           toast.success(response.data.message);
@@ -64,6 +89,22 @@ const WatchlistPage = () => {
       }
     };
     remove(id);
+  };
+  
+  const removeFromWatchlistE = (e, id, season, episode) => {
+    e.preventDefault();
+    const remove = async (id, season, episode) => {
+      try {
+        const response = await axios.delete(`api/v1/tv/removeWatchE/${id}/${season}/${episode}`);
+        if (response.data.success) {
+          setDatac(datac.filter((item) => !(item.id === id && item.season === season && item.episode === episode)));
+          toast.success(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed to remove item from watchlist");
+      }
+    };
+    remove(id, season, episode);
   };
 
   return (
@@ -90,6 +131,7 @@ const WatchlistPage = () => {
       
       <div className="mr-auto mt-3 ml-2 rounded-lg items-center bg-white bg-opacity-5 hover:cursor-pointer hover:bg-opacity-10">
         <Listbox value={selectContent} onChange={(value) => {
+          console.log(`Changing content type from ${selectContent} to ${value}`);
           sessionStorage.setItem("content", value);
           setSelectContent(value);
         }}>
@@ -157,14 +199,16 @@ const WatchlistPage = () => {
 
       {/* Content Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-6xl">
-        {filteredData.slice(0, displayCount).map((item, index) => (
+        {filteredData.slice(0, displayCount).map((item, index) => {
+          
+          return (
           <Link
-            key={item.id || index}
-            to={item.type === 'movie' ? `/movie?id=${item?.id}&name=${item?.title}` : `/tv/details?id=${item?.id}&name=${item?.title}`}
+            key={item.season ? `${item.id}-${item.season}-${item.episode}` : `${item.id}`}
+            to={item.type === 'movie' ? `/movie?id=${item?.id}&name=${item?.title}` : item.season ? `/watch/?id=${item?.id}&name=${item?.name}&season=${item.season}&episode=${item.episode}&tepisodes=${item.totalEpisodes}` :  `/tv/details?id=${item?.id}&name=${item?.title}`}
             className="group relative block bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <button 
-              onClick={(e) => removeFromWatchlist(e, item.id)} 
+              onClick={item.season ? (e)=> removeFromWatchlistE(e,item.id,item.season,item.episode) : (e) => removeFromWatchlist(e, item.id)} 
               className='absolute top-2 right-2 rounded-full z-10'
             >
               <SquareX className='size-6 cursor-pointer fill-white hover:fill-red-500' />
@@ -177,11 +221,18 @@ const WatchlistPage = () => {
             />
 
             {/* Item Title (Always Visible) */}
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3">
+            
+            <div className={!item.season ? `absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent px-3 py-2`:`absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-black/60 px-3 py-2`}>
+            {item.season && (
+              <p className="text-white font-semibold">{item.name}</p>
+            )}
               <h3 className="text-sm sm:text-base font-bold text-white truncate">{item.title}</h3>
+              {item.season && (
+              <p className="text-gray-300 font-semibold">S{item.season}.E{item.episode}</p>
+            )}
             </div>
           </Link>
-        ))}
+        )})}
       </div>
 
       {/* Load More/Less buttons */}

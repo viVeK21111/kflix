@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Key, Eye, EyeOff, CheckCircle,Loader } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { AccountCheckStore } from "../store/accountcheck";
 import { useEffect } from 'react';
 
@@ -62,10 +62,15 @@ export default function ChangePasswordH() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900  justify-center">
+      <header className={`flex w-full items-center bg-black bg-opacity-50 lg:justify-start justify-center`}>
+            <Link to={'/'} className='flex items-center j ml-1'> 
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-32 sm:w-36' />
+            </Link>
+          </header>
+      <div className="w-full max-w-md mt-14 mx-auto px-3 sm:px-0">
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
-          <div className="bg-slate-700 p-6">
+          <div className="bg-slate-700 px-6 py-4">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-red-600 rounded-lg shadow-lg">
                 <Key size={22} className="text-white" />
@@ -74,7 +79,11 @@ export default function ChangePasswordH() {
                 <h2 className="text-white text-xl font-semibold">Change Password</h2>
                 <p className="text-slate-300 text-sm">Secure your account with a strong password</p>
               </div>
+            
             </div>
+              <div className='text-gray-400 font-semibold text-sm mt-5'>
+                <p>{email}</p>
+              </div>
           </div>
           
           <form onSubmit={handleSubmit} className="p-6 space-y-5">

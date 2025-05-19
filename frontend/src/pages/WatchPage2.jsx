@@ -47,7 +47,7 @@ function WatchPage() {
   let tEpisodes = queryParams.get('tepisodes');
   if(tEpisodes) tEpisodes = parseInt(tEpisodes);
   localStorage.setItem("numitems",6);
-  const {addWatch} = addWatchStore();
+  const {addWatch,addEpisode} = addWatchStore();
 
   const [srcIndex,setSrcIndex] = useState(0);
   const [selectopen,setselectopen] = useState(false);
@@ -139,6 +139,19 @@ function WatchPage() {
     e.preventDefault();
     console.log("id "+id);
     addWatch(id);
+  }
+  const addWatchEpisode = async(e) => {
+    e.preventDefault();
+    const data = {
+      id:Id,
+      season:Season,
+      episode:Episode,
+      name:Name,
+      totalEpisodes:tEpisodes,
+      poster_path: datam?.seasons?.[Season]?.poster_path || (datam?.poster_path || datam?.profile_path || datam?.backdrop_path),
+      title: datae?.episodes[Episode - 1]?.name,
+    };
+    addEpisode(data); 
   }
 
   const Lightsout = (e) => {
@@ -407,6 +420,15 @@ function WatchPage() {
                       <button
                         className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
                         onClick={(e) => addWatchList(e, datam?.id)}
+                      >
+                        <Plus className='size-5' />
+                        <p className='ml-1'>Watch Later</p>
+                      </button>
+                    )}
+                    {Season && (
+                      <button
+                        className='bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded flex items-center'
+                        onClick={(e) => addWatchEpisode(e)}
                       >
                         <Plus className='size-5' />
                         <p className='ml-1'>Watch Later</p>

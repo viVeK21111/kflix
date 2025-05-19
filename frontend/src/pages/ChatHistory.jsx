@@ -38,18 +38,21 @@ const [loading,setloading] = useState(true);
   return (
     <div className='min-h-screen ' style={{ backgroundColor: "#1e1d1d" }}>
         {/* Search History Section */}
-      <div  className="pt-5 w-full  pb-3">
-        <header className='flex border-b border-gray-700 mb-5'>
-        <p className='flex items-center text-white text-xl mb-5'><MessagesSquare className='ml-3'/> <p className='ml-2'>chat History</p></p>
-        <div className='ml-auto flex pb-3'>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
+      <div  className=" w-full  pb-3">
+        <header className='flex border-b border-gray-700 mb-5 items-center'>
+              <Link to={'/'} className='flex ml-1 items-center'> 
+                        <img src={'/kflix3.png'} alt='kflix logo' className='w-28 sm:w-32' />
+              </Link>
+        <div className='ml-auto flex '>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 mr-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
               </div>
             
         </header>
-        <div className='max-w-2xl ml-2'>
+        <div className='max-w-2xl ml-2 mt-10'>
         {datalocal?.chatHistory?.length > 0 ? (
           <>
+                  <p className='flex items-center text-white text-xl mb-4'><MessagesSquare className='ml-3'/> <p className='ml-2'>chat History</p></p>
+
                   <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearButton}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
 
             <div className="flex flex-col gap-1">

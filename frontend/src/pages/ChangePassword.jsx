@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Key, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
+import { House } from 'lucide-react';
 
 export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,8 +38,19 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900  items-center justify-center">
+
+       <header className='flex bg-white bg-opacity-5 mb-5'>
+        <Link to={'/'} className='flex items-center ml-1'>
+              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+            </Link>
+        <div className='ml-auto flex'>
+                <Link className='hover:bg-white hover:bg-opacity-5 text-base items-center flex p-3  rounded-l-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 hover:scale-105 transition-transform'/><p className='font-semibold ml-1'>Home</p></p></Link>
+              </div>
+            
+        </header>
+
+      <div className="w-full max-w-md  mx-auto mt-20 pl-3 pr-5 sm:pl-0 sm:pr-0">
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
           <div className="bg-slate-700 p-6">
             <div className="flex items-center gap-4">

@@ -100,3 +100,55 @@ export const addTvWatch = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+
+export const addEpisode = async (req, res) => {
+    let {id,season,episode,name,totalEpisodes,poster_path,title} = req.body;
+    id = parseInt(id);
+    season = parseInt(season);
+    episode = parseInt(episode);
+    totalEpisodes = parseInt(totalEpisodes);
+    try{
+        
+        await User.findByIdAndUpdate(req.user._id,{
+                    $push:{
+                    watchList:{
+                    type:'tv',
+                    id:id,
+                    image:poster_path,
+                    title: title,
+                    season:season,
+                    episode:episode,
+                    name:name,
+                    totalEpisodes:totalEpisodes
+                    }
+                }});
+        return res.json({success:true,message:"Episode added to watchlist"});
+    }
+    catch(error) {
+        console.log("Error in adding tv to watchlist: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+export const removeEpisode = async (req, res) => {
+    let {id,season,episode} = req.params;
+    id = parseInt(id);
+    season = parseInt(season);
+    episode = parseInt(episode);
+    try{
+        
+        await User.findByIdAndUpdate(req.user._id,{
+                    $pull:{
+                    watchList:{
+                    type:'tv',
+                    id:id,
+                    season:season,
+                    episode:episode,
+                    }
+                }});
+        return res.json({success:true,message:"episode removed from watchlist"});
+    }
+    catch(error) {
+        console.log("Error in adding tv to watchlist: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}

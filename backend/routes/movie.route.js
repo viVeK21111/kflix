@@ -17,7 +17,7 @@ router.get('/details/:id',protectRoute,getMovieDetails)
 router.get('/similar/:id',protectRoute,getSimilarMovies)
 router.get('/category/:category',protectRoute,getMoviebyCategory)
 router.get('/credits/:id',protectRoute,getMovieCredits);
-router.get('/addWatch/:id',protectRoute,addMovieWatch);
+router.put('/addWatch/:id',protectRoute,addMovieWatch);
 router.get('/getWatchlist',protectRoute,getWatchlist);
-router.get('/removeWatch/:id',protectRoute,removeFromWatchlist);
+router.delete('/removeWatch/:id',protectRoute,removeFromWatchlist);
 export default router;
