@@ -107,7 +107,14 @@ export const addEpisode = async (req, res) => {
     season = parseInt(season);
     episode = parseInt(episode);
     totalEpisodes = parseInt(totalEpisodes);
+    const user = await User.findById(req.user._id);
     try{
+
+         const isEpisodeExists = user.watchList.some(x => (x.id === id && x.season === season && x.episode === episode));
+
+        if (isEpisodeExists) {
+            return res.json({ success: false, message: "Already exists in watchlist" });
+        }
         
         await User.findByIdAndUpdate(req.user._id,{
                     $push:{
