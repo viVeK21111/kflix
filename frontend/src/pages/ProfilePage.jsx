@@ -2,13 +2,18 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText  } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText,UserCheck   } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
 export default function ProfilePage(){
   const { getdata, data,ClearHistory,ClearHistoryid } = ProfileStore();
-  const {logout} = userAuthStore();
+  const {logout,user} = userAuthStore();
+   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
+
+   const isAdmin = () => {
+    return adminEmails.includes(user.email);
+  };
   
   const [datalocal,setdatalocal] = useState(null);
   const [settingSelected,setsettingSelected] = useState(null);
@@ -61,7 +66,7 @@ export default function ProfilePage(){
   };
   const handleDelete = async() =>{
     setdel(true);
-    const response = await axios.get('/api/v1/auth/deleteUser');
+    const response = await axios.delete('/api/v1/auth/deleteUser');
     if (response.data.success) {
       setDeleted(true);
       setTimeout(() => {
@@ -194,6 +199,18 @@ export default function ProfilePage(){
 					
 				</a>
         </div>
+        {isAdmin() && (
+          <div className="flex flex-col">
+        <Link to={'admin'} className="flex pl-3 py-2 border-b  border-white border-opacity-15 hover:bg-slate-700 ">
+        
+					<UserCheck  size={22} />
+					
+          <p className="pl-2">Admin</p>
+					
+				</Link>
+        </div>
+        )}
+      
 
       </div>
      

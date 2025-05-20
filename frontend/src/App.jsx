@@ -24,6 +24,7 @@ import Terms from "./pages/Terms";
 import {useLocation}  from  'react-router-dom';
 import ForgotPassword from "./pages/ForgotPassword";
 import ChangePasswordH from "./pages/ChangePasswordH";
+import Monitor from "./pages/Monitor";
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -41,6 +42,12 @@ function FooterWithRouteCheck() {
 function App() {
 
   const {user,isCheckingauth,authCheck} = userAuthStore();
+  const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
+
+   const isAdmin = () => {
+    return adminEmails.includes(user.email);
+  };
+  
   useEffect (()=> {
     authCheck();
   },[authCheck]);
@@ -76,7 +83,8 @@ function App() {
       <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
       <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
       <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
-       <Route path='/changepassword' element = {<ChangePasswordH/>} />
+      <Route path='/changepassword' element = {<ChangePasswordH/>} />
+      <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/'}/>} />
     </Routes>
     <FooterWithRouteCheck/>
     <Toaster/>

@@ -127,7 +127,6 @@ export async function checkAccount(req,res) {
             return res.status(400).json({success:false,message:"Account not found"});
        }
        else {
-        req.user = user;
         return res.status(200).json({success:true,message:"Account found"});
        }
     }
@@ -136,6 +135,21 @@ export async function checkAccount(req,res) {
     }
 }
 
+export async function userdetails(req,res) {   
+    try {
+        const {email} = req.body;
+        const user = await User.findOne({email:email});
+        if(!user) {
+            return res.status(400).json({success:false,message:"Account not found"});
+       }
+       else {
+        return res.status(200).json({success:true,user:user,message:"Account found"});
+       }
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+}
 
 export async function deleteAccount(req,res) {
     try {
