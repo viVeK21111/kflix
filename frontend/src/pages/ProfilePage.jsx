@@ -12,7 +12,7 @@ export default function ProfilePage(){
    const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
 
    const isAdmin = () => {
-    return adminEmails.includes(user.email);
+    return adminEmails.includes(user?.email);
   };
   
   const [datalocal,setdatalocal] = useState(null);

@@ -25,6 +25,7 @@ import {useLocation}  from  'react-router-dom';
 import ForgotPassword from "./pages/ForgotPassword";
 import ChangePasswordH from "./pages/ChangePasswordH";
 import Monitor from "./pages/Monitor";
+import UserMonitor from "./pages/UserMonitor";
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -45,7 +46,7 @@ function App() {
   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
 
    const isAdmin = () => {
-    return adminEmails.includes(user.email);
+    return adminEmails.includes(user?.email);
   };
   
   useEffect (()=> {
@@ -84,7 +85,8 @@ function App() {
       <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
       <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
       <Route path='/changepassword' element = {<ChangePasswordH/>} />
-      <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/'}/>} />
+      <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
+      <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
     </Routes>
     <FooterWithRouteCheck/>
     <Toaster/>

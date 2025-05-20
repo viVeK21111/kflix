@@ -150,10 +150,39 @@ export async function userdetails(req,res) {
         res.status(500).json({success:false,message:error.message});
     }
 }
+export async function allusersdetails(req,res) {
+    try {
+        const users = await User.find();
+        if(!users) {
+            return res.status(400).json({success:false,message:"No users found"});
+       }
+       else {
+        return res.status(200).json({success:true,users:users,message:"Users found"});
+       }
+    }
+    catch(error) {
+        res.status(500).json({success:false,message:error.message});
+    }
+}
 
 export async function deleteAccount(req,res) {
     try {
         const deletedUser = await User.findByIdAndDelete(req.user._id);
+        if(!deletedUser) {
+            return res.status(404).json({sucess:false,message:"account not found"});
+        }
+        return res.status(200).json({success:true,message:"account deleted"});
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export async function deleteUserAccount(req,res) {
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({email:email});
+        const deletedUser = await User.findByIdAndDelete(user._id);
         if(!deletedUser) {
             return res.status(404).json({sucess:false,message:"account not found"});
         }
