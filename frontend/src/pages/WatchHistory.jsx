@@ -132,7 +132,7 @@ const [loading,setloading] = useState(true);
             )}
           </>
         ) : (
-          <p className="text-gray-400 text-center">No watch history found.</p>
+          <p className="text-gray-400 text-center pt-7">No watch history found.</p>
         )}
       </div>
     </div>

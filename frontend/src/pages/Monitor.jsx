@@ -1,21 +1,40 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft,UserCheck,User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft, UserCheck, User, Sun, Moon } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const Monitor = () => {
   const [email, setEmail] = useState('');
-  
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
- 
+  const navigate = useNavigate();
   // For user listing and pagination
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  // Theme state
+  const [darkMode, setDarkMode] = useState(false);
   
   const usersPerPage = 15;
+
+  // Initialize theme from localStorage when component mounts
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("darkMode");
+    if (savedTheme) {
+      setDarkMode(savedTheme === "true");
+    } else {
+      // Check for system preference if no saved theme
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDarkMode(prefersDark);
+    }
+  }, []);
+
+  // Apply theme whenever darkMode changes
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem("darkMode", darkMode.toString());
+  }, [darkMode]);
 
   // Initialize currentPage from sessionStorage when component mounts
   useEffect(() => {
@@ -73,34 +92,71 @@ const Monitor = () => {
     }
   };
 
+  // Theme toggle function
+  const toggleTheme = () => {
+    setDarkMode(prev => !prev);
+  };
+
   // Get current users for pagination
   const getCurrentUsers = () => {
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     return users.slice(indexOfFirstUser, indexOfLastUser);
   };
+  
   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
 
-   const isAdmin = (email) => {
+  const isAdmin = (email) => {
     return adminEmails.includes(email);
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (email.length > 0 && email.includes("@") && email.includes(".com")) {
+      navigate(`/profile/admin/user?email=${email}`);
+    }
+    else {
+      toast.error("Invalid email");
+    }
+  }
   
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className={`flex w-full items-center bg-black bg-opacity-5 `}>
-                 <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/pic4.png'} alt='kflix logo' className='w-30 sm:w-32 h-8 sm:h-10' />
-            </Link>
-                    <div className='ml-auto flex items-center p-2 '>
-                      <Link className='hover:bg-black hover:bg-opacity-5 p-2 text-base rounded-lg' to={'/profile'}> <p className='flex items-center text-black pl-1'><UserCheck className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Profile</p></p></Link>
+    <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} transition-colors duration-200`}>
+      <header className={`flex w-full items-center ${darkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-black bg-opacity-5'} transition-colors duration-200`}>
+        <Link to={'/'} className='flex items-center ml-1'>
+          <img src={'/pic4.png'} alt='kflix logo' className='w-30 sm:w-32 h-8 sm:h-10' />
+        </Link>
+        <div className='ml-auto flex items-center p-2'>
+          <button 
+            onClick={toggleTheme}
+            className={`p-2 rounded-full mr-2 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors duration-200`}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? (
+              <Sun className="h-5 w-5 text-white-300" />
+            ) : (
+              <Moon className="h-5 w-5 text-gray-600" />
+            )}
+          </button>
+          
+          <Link className={`hover:${darkMode ? 'bg-gray-700' : 'bg-black hover:bg-opacity-10'} p-2 text-base rounded-lg transition-colors duration-200`} to={'/profile'}>
+            <p className={`flex items-center ${darkMode ? 'text-white' : 'text-black'}`}>
+              <UserCheck className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
+              <p className='font-semibold'>Profile</p>
+            </p>
+          </Link>
 
-                         
-                      <Link className='hover:bg-black hover:bg-opacity-5 p-2 text-base rounded-lg'  to={'/'}> <p className='flex items-center text-black '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                    </div>
-                  
-                </header>
+          <Link className={`hover:${darkMode ? 'bg-gray-700' : 'bg-black hover:bg-opacity-10'} p-2 text-base rounded-lg transition-colors duration-200`} to={'/'}>
+            <p className={`flex items-center ${darkMode ? 'text-white' : 'text-black'}`}>
+              <House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
+              <p className='font-semibold'>Home</p>
+            </p>
+          </Link>
+        </div>
+      </header>
+      
       <div className="max-w-7xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div className={`${darkMode ? 'bg-gray-800 shadow-dark' : 'bg-white shadow-lg'} rounded-lg p-6 mb-6 transition-colors duration-200`}>
           <h1 className="text-2xl font-bold mb-6">Admin Monitoring Dashboard</h1>
           
           {/* User Search */}
@@ -111,21 +167,19 @@ const Monitor = () => {
                 placeholder="Enter user email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 w-16 md:w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`flex-1 w-16 md:w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200`}
               />
-              <Link to={email.length > 0 ? `/profile/admin/user?email=${email}` : ``} className='ml-auto'>
-                <button
-                  className="bg-blue-600 text-white px-2 sm:px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
-                  disabled={loading}
-                >
-                  {loading ? <Loader className="animate-spin h-4 w-4" /> : <Search className="h-4 w-4" />}
-                  {loading ? 'Searching...' : 'Search'}
-                </button>
-              </Link>
+              <button
+                className="bg-blue-600 text-white px-2 sm:px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2 transition-colors duration-200"
+                onClick={(e) => onSubmit(e)}
+              >
+                <Search className="h-4 w-4" />
+                Search
+              </button>
             </div>
             
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              <div className={`${darkMode ? 'bg-red-900 border-red-800 text-red-200' : 'bg-red-100 border-red-400 text-red-700'} border px-4 py-3 rounded mb-4 transition-colors duration-200`}>
                 {error}
               </div>
             )}
@@ -141,25 +195,25 @@ const Monitor = () => {
               </div>
             ) : (
               <>
-                <div className="border rounded-lg overflow-auto">
-                  <table className="min-w-full bg-white">
-                    <thead className="bg-gray-50">
+                <div className={`border ${darkMode ? 'border-gray-700' : 'border-gray-200'} rounded-lg overflow-auto transition-colors duration-200`}>
+                  <table className={`min-w-full ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-200`}>
+                    <thead className={`${darkMode ? 'bg-gray-700' : 'bg-gray-50'} transition-colors duration-200`}>
                       <tr>
-                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th className={`py-3 px-4 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider transition-colors duration-200`}>Username</th>
+                        <th className={`py-3 px-4 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider transition-colors duration-200`}>Email</th>
+                        <th className={`py-3 px-4 text-center text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider transition-colors duration-200`}>Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className={`divide-y ${darkMode ? 'divide-gray-700' : 'divide-gray-200'} transition-colors duration-200`}>
                       {getCurrentUsers().length > 0 ? (
                         getCurrentUsers().map((user, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
+                          <tr key={index} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} transition-colors duration-200`}>
                             <td className="py-3 px-4 flex whitespace-nowrap">
                               {isAdmin(user.email) && (
-                                <UserCheck className='bg-blue-100 text-blue-600 p-1 h-7 w-8 rounded-xl' />
+                                <UserCheck className={`${darkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'} p-1 h-7 w-8 rounded-xl transition-colors duration-200`} />
                               )}
                               {!isAdmin(user.email) &&
-                                 <User className='bg-blue-100 text-blue-600  h-7 w-8  p-1 rounded-xl'/>
+                                <User className={`${darkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'} h-7 w-8 p-1 rounded-xl transition-colors duration-200`}/>
                               }
                               <div className="flex items-center ml-2">
                                 <span className='font-semibold'>{user.username}</span>
@@ -169,7 +223,7 @@ const Monitor = () => {
                             <td className="py-3 px-4 whitespace-nowrap text-center">
                               <Link
                                 to={`user/?email=${user.email}`}
-                                className="text-blue-600 hover:text-blue-900 flex items-center justify-center gap-1"
+                                className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-900'} flex items-center justify-center gap-1 transition-colors duration-200`}
                               >
                                 <Eye className="h-4 w-4" />
                                 View
@@ -179,7 +233,7 @@ const Monitor = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3" className="py-4 text-center text-gray-500">
+                          <td colSpan="3" className={`py-4 text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'} transition-colors duration-200`}>
                             No users found
                           </td>
                         </tr>
@@ -191,17 +245,17 @@ const Monitor = () => {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex justify-between items-center mt-4">
-                    <div className="text-sm text-gray-500">
+                    <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} transition-colors duration-200`}>
                       Page {currentPage} of {totalPages}
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={prevPage}
                         disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md flex items-center gap-1 ${
+                        className={`px-3 py-1 rounded-md flex items-center gap-1 transition-colors duration-200 ${
                           currentPage === 1
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            ? darkMode ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                         }`}
                       >
                         <ChevronLeft className="h-4 w-4" />
@@ -210,10 +264,10 @@ const Monitor = () => {
                       <button
                         onClick={nextPage}
                         disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md flex items-center gap-1 ${
+                        className={`px-3 py-1 rounded-md flex items-center gap-1 transition-colors duration-200 ${
                           currentPage === totalPages
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            ? darkMode ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                         }`}
                       >
                         Next
@@ -227,7 +281,6 @@ const Monitor = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

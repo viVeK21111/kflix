@@ -120,12 +120,7 @@ const WatchlistPage = () => {
               <p className='font-semibold'>Home</p>
             </p>
           </Link>
-          <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}>
-            <p className='flex items-center text-white pl-1'>
-              <TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
-              <p className='font-semibold'>Watchlist</p>
-            </p>
-          </Link>
+          
         </div>
       </header>
       
@@ -187,12 +182,12 @@ const WatchlistPage = () => {
 
       {/* Empty Watchlist Message */}
       {!loading && !error && datac?.length === 0 && (
-        <p className="text-gray-400 mt-6 text-lg">Your watchlist is empty. Start adding movies! 🍿</p>
+        <p className="text-gray-400 mt-6 p-3 text-lg">Your watchlist is empty. Start adding movies! 🍿</p>
       )}
 
       {/* Show "No [content type] in watchlist" message */}
       {!loading && !error && datac?.length > 0 && filteredData.length === 0 && (
-        <p className="text-gray-400 mt-6 text-lg">
+        <p className="text-gray-400 mt-6 p-3 text-lg">
           No {selectContent}s in your watchlist. Switch to {selectContent === 'Movie' ? 'Tv' : 'Movie'} or add some {selectContent}s!
         </p>
       )}

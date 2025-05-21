@@ -104,7 +104,7 @@ const [loading,setloading] = useState(true);
             )}
           </>
         ) : (
-          <p className="text-gray-400 text-center">No search history found.</p>
+          <p className="text-gray-400 text-center pt-7">No search history found.</p>
         )}
       </div>
     </div>
