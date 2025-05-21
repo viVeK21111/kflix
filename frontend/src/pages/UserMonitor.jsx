@@ -2,22 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from "react-hot-toast";
 import { 
-  Search, 
-  Eye, 
-  Film, 
-  Tv, 
-  Clock, 
-  List, 
-  MessageSquare, 
-  Settings,
-  User,
-  Info, 
-  Loader, 
-  ChevronDown, 
-  ChevronRight, 
-  Moon, 
-  Sun,
-  ArrowLeft
+  Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings,User,Info, Loader,ChevronDown, ChevronRight, Moon, 
+  Sun,ArrowLeft,UserCheck
 } from 'lucide-react';
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { useLocation, Link } from 'react-router-dom';
@@ -34,6 +20,11 @@ export default function UserMonitor() {
     searchHistory: false,
     chatHistory: false
   });
+   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
+
+   const isAdmin = () => {
+    return adminEmails.includes(email);
+  };
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -219,7 +210,7 @@ export default function UserMonitor() {
             {/* Basic User Info */}
             <SectionCard 
               title="User Information" 
-              icon={User} 
+              icon={isAdmin() ? UserCheck : User} 
               isExpanded={true} 
               toggleFn={() => {}}
             >
@@ -244,6 +235,8 @@ export default function UserMonitor() {
                 
                 <div className={`p-4 rounded-lg transition-colors duration-200 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
                   <h3 className="text-md font-medium mb-3">Profile</h3>
+                 
+                   
                   <div className="flex items-center gap-4">
                     {userData.image ? (
                       <img 
@@ -261,6 +254,12 @@ export default function UserMonitor() {
                     )}
                    
                   </div>
+                   {userData.created && (
+                    <p className={`text-xs mt-2 transition-colors duration-200 ${darkMode ? 'text-gray-300' : 'text-gray-600'} flex items-center gap-1`}>
+                            <b>Created:</b> <p> {formatDate(userData.created)}</p>
+                           
+                    </p>
+                  )}
                 </div>
               </div>
             </SectionCard>
@@ -284,7 +283,6 @@ export default function UserMonitor() {
                           className="w-16 h-24 object-cover rounded shadow-sm"
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/160x240?text=No+Image";
                           }}
                         />
                         <div className="flex-1">
@@ -306,7 +304,7 @@ export default function UserMonitor() {
                           <h3 className="font-medium mt-1 text-lg">{item.name || item.title}</h3>
                           {item.type === 'tv' && (
                             <p className={`text-sm transition-colors duration-200 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                              Season {item.season}, Episode {item.episode} - {item.title}
+                              S{item.season}.E{item.episode} - {item.title}
                             </p>
                           )}
                           <p className={`text-xs mt-2 transition-colors duration-200 ${darkMode ? 'text-gray-400' : 'text-gray-500'} flex items-center gap-1`}>
@@ -346,7 +344,6 @@ export default function UserMonitor() {
                           className="w-full h-48 object-cover"
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/300x450?text=No+Image";
                           }}
                         />
                         <div className="p-3">
@@ -414,7 +411,6 @@ export default function UserMonitor() {
                           className="w-full h-40 object-cover"
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/300x450?text=No+Image";
                           }}
                         />
                         <div className="p-3">
@@ -521,9 +517,12 @@ export default function UserMonitor() {
                 </div>
               )}
             </SectionCard>
-            <button onClick={handleDelete} className="mb-5 mt-5 md:mt-0 rounded-md text-white bg-red-600 hover:bg-red-700 p-2">
+            {!isAdmin() && (
+              <button onClick={handleDelete} className="mb-5 mt-5 md:mt-0 rounded-md text-white bg-red-600 hover:bg-red-700 p-2">
                             Delete Account
             </button>
+            )}
+            
           </div>
           
         )}

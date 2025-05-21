@@ -48,7 +48,8 @@ export async function signup(req,res) {
             email,
             password:hashedPassword,
             username,
-            image
+            image,
+            created:new Date(),
         })
         
         await newUser.save();

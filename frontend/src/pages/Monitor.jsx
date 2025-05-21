@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft,UserCheck } from 'lucide-react';
+import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft,UserCheck,User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Monitor = () => {
@@ -79,6 +79,11 @@ const Monitor = () => {
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     return users.slice(indexOfFirstUser, indexOfLastUser);
   };
+  const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
+
+   const isAdmin = (email) => {
+    return adminEmails.includes(email);
+  };
   
   return (
     <div className="min-h-screen bg-gray-100">
@@ -101,16 +106,16 @@ const Monitor = () => {
           {/* User Search */}
           <div className="mb-8">
             <div className="flex gap-2 mb-4">
-              <input
+              <input 
                 type="email"
                 placeholder="Enter user email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 w-16 md:w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <Link to={email.length > 0 ? `/profile/admin/user?email=${email}` : ``} className='ml-auto'>
                 <button
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
+                  className="bg-blue-600 text-white px-2 sm:px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
                   disabled={loading}
                 >
                   {loading ? <Loader className="animate-spin h-4 w-4" /> : <Search className="h-4 w-4" />}
@@ -149,8 +154,14 @@ const Monitor = () => {
                       {getCurrentUsers().length > 0 ? (
                         getCurrentUsers().map((user, index) => (
                           <tr key={index} className="hover:bg-gray-50">
-                            <td className="py-3 px-4 whitespace-nowrap">
-                              <div className="flex items-center">
+                            <td className="py-3 px-4 flex whitespace-nowrap">
+                              {isAdmin(user.email) && (
+                                <UserCheck className='bg-blue-100 text-blue-600 p-1 h-7 w-8 rounded-xl' />
+                              )}
+                              {!isAdmin(user.email) &&
+                                 <User className='bg-blue-100 text-blue-600  h-7 w-8  p-1 rounded-xl'/>
+                              }
+                              <div className="flex items-center ml-2">
                                 <span className='font-semibold'>{user.username}</span>
                               </div>
                             </td>
