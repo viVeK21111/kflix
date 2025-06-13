@@ -50,11 +50,37 @@ const Monitor = () => {
     sessionStorage.setItem("currentPage", currentPage.toString());
   }, [currentPage]);
 
+  // Update pagination when search changes
+    useEffect(() => {
+      if(email.length>0) {
+        const filteredUsers = getFilteredUsers();
+      const calculatedTotalPages = Math.ceil(filteredUsers.length / usersPerPage);
+      setTotalPages(calculatedTotalPages);
+      
+      // Reset to first page when search changes
+      if (currentPage > calculatedTotalPages && calculatedTotalPages > 0) {
+        setCurrentPage(1);
+      } else if (calculatedTotalPages === 0) {
+        setCurrentPage(1);
+      }
+      else {
+        if (sessionStorage.getItem("currentPage")) {
+           setCurrentPage(parseInt(sessionStorage.getItem("currentPage")));
+        }
+      }
+      }
+      else {
+        
+        setTotalPages(Math.ceil((users.length / usersPerPage)));
+      }
+      
+    }, [email, users]);
+
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await axios.get('/api/v1/auth/admin/users');
+        const response = await axios.get('/api/v1/auth/allusersdetails');
         if (response.data.success) {
           setUsers(response.data.users);
           
@@ -97,11 +123,27 @@ const Monitor = () => {
     setDarkMode(prev => !prev);
   };
 
+  const getFilteredUsers = () => {
+    if (!email.trim()) {
+      return users;
+    }
+    return users.filter(user => 
+      user.email.toLowerCase().includes(email.toLowerCase()) ||
+      user.username.toLowerCase().includes(email.toLowerCase())
+    );
+  };
+
   // Get current users for pagination
   const getCurrentUsers = () => {
+    const filteredUsers = getFilteredUsers();
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    return users.slice(indexOfFirstUser, indexOfLastUser);
+    if(email.length>0) {
+      return filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+    }
+    else {
+      return users.slice(indexOfFirstUser, indexOfLastUser);
+    }
   };
   
   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];

@@ -39,7 +39,17 @@ const Navbar = ({ movieSectionRef }) => {
                
                 </div>
                 </Link>
-                <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded transition-all duration-300 hover:scale-110 cursor-pointer'/></Link>
+                <Link to={'/profile'}>  
+                  <img 
+                    src={user?.image || "/a1.jpg"} 
+                    alt='avatar' 
+                    className='h-8 w-8 rounded-full object-cover transition-all duration-300 hover:scale-110 cursor-pointer'
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/a1.jpg";
+                    }}
+                  />
+                </Link>
 
                 <div className='md:hidden'>
                     <Menu className='size-8 cursor-pointer bg-slate-700 p-1 rounded-lg transition-all duration-400 hover:scale-110' onClick={toggleMobileMenu}/>

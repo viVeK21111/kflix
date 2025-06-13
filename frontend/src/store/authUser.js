@@ -23,11 +23,22 @@ export const userAuthStore = create((set)=> ({
         set({isSigningIn:true})
         try {
             const response = await axios.post('/api/v1/auth/signin',credentails);
-            set({user:response.data.user,isSigningIn:true})
+            set({user:response.data.user,isSigningIn:false})
             toast.success(response.data.message || "Sign in successfully")
         } catch (error) {
             toast.error(error.response.data.message || "an error occured");
             set({isSigningIn:false,user:null})
+        }
+    },
+    auth0SignIn: async (userData) => {
+        set({ isSigningIn: true });
+        try {
+            const response = await axios.post('/api/v1/auth/auth0', userData);
+            set({ user: response.data.user, isSigningIn: false });
+            toast.success(response.data.message || "Signed in successfully with Auth0");
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Auth0 sign in failed");
+            set({ isSigningIn: false, user: null });
         }
     },
     logout: async() => {

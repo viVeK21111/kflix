@@ -14,8 +14,10 @@ const Footer = () => {
 					</li>
 					
 					</div>
+					<div>
+						<p className="text-gray-400">@KFlix 2025</p>
+					</div>
 					
-					<p className="text-gray-400">@KFlix 2025</p>
 					<p className="flex">
 					<Link to={'/contactus'} className="flex  py-2 w-full items-center text-gray-500 hover:underline"><p className="ml-2">Contact Us</p></Link>
 					

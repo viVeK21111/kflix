@@ -101,8 +101,8 @@ const ContactPage = () => {
               </div>
             
           </header>
-      <div className='flex justify-center mt-10'>
-      <div className="max-w-xl w-full m-3 md:m-0 bg-slate-800 bg-opacity-80 p-5 rounded-lg shadow-md">
+      <div className='flex justify-center md:mt-10'>
+      <div className="max-w-xl w-full md:m-3 m-0 bg-slate-800 bg-opacity-80 p-5 rounded-lg shadow-md">
     <h2 className="text-2xl font-semibold text-white mb-3 text-center">Contact Us</h2>
     <form onSubmit={handleSubmit} className="space-y-4">
         <label htmlFor="name" className="flex text-white font-medium">Name</label>
@@ -143,15 +143,26 @@ const ContactPage = () => {
         >
             Send
         </button>
-    </form>
-</div>
-    </div>
-
-    {msgsent && (
-        <div className='flex justify-center p-5 mt-5 font-semibold text-white'>
+         {msgsent && (
+        <div className='flex justify-center  font-semibold text-white'>
             <p> We received your message and will get back to you soon..!</p>
         </div>
     )}
+    </form>
+    </div>
+
+    </div>
+    <div className='flex justify-center pt-7 pb-3'>
+            <p className='text-white'>Join our</p>
+         <Link 
+          className="inline-flex items-center ml-2 text-white font-semibold rounded-lg shadow-lg"
+            to={'https://discord.gg/P3rcqHwp9d'} target="_blank"
+            >
+      <img src="/d1.png" className="mr-2 h-4 mx-auto"></img><p>Discord</p>
+        </Link>
+        </div>
+
+   
       </div>
    
   );

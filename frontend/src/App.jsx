@@ -26,6 +26,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ChangePasswordH from "./pages/ChangePasswordH";
 import Monitor from "./pages/Monitor";
 import UserMonitor from "./pages/UserMonitor";
+import { Auth0Provider } from '@auth0/auth0-react';
+import { auth0Config } from './auth0-config';
+import CallbackPage from './pages/CallbackPage';
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -41,7 +44,6 @@ function FooterWithRouteCheck() {
 }
 
 function App() {
-
   const {user,isCheckingauth,authCheck} = userAuthStore();
   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
 
@@ -64,34 +66,34 @@ function App() {
     )
   }
   return (
-    <>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path='/signup' element ={!user ? <SignUpPage /> : <Navigate to={'/'}/>} />
-      <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
-      <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
-      <Route path="/movie" element = {user ? <MoviePage/> :  <Navigate to={'/'}/>} />
-      <Route path="/watch" element = {user ? <WatchPage2/> :  <Navigate to={'/'}/>} />
-      <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
-      <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/'}/>} />
-      <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />
-      <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/'}/>} />
-      <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/'}/>} />
-      <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/'}/>} />
-      <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
-      <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
-      <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
-      <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
-      <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
-      <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
-      <Route path='/changepassword' element = {<ChangePasswordH/>} />
-      <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
-      <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
-    </Routes>
-    <FooterWithRouteCheck/>
-    <Toaster/>
-    </>
+    <Auth0Provider {...auth0Config}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path='/signup' element ={!user ? <SignUpPage /> : <Navigate to={'/'}/>} />
+        <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
+        <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
+        <Route path="/movie" element = {user ? <MoviePage/> :  <Navigate to={'/'}/>} />
+        <Route path="/watch" element = {user ? <WatchPage2/> :  <Navigate to={'/'}/>} />
+        <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
+        <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/'}/>} />
+        <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />
+        <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/'}/>} />
+        <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/'}/>} />
+        <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/'}/>} />
+        <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
+        <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
+        <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
+        <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
+        <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
+        <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
+        <Route path='/changepassword' element = {<ChangePasswordH/>} />
+        <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
+        <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
+        <Route path="/callback" element={<CallbackPage />} />
+      </Routes>
+      <FooterWithRouteCheck/>
+      <Toaster/>
+    </Auth0Provider>
   );
-  
 }
 export default App;

@@ -63,19 +63,29 @@ const SearchPage = () => {
     
     sessionStorage.setItem('searchType2', searchType);
     setSearchType2(searchType);
-    const sortResults = (data) => {
-      return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
-    };
-  
+    
     if (query.trim()) {
       if (searchType === 'movie') {
-        getMovie(query.trim()).then(sortResults).finally(() =>
-           setloading(false),
-      );
+        getMovie(query.trim()).then((data) => {
+          if (data && Array.isArray(data)) {
+            return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+          }
+          return data;
+        }).finally(() => setloading(false));
       } else if (searchType === 'tv') {
-        getTv(query.trim()).then(sortResults).finally(() => setloading(false));
+        getTv(query.trim()).then((data) => {
+          if (data && Array.isArray(data)) {
+            return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+          }
+          return data;
+        }).finally(() => setloading(false));
       } else {
-        getPerson(query.trim()).then(sortResults).finally(() => setloading(false));
+        getPerson(query.trim()).then((data) => {
+          if (data && Array.isArray(data)) {
+            return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+          }
+          return data;
+        }).finally(() => setloading(false));
       }
     }
   };
