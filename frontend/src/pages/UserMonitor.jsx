@@ -62,7 +62,7 @@ export default function UserMonitor() {
 
   const handleDelete = async() =>{
     try {
-        const response = await axios.delete('/api/v1/auth/deleteUserAccount', {
+        const response = await axios.delete('/api/v1/auth/deleteUserMail', {
         data: { email: email }
         });
     if (response.data.success) {
@@ -92,7 +92,7 @@ export default function UserMonitor() {
     try {
       setLoading(true);
       setError('');
-      const response = await axios.post(`/api/v1/auth/userdetails`, { email: email });
+      const response = await axios.post(`/api/v1/auth/admin/mail`, { email: email });
       if (response.data.success) {
         setUserData(response.data.user);
       } else {

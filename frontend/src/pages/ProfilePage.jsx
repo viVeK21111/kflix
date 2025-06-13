@@ -101,11 +101,7 @@ export default function ProfilePage(){
         <img
           src={datalocal?.image || "/a1.jpg"}
           alt="Profile"
-          className="flex justify-center size-24 border-red-600 shadow-lg object-cover rounded-full"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "/a1.jpg";
-          }}
+          className="flex justify-center size-24 border-red-600 shadow-lg object-cover"
         />
         <div className="ml-4">
         <h1 className="text-2xl font-bold ">{datalocal?.username || "Unknown"}</h1>

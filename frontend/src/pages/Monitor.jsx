@@ -80,7 +80,7 @@ const Monitor = () => {
     const fetchAllUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await axios.get('/api/v1/auth/allusersdetails');
+        const response = await axios.get('/api/v1/auth/admin/users');
         if (response.data.success) {
           setUsers(response.data.users);
           

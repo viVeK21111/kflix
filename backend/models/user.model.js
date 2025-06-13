@@ -13,14 +13,7 @@ const userSchema = mongoose.Schema({
 	},
 	password: {
 		type: String,
-		required: function() {
-			return !this.auth0Id; // Password is required only if not using Auth0
-		},
-	},
-	auth0Id: {
-		type: String,
-		unique: true,
-		sparse: true,
+		required: true,
 	},
 	image: {
 		type: String,
@@ -28,7 +21,7 @@ const userSchema = mongoose.Schema({
 	},
 	created : {
 		type : Date,
-		default: Date.now,
+		
 	},
 	searchHistory: {
 		type: Array,

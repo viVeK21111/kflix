@@ -2,6 +2,7 @@ import {User} from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/generateToken.js';
 
+
 export async function signin(req,res) {
     try {
         const {email,password} = req.body;
@@ -22,7 +23,7 @@ export async function signin(req,res) {
     catch(error) {
         console.log("Error in signing in: "+error.message);
         res.status(500).json({success:false,message:error.message});
-    }
+}
 }
 
 export async function signup(req,res) {
@@ -62,6 +63,7 @@ export async function signup(req,res) {
         console.log("Error in creating new account: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }
+
 }
 
 export async function logout(req,res) {
@@ -188,47 +190,6 @@ export async function deleteUserAccount(req,res) {
         return res.status(200).json({success:true,message:"account deleted"});
     }
     catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-}
-
-export async function auth0Login(req, res) {
-    try {
-        const { email, name, picture, sub: auth0Id } = req.body;
-
-        // Check if user exists
-        let user = await User.findOne({ email });
-
-        if (!user) {
-            // Create new user if doesn't exist
-            const username = name.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 1000);
-            user = await User.create({
-                email,
-                username,
-                auth0Id,
-                image: picture,
-                created: new Date(),
-            });
-        } else if (!user.auth0Id) {
-            // If user exists but hasn't used Auth0 before, update their account
-            user.auth0Id = auth0Id;
-            if (!user.image) user.image = picture;
-            await user.save();
-        }
-
-        // Generate JWT token
-        generateToken(user._id, res);
-        
-        return res.status(200).json({
-            success: true,
-            user: {
-                ...user._doc,
-                password: undefined
-            },
-            message: `Welcome ${user.username}`
-        });
-    } catch (error) {
-        console.log("Error in Auth0 authentication:", error.message);
         res.status(500).json({ success: false, message: error.message });
     }
 }
