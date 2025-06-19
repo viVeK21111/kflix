@@ -73,6 +73,16 @@ const SignUpPage = () => {
             </div>
             <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign Up</button>  
           </form>
+          <div><p className="text-white text-center p-1">or</p></div>
+
+          <button
+            onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || ''}/api/v1/auth/google`}
+            className='w-full py-2 px-4 bg-white rounded-md font-base hover:bg-gray-200  flex items-center justify-center gap-2'
+            type='button'
+          >
+            <img src='/google-icon.png' alt='Google' className='h-5 w-5' />
+            Sign up with Google
+          </button>
           {/*<div className='text-center text-white text-sm m-3'>By signing up, you agree to our Terms, Data Policy and Cookies Policy.</div>  */} 
             <div className='flex mt-4'>
             <div className='text-semibold flex text-white text-left mr-2'>Already signed up?</div>

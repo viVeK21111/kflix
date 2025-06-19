@@ -39,7 +39,18 @@ const Navbar = ({ movieSectionRef }) => {
                
                 </div>
                 </Link>
-                <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded transition-all duration-300 hover:scale-110 cursor-pointer'/></Link>
+                {user && user.email ? (
+                    <Link to={'/profile'}>  <img src = {user.image} alt='avatar' className='h-8 rounded transition-all duration-300 hover:scale-110 cursor-pointer'/></Link>
+                ) : (
+                    <button
+                      onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || ''}/api/v1/auth/google`}
+                      className='py-2 px-4 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 flex items-center gap-2'
+                      type='button'
+                    >
+                      <img src='/google-icon.png' alt='Google' className='h-5 w-5' />
+                      Sign in with Google
+                    </button>
+                )}
 
                 <div className='md:hidden'>
                     <Menu className='size-8 cursor-pointer bg-slate-700 p-1 rounded-lg transition-all duration-400 hover:scale-110' onClick={toggleMobileMenu}/>

@@ -62,6 +62,15 @@ const LoginPage = () => {
             </div>
             <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign In</button>  
           </form>
+          <div><p className="text-white text-center p-1">or</p></div>
+          <button
+            onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || ''}/api/v1/auth/google`}
+            className='w-full py-2 px-4 bg-white  rounded-md font-base hover:bg-gray-200  flex items-center justify-center gap-2'
+            type='button'
+          >
+            <img src='/google-icon.png' alt='Google' className='flex items-center h-5 w-5' />
+            Sign in with Google
+          </button>
           <div>
             <div className='text-sm text-white text-left mt-4'>
               <Link to={'/forgotpassword'} className='text-red-700 underline font-semibold'>Forgot Password?</Link>

@@ -1,7 +1,15 @@
 import {User} from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/generateToken.js';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
+// Google Auth0 login: redirect to Auth0 authorize URL
+globalThis.AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
+globalThis.AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+globalThis.AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
+globalThis.AUTH0_CALLBACK_URL = process.env.AUTH0_CALLBACK_URL;
+globalThis.FRONTEND_URL = process.env.FRONTEND_URL;
 
 export async function signin(req,res) {
     try {
@@ -23,7 +31,7 @@ export async function signin(req,res) {
     catch(error) {
         console.log("Error in signing in: "+error.message);
         res.status(500).json({success:false,message:error.message});
-}
+    }
 }
 
 export async function signup(req,res) {
@@ -191,5 +199,74 @@ export async function deleteUserAccount(req,res) {
     }
     catch (error) {
         res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// Google Auth0 login: redirect to Auth0 authorize URL
+export function googleAuth(req, res) {
+    const authorizeUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?` +
+        `response_type=code&` +
+        `client_id=${process.env.AUTH0_CLIENT_ID}&` +
+        `redirect_uri=${encodeURIComponent(process.env.AUTH0_CALLBACK_URL)}` +
+        `&scope=openid%20profile%20email&` +
+        `connection=google-oauth2&` +
+        `prompt=select_account`;
+    res.redirect(authorizeUrl);
+}
+
+// Google Auth0 callback handler
+export async function googleAuthCallback(req, res) {
+    const code = req.query.code;
+    if (!code) {
+        return res.status(400).json({ success: false, message: 'No code provided' });
+    }
+    try {
+        // Exchange code for tokens
+        const tokenRes = await axios.post(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
+            grant_type: 'authorization_code',
+            client_id: process.env.AUTH0_CLIENT_ID,
+            client_secret: process.env.AUTH0_CLIENT_SECRET,
+            code,
+            redirect_uri: process.env.AUTH0_CALLBACK_URL,
+        }, {
+            headers: { 'content-type': 'application/json' }
+        });
+        const { id_token } = tokenRes.data;
+        // Decode id_token to get user info
+        const decoded = jwt.decode(id_token);
+        const { sub, email, name, picture } = decoded;
+        // sub is like 'google-oauth2|1234567890'
+        const googleId = sub.split('|')[1];
+        // Find user by googleId or email
+        let user = await User.findOne({ $or: [ { googleId }, { email } ] });
+        if (user) {
+            // If user exists but not linked, link googleId
+            if (!user.googleId) {
+                user.googleId = googleId;
+                user.provider = 'google';
+                user.picture = picture;
+                await user.save();
+            }
+        } else {
+            // Create new user
+            user = new User({
+                username: name || email.split('@')[0],
+                email,
+                googleId,
+                provider: 'google',
+                picture,
+                image: picture,
+                created: new Date(),
+                password: ' ', // Not used for Google users
+            });
+            await user.save();
+        }
+        // Generate JWT and set cookie
+        generateToken(user._id, res);
+        // Redirect to frontend homepage
+        res.redirect(process.env.FRONTEND_URL || '/');
+    } catch (error) {
+        console.error('Google Auth0 callback error:', error.message);
+        res.status(500).json({ success: false, message: 'Google authentication failed' });
     }
 }

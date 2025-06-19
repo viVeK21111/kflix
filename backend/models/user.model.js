@@ -15,9 +15,21 @@ const userSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	googleId: {
+		type: String,
+		default: null,
+	},
+	provider: {
+		type: String,
+		default: 'local',
+	},
 	image: {
 		type: String,
 		default: "",
+	},
+	picture: {
+		type: String,
+		default: '',
 	},
 	created : {
 		type : Date,

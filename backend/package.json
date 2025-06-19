@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@auth0/auth0-spa-js": "^2.2.0",
     "@google/generative-ai": "^0.24.0",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
