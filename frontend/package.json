@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.3.0",
     "@headlessui/react": "^2.2.0",
     "axios": "^1.7.9",
     "emailjs-com": "^3.2.0",
