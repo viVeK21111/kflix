@@ -9,8 +9,40 @@ import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
 import { useState,useEffect,useRef } from 'react';
 import {addWatchStore} from '../../store/watchStore';
 import { TvMinimalPlay,Clapperboard,Loader,Star,Clock } from 'lucide-react';
+import emailjs from 'emailjs-com';
+import { userAuthStore } from '../../store/authUser';
 
 export const HomeScreen = () => {
+  const {user}  = userAuthStore();
+  useEffect(() => {
+  const SECRET_KEY = import.meta.env.VITE_SECRET_EMAILJS;
+  const SERVICE_KEY = import.meta.env.VITE_SERVIE_EMAILJS;
+  const TEMPLATE_AUTO = import.meta.env.VITE_TEMPLATE_AUTO;
+  const params = new URLSearchParams(window.location.search);
+  const gauthUser = params.get("authUser");
+  if(gauthUser && gauthUser=="new") {
+    try {
+     
+      const paramsa = {
+        name: user.username,
+        email: user.email,
+    };
+   emailjs.send(SERVICE_KEY, TEMPLATE_AUTO, paramsa, SECRET_KEY);
+    console.log('auto reply Email sent successfully!');
+    window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    catch(error) {
+        console.log("error sending welcome email "+error.message);
+    }
+  }
+  else if(gauthUser=="old") {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+   
+  },[])
+ 
+
+
   const {trending,loading} = useGetTrendingContent();
   const {contentType} = useContentStore();
   const [ImageLoad,setImageLoad] = useState(true);

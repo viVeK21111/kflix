@@ -63,12 +63,6 @@ const ContactPage = () => {
     emailjs.send(SERVICE_KEY, TEMPLATE_GET, params, SECRET_KEY);
     console.log('Email sent successfully!');
 
-    const paramsa = {
-      name: formData.name,
-      email: formData.email,
-  };
-  emailjs.send(SERVICE_KEY, TEMPLATE_AUTO, paramsa, SECRET_KEY);
-  console.log('auto reply Email sent successfully!');
 
 
      

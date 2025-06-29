@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import emailjs from 'emailjs-com';
 
 export const userAuthStore = create((set)=> ({
     user:null,
@@ -9,10 +10,22 @@ export const userAuthStore = create((set)=> ({
     isSigningIn:false,
     isLoggingOut:false,
     signup: async(credentails)=> {
+        const SECRET_KEY = import.meta.env.VITE_SECRET_EMAILJS;
+        const SERVICE_KEY = import.meta.env.VITE_SERVIE_EMAILJS;
+        const TEMPLATE_AUTO = import.meta.env.VITE_TEMPLATE_AUTO;
         set({isSigningUp:true})
         try {
             const response = await axios.post("/api/v1/auth/signup",credentails);
             set({user:response.data.user,isSigningUp:false})
+            if(response.data.success) {
+                const paramsa = {
+                    name: response.data.user.username,
+                    email: response.data.user.email,
+                };
+                emailjs.send(SERVICE_KEY, TEMPLATE_AUTO, paramsa, SECRET_KEY);
+                console.log('auto reply Email sent successfully!');
+              
+            }
             toast.success("account created successfully")
         } catch (error) {
             toast.error(error.response.data.message || "an error occured");

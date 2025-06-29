@@ -49,7 +49,7 @@ function WatchPage() {
   localStorage.setItem("numitems",6);
   const {addWatch,addEpisode} = addWatchStore();
 
-  const [srcIndex,setSrcIndex] = useState(0);
+  const [srcIndex,setSrcIndex] = useState(Number(sessionStorage.getItem('srcIndex')) || 0);
   const [selectopen,setselectopen] = useState(false);
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [datae,setDatae] = useState(null);
@@ -165,18 +165,18 @@ function WatchPage() {
   if(!Season) {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
-      { name: "Source2 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
-      { name: "Source3 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
-      { name: "Source4 (rive)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
-      { name: "Source5 (embed.su)",description:"brave browser only", url: `https://embed.su/embed/movie/${Id}` },
+      { name: "Source2 (embed-api)",description:"brave browser only", url: `https://player.embed-api.stream/?id=${Id}&type=movie` },
+      { name: "Source3 (rive)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
+      { name: "Source4 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
+      { name: "Source5 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
     ];
   } else {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
-      { name: "Source2 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
-      { name: "Source3 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
-      { name: "Source4 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
-      { name: "Source5 (embed.su)",description:"brave browser only", url: `https://embed.su/embed/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source2 (embed-api)",description:"brave browser only", url: `https://player.embed-api.stream/?id=${Id}&s=${Season}&e=${Episode}` },
+      { name: "Source3 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
+      { name: "Source4 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
+      { name: "Source5 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
     ];
   }
    
@@ -184,6 +184,7 @@ function WatchPage() {
     e.preventDefault();
     setselectopen(false);
     setSrcIndex(Number(index)); // Change the source based on selection
+    sessionStorage.setItem('srcIndex',index);
   };
 
   const handleSelectChange = (e) => {

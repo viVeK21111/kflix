@@ -239,6 +239,7 @@ export async function googleAuthCallback(req, res) {
         const googleId = sub.split('|')[1];
         // Find user by googleId or email
         let user = await User.findOne({ $or: [ { googleId }, { email } ] });
+        let authUser = "old"
         if (user) {
             // If user exists but not linked, link googleId
             if (!user.googleId) {
@@ -260,11 +261,12 @@ export async function googleAuthCallback(req, res) {
                 password: ' ', // Not used for Google users
             });
             await user.save();
+            authUser = "new"
         }
         // Generate JWT and set cookie
         generateToken(user._id, res);
         // Redirect to frontend homepage
-        res.redirect(process.env.FRONTEND_URL || '/');
+        res.redirect(process.env.FRONTEND_URL+`?authUser=${authUser}` || '/');
     } catch (error) {
         console.error('Google Auth0 callback error:', error.message);
         res.status(500).json({ success: false, message: 'Google authentication failed' });
