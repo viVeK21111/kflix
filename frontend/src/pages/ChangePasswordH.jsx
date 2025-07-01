@@ -65,14 +65,14 @@ export default function ChangePasswordH() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900  justify-center">
       <header className={`flex w-full items-center bg-black bg-opacity-50 lg:justify-start justify-center`}>
             <Link to={'/'} className='flex items-center j ml-1'> 
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-32 sm:w-36' />
+              <img src={'/kflix3.png'} alt='kflix logo' className='w-32 sm:w-36' />
             </Link>
           </header>
       <div className="w-full max-w-md mt-14 mx-auto px-3 sm:px-0">
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
           <div className="bg-slate-700 px-6 py-4">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-red-600 rounded-lg shadow-lg">
+              <div className="p-3 bg-gray-600 rounded-lg shadow-lg">
                 <Key size={22} className="text-white" />
               </div>
               <div>
@@ -139,8 +139,8 @@ export default function ChangePasswordH() {
               disabled={isSubmitting}
               className={`w-full p-3 rounded-lg font-medium text-white transition-all ${
                 isSubmitting 
-                  ? 'bg-red-600 cursor-not-allowed' 
-                  : 'bg-red-600 hover:bg-red-700 shadow-lg hover:shadow-red-600/20'
+                  ? 'bg-gray-600 cursor-not-allowed' 
+                  : 'bg-gray-600 hover:bg-gray-500 shadow-lg hover:shadow-gray-600/20'
               }`}
             >
               {isSubmitting ? 'Updating...' : 'Update Password'}

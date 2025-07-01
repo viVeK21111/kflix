@@ -16,7 +16,7 @@ const SearchPage = () => {
   const [Searchsubmit,setSearchsubmit] = useState(false);
   const [Loading1,setLoading1] = useState(true);
   const logo = new Image();
-  logo.src = '/kflix2.png';
+  logo.src = '/kflix3.png';
    const [isMobileMenuOpen,setisMobileMenuOpen] = useState(false);
       
       const toggleMobileMenu = () => {
@@ -94,7 +94,7 @@ const SearchPage = () => {
       {/* Header */}
       <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
              <Link to={'/'} className='mr-auto' >
-               <img src={'/kflix2.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+               <img src={'/kflix3.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
              </Link>
                    <div className='hidden md:flex ml-auto items-center p-2 '>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>

@@ -38,18 +38,18 @@ const AuthScreen = () => {
             {/* Navbar */}
             <div className='flex items-center justify-between p-2  max-w-full ml-2  md:ml-3'>
                 
-                <img src='/kflix2.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
+                <img src='/kflix3.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
                
-                <Link to={"/login"} className='text-white bg-red-600 hover:bg-red-700 py-1 px-2 rounded'>
+                <Link to={"/login"} className='text-white bg-gray-700 py-1 px-2 rounded'>
                     Sign In
                 </Link>
             </div>
 
             {/* hero section */}
             <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
-                <h1 className='text-2xl md:text-4xl font-bold mb-4'>Unlimited free movies, TV shows, and more</h1>
-                <p className='hidden sm:flex text-base mb-4'>Watch anywhere at ease.</p>
-                <p className='mb-4'>Ready to watch? Enter your email to create account.</p>
+                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited free movies, TV shows, and more</h1>
+ 
+                <p className='mb-4 text-sm sm:text-lg md:text-xl font-semibold text-gray-200'>Ready to watch? Enter your email to create account.</p>
 
                 <form className='flex flex-col md:flex-row gap-4 w-64 md:w-1/2 mb-20' onSubmit={handleFormSubmit}>
                     <input
@@ -59,7 +59,7 @@ const AuthScreen = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <button className='bg-red-600 text-xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center'>
+                    <button className='bg-gray-800  text-xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center'>
                         Get Started
                         <ChevronRight className='size-8 md:size-8' />
                     </button>

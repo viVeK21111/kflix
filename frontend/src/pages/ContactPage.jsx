@@ -86,7 +86,7 @@ const ContactPage = () => {
     <div className="relative contact-bg backdrop-blur justify-center items-center min-h-screen">
       <header className={`flex w-full items-center bg-black bg-opacity-50`}>
             <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-32 sm:w-36' />
+              <img src={'/kflix3.png'} alt='kflix logo' className='w-32 sm:w-36' />
             </Link>
               <div className='ml-auto flex items-center p-2 '>
                    
@@ -96,7 +96,7 @@ const ContactPage = () => {
             
           </header>
       <div className='flex justify-center md:mt-10'>
-      <div className="max-w-xl w-full md:m-3 m-0 bg-slate-800 bg-opacity-80 p-5 rounded-lg shadow-md">
+      <div className="max-w-xl w-full md:m-3 m-0 bg-black bg-opacity-70 p-5 rounded-lg shadow-md">
     <h2 className="text-2xl font-semibold text-white mb-3 text-center">Contact Us</h2>
     <form onSubmit={handleSubmit} className="space-y-4">
         <label htmlFor="name" className="flex text-white font-medium">Name</label>
@@ -106,7 +106,7 @@ const ContactPage = () => {
             placeholder="Your Name" 
             value={formData.name} 
             onChange={handleChange} 
-            className="w-full p-2 border border-gray-300 rounded-md" 
+            className="w-full p-2 border border-gray-700 text-white rounded-md bg-slate-900" 
             required 
         />
 
@@ -117,7 +117,7 @@ const ContactPage = () => {
             placeholder="Your Email" 
             value={formData.email} 
             onChange={handleChange} 
-            className="w-full p-2 border border-gray-300 rounded-md" 
+            className="w-full p-2 border border-gray-700 text-white rounded-md bg-slate-900" 
             required 
         />
 
@@ -127,13 +127,13 @@ const ContactPage = () => {
             placeholder="Your Message" 
             value={formData.message} 
             onChange={handleChange} 
-            className="w-full p-2 border border-gray-300 rounded-md h-32" 
+            className="w-full p-2 border border-gray-700 text-white rounded-md bg-slate-900 h-32" 
             required 
         />
 
         <button 
             type="submit" 
-            className="w-full bg-red-600 text-white py-2 font-semibold rounded-md hover:bg-red-700"
+            className="w-full bg-gray-700 text-white py-2 font-semibold rounded-md hover:bg-gray-600"
         >
             Send
         </button>

@@ -49,7 +49,7 @@ function WatchPage() {
   localStorage.setItem("numitems",6);
   const {addWatch,addEpisode} = addWatchStore();
 
-  const [srcIndex,setSrcIndex] = useState(Number(sessionStorage.getItem('srcIndex')) || 0);
+  const [srcIndex,setSrcIndex] = useState(Number(sessionStorage.getItem('srcIndex')) || 1);
   const [selectopen,setselectopen] = useState(false);
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [datae,setDatae] = useState(null);
@@ -165,18 +165,20 @@ function WatchPage() {
   if(!Season) {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
-      { name: "Source2 (embed-api)",description:"brave browser only", url: `https://player.embed-api.stream/?id=${Id}&type=movie` },
-      { name: "Source3 (rive)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
-      { name: "Source4 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
-      { name: "Source5 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/movie/${Id}?autoplay=0` },
+      { name: "Source2 (rive)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
+      { name: "Source3 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/movie/${Id}`},
+      { name: "Source4 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/movie/${Id}` },
+      { name: "Source5 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
+     
     ];
   } else {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
-      { name: "Source2 (embed-api)",description:"brave browser only", url: `https://player.embed-api.stream/?id=${Id}&s=${Season}&e=${Episode}` },
-      { name: "Source3 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
-      { name: "Source4 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
-      { name: "Source5 (Vidbinge)",description:"brave browser recommended", url: `https://vidsrc.dev/embed/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source2 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
+      { name: "Source3 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source4 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source5 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
+    
     ];
   }
    
@@ -216,7 +218,7 @@ function WatchPage() {
         {/* Header with Mobile Menu */}
         <header className={bgColorClass!='bg-black'?`flex items-center bg-slate-900 bg-opacity-40 ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`:`flex items-center bg-black ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`}>
           <Link to={'/'} className='flex items-center ml-1'>
-            <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+            <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
           </Link>
           
           {/* Mobile Menu Button */}

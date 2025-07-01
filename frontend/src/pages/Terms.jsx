@@ -8,7 +8,7 @@ export default function Terms() {
       {/* Header */}
       <header className="flex items-center justify-between bg-gray-800 px-4 py-3">
               <Link to="/" className="flex-shrink-0">
-                <img src="/kflix2.png" alt="Kflix Logo" className="w-30 sm:w-32 h-12 sm:h-14" />
+                <img src="/kflix3.png" alt="Kflix Logo" className="w-30 sm:w-32 h-12 sm:h-14" />
               </Link>
               <Link
                 to="/"

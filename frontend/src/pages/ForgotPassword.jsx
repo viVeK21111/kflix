@@ -50,7 +50,7 @@ export default function ForgotPassword() {
     <div className=" justify-center min-h-screen bg-gray-100 px-4 contact-bg">
         <header className='max-w-6xl mx-auto flex justify-center p-4'>
               <Link to={'/'} className='flex items-center'>
-              <img src={'/kflix2.png'} alt='logo' className='w-52' />
+              <img src={'/kflix3.png'} alt='logo' className='w-52' />
               
               </Link>
             </header>
@@ -89,7 +89,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
               loading ? 'opacity-70 cursor-not-allowed' : ''
             }`}
           >
@@ -97,7 +97,7 @@ export default function ForgotPassword() {
           </button>
           
           <div className="text-sm font-semibold underline text-center mt-4">
-            <a href="/login" className="text-red-600 hover:text-red-600">
+            <a href="/login" className="text-gray-400 hover:text-gray-300">
               Back to Login
             </a>
           </div>

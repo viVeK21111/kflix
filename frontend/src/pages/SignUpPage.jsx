@@ -28,7 +28,7 @@ const SignUpPage = () => {
     <div className='h-screen w-full contact-bg'>
       <header className='max-w-6xl mx-auto flex items-center justify-center p-4'>
         <Link to={'/'} className='flex items-center'>
-        <img src={'/kflix2.png'} alt='logo' className='w-52' />
+        <img src={'/kflix3.png'} alt='logo' className='w-52' />
         
         </Link>
       </header>
@@ -71,13 +71,13 @@ const SignUpPage = () => {
             </button>
               </div>
             </div>
-            <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign Up</button>  
+            <button type='submit' className='w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold'>Sign Up</button>  
           </form>
           <div><p className="text-white text-center p-1">or</p></div>
 
           <button
             onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || ''}/api/v1/auth/google`}
-            className='w-full py-2 px-4 bg-white rounded-md font-base hover:bg-gray-200  flex items-center justify-center gap-2'
+            className='w-full py-2 px-4 rounded-md font-base  bg-gray-800 text-white hover:bg-gray-700   flex items-center justify-center gap-2'
             type='button'
           >
             <img src='/google-icon.png' alt='Google' className='h-5 w-5' />
@@ -86,7 +86,7 @@ const SignUpPage = () => {
           {/*<div className='text-center text-white text-sm m-3'>By signing up, you agree to our Terms, Data Policy and Cookies Policy.</div>  */} 
             <div className='flex mt-4'>
             <div className='text-semibold flex text-white text-left mr-2'>Already signed up?</div>
-            <Link to={'/login'} className='block text-left text-red-700 underline font-semibold'> <spawn>Sign In</spawn></Link>
+            <Link to={'/login'} className='block text-left text-blue-400 underline font-semibold'> <spawn>Sign In</spawn></Link>
             </div>
       </div>
     </div>

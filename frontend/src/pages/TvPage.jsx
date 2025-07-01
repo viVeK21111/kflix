@@ -197,7 +197,7 @@ const TvPage = () => {
       <header className="relative">
       <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
             <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+              <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </Link>
               <div className='ml-auto flex items-center p-2 '>
                    

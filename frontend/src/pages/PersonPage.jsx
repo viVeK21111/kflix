@@ -70,7 +70,7 @@ export default function PersonPage() {
     <div className="min-h-screen bg-slate-800 text-white flex flex-col ">
       <header className={`flex w-full items-center bg-black bg-opacity-10`}>
             <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+              <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </Link>
               <div className='ml-auto flex items-center p-2 '>
                    

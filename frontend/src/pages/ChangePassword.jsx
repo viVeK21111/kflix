@@ -42,7 +42,7 @@ export default function ChangePassword() {
 
        <header className='flex bg-white bg-opacity-5 mb-5'>
         <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix2.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
+              <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </Link>
         <div className='ml-auto flex'>
                 <Link className='hover:bg-white hover:bg-opacity-5 text-base items-center flex p-3  rounded-l-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 hover:scale-105 transition-transform'/><p className='font-semibold ml-1'>Home</p></p></Link>
@@ -54,7 +54,7 @@ export default function ChangePassword() {
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
           <div className="bg-slate-700 p-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-red-600 rounded-lg shadow-lg">
+              <div className="p-3 bg-gray-600 rounded-lg shadow-lg">
                 <Key size={22} className="text-white" />
               </div>
               <div>
@@ -117,8 +117,8 @@ export default function ChangePassword() {
               disabled={isSubmitting}
               className={`w-full p-3 rounded-lg font-medium text-white transition-all ${
                 isSubmitting 
-                  ? 'bg-red-600 cursor-not-allowed' 
-                  : 'bg-red-600 hover:bg-red-700 shadow-lg hover:shadow-red-600/20'
+                  ? 'bg-gray-600 cursor-not-allowed' 
+                  : 'bg-gray-600 hover:bg-gray-600 shadow-lg hover:shadow-gray-600/20'
               }`}
             >
               {isSubmitting ? 'Updating...' : 'Update Password'}

@@ -22,7 +22,7 @@ const LoginPage = () => {
     <div className='h-screen w-full contact-bg'>
       <header className='max-w-6xl mx-auto flex items-center justify-center p-4'>
         <Link to={'/'} className='flex items-center'>
-        <img src={'/kflix2.png'} alt='logo' className='w-52' />
+        <img src={'/kflix3.png'} alt='logo' className='w-52' />
       
         </Link>
       </header>
@@ -60,12 +60,12 @@ const LoginPage = () => {
                 </div>
               
             </div>
-            <button type='submit' className='w-full py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700'>Sign In</button>  
+            <button type='submit' className='w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold'>Sign In</button>  
           </form>
           <div><p className="text-white text-center p-1">or</p></div>
           <button
             onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || ''}/api/v1/auth/google`}
-            className='w-full py-2 px-4 bg-white  rounded-md font-base hover:bg-gray-200  flex items-center justify-center gap-2'
+            className='w-full py-2 px-4 bg-gray-800 text-white hover:bg-gray-700  rounded-md font-base  flex items-center justify-center gap-2'
             type='button'
           >
             <img src='/google-icon.png' alt='Google' className='flex items-center h-5 w-5' />
@@ -73,12 +73,12 @@ const LoginPage = () => {
           </button>
           <div>
             <div className='text-sm text-white text-left mt-4'>
-              <Link to={'/forgotpassword'} className='text-red-700 underline font-semibold'>Forgot Password?</Link>
+              <Link to={'/forgotpassword'} className='text-gray-300 hover:text-gray-400 underline font-semibold'>Forgot Password?</Link>
             </div>
           </div>
           <div className='flex mt-4'>
             <div className='text-semibold flex text-white text-left mr-2'>Don't have an account?</div>
-            <Link to={'/signup'} className='block text-left text-red-700 underline font-semibold'><spawn>Sign Up</spawn></Link>
+            <Link to={'/signup'} className='block text-left text-blue-400 underline font-semibold'><spawn>Sign Up</spawn></Link>
             </div>
          
       </div>

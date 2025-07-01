@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(cors({ 
     origin: [
-      "https://kflix-mocha.vercel.app",
+      "https://kflixx.netlify.app",
       "https://www.kflix.site",
       "https://kflix.site" 
     ],
