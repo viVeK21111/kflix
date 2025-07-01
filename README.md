@@ -27,7 +27,7 @@ Configure vite.config file to host on local network.
 ### Snap shots
 Login page
 <br><br>
-![Login][/snapshots/loginpage.png] 
+![Login](/snapshots/loginpage.png)
 <br><br>
 ![Homescreen](/snapshots/homepage2.png)
 <br><br>
@@ -65,9 +65,12 @@ Streaming by Third party services
 
 ### Production deployment
 Frontend server deployed on netlify, backend server deployed on render. <br>
-Custom domain: https://kflix.site <br>
+Custom domain: https://kflix.site <br> 
+netlify: https://kflixx.netlify.app/ <br>
 
-#### cors policy: Frontend url is added in cors in backend server to allow the requests from specified url i.e frontend. <br>
+#### Cors policy: <br>
+Frontend url is added in cors in backend server to allow the requests from specified url i.e frontend. 
+<br>
 
 ### Documentation
 In detailed documentation of kflix platform <br>
