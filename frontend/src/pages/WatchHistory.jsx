@@ -11,14 +11,15 @@ const { getdata, data,ClearWatchHistoryMovie,ClearWatchHistoryTv,ClearWatchHisto
 const [datalocal,setdatalocal] = useState(null);
 const [loading,setloading] = useState(true);
 
-  useEffect(() => {
-     
-       getdata().finally(() => setloading(false));
-       setdatalocal(data);
-       sessionStorage.setItem("numitems",6);
-   
-   }, [data]);
- 
+useEffect(() => {
+  getdata().finally(() => setloading(false));
+  sessionStorage.setItem("numitems",6);
+}, []);
+
+useEffect(() => {
+  setdatalocal(data);
+}, [data]);
+
   const ClearButtonMovie = (e,id,date) => {
     e.preventDefault();
     ClearWatchHistoryMovie(id,date);

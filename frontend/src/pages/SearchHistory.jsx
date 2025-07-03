@@ -11,13 +11,15 @@ const { getdata, data,ClearHistory,ClearHistoryid } = ProfileStore();
 const [datalocal,setdatalocal] = useState(null);
 const [loading,setloading] = useState(true);
 
- useEffect(() => {
-    
-      getdata().finally(() => setloading(false));
-      setdatalocal(data);
-      sessionStorage.setItem("numitems",6);
-  
-  }, [data]);
+useEffect(() => {
+  getdata().finally(() => setloading(false));
+  sessionStorage.setItem("numitems",6);
+}, []);
+
+useEffect(() => {
+  setdatalocal(data);
+}, [data]);
+
   const ClearButton = (e) => {
     e.preventDefault();
     ClearHistory();

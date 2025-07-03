@@ -40,14 +40,14 @@ const AuthScreen = () => {
                 
                 <img src='/kflix3.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
                
-                <Link to={"/login"} className='text-white bg-gray-700 py-1 px-2 rounded'>
+                <Link to={"/login"} className='text-white bg-gray-600 bg-opacity-80 hover:bg-opacity-90 py-1 px-2 rounded'>
                     Sign In
                 </Link>
             </div>
 
             {/* hero section */}
             <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
-                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited free movies, TV shows, and more</h1>
+                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited free Movies, TV shows, and more</h1>
  
                 <p className='mb-4 text-sm sm:text-lg md:text-xl font-semibold text-gray-200'>Ready to watch? Enter your email to create account.</p>
 
@@ -59,7 +59,7 @@ const AuthScreen = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <button className='bg-gray-800  text-xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center'>
+                    <button className='bg-blue-600 hover:bg-blue-700  text-xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center'>
                         Get Started
                         <ChevronRight className='size-8 md:size-8' />
                     </button>

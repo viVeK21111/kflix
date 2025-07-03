@@ -10,13 +10,14 @@ const { getdata, data,ClearHistoryquery,ClearHistoryqueryAll } = ProfileStore();
 const [datalocal,setdatalocal] = useState(null);
 const [loading,setloading] = useState(true);
 
- useEffect(() => {
-    
-      getdata().finally(() => setloading(false));
-      setdatalocal(data);
-      localStorage.setItem("numitems",6);
-  
-  }, [data]);
+useEffect(() => {
+  getdata().finally(() => setloading(false));
+  localStorage.setItem("numitems",6);
+}, []);
+
+useEffect(() => {
+  setdatalocal(data);
+}, [data]);
  
   const ClearButtonid = (e,query) => {
     e.preventDefault();

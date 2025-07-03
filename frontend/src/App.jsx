@@ -31,9 +31,9 @@ function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
   
   const location = useLocation();
-  
+  const {user} = userAuthStore();
   // Don't show footer on chat page
-  if (location.pathname === '/chat') {
+  if (location.pathname === '/chat' || !user) {
     return null;
   }
   

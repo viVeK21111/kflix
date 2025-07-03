@@ -25,9 +25,12 @@ export default function ProfilePage(){
   useEffect(() => {
     if(!deleted && !del) {
       getdata().finally(() => setloading(false));
-      setdatalocal(data);
       localStorage.setItem("numitems",6);
     }
+  }, [deleted, del]);
+
+  useEffect(() => {
+    setdatalocal(data);
   }, [data]);
 
   useEffect(() => {
@@ -189,7 +192,7 @@ export default function ProfilePage(){
         </div>
         <div className="flex flex-col">
         <a
-        href='https://github.com/viVeK21111/netflix_clone' 
+        href='https://github.com/viVeK21111/kflix' 
         className="flex pl-3 py-2 border-b  border-white border-opacity-15 hover:bg-slate-700 "
         target="_blanck"
         >
