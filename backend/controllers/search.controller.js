@@ -153,7 +153,7 @@ export const ClearHistory = async(req,res) => {
     }
 };
 export const removeFromChatHistory = async(req,res) => {
-    let {query} = req.params;
+    let {query} = req.body;
     try {
         await User.findByIdAndUpdate(req.user._id,{
             $pull:{

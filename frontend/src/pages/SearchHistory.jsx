@@ -20,13 +20,15 @@ useEffect(() => {
   setdatalocal(data);
 }, [data]);
 
-  const ClearButton = (e) => {
+  const ClearButton = async(e) => {
     e.preventDefault();
-    ClearHistory();
+   await ClearHistory();
+   getdata()
   }
-  const ClearButtonid = (e,id) => {
+  const ClearButtonid = async (e,id) => {
     e.preventDefault();
-    ClearHistoryid(id);
+    await ClearHistoryid(id);
+    getdata();
   }
   if(loading) {
     return (

@@ -13,7 +13,7 @@ router.delete('/removehistory/:id',protectRoute,removeFromSearchHistory)
 router.delete('/clearhistory',protectRoute,ClearHistory)
 router.get('/person/:id',protectRoute,getPersonDetails)
 router.get('/person/credits/:id',protectRoute,getPersonCredits)
-router.delete('/removehistoryquery/:query',protectRoute,removeFromChatHistory)
+router.delete('/removehistoryquery',protectRoute,removeFromChatHistory)
 router.delete('/clearhistoryquery',protectRoute,clearChatHistory)
 
 export default router;

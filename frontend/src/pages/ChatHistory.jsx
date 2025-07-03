@@ -19,13 +19,15 @@ useEffect(() => {
   setdatalocal(data);
 }, [data]);
  
-  const ClearButtonid = (e,query) => {
+  const ClearButtonid = async (e,query) => {
     e.preventDefault();
-    ClearHistoryquery(query);
+    await ClearHistoryquery(query);
+    getdata();
   }
-  const ClearButton = (e) => {
+  const ClearButton = async (e) => {
     e.preventDefault();
-    ClearHistoryqueryAll();
+    await ClearHistoryqueryAll();
+    getdata();
   }
   if(loading) {
     return (

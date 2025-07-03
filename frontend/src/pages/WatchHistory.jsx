@@ -20,13 +20,15 @@ useEffect(() => {
   setdatalocal(data);
 }, [data]);
 
-  const ClearButtonMovie = (e,id,date) => {
+  const ClearButtonMovie = async (e,id,date) => {
     e.preventDefault();
-    ClearWatchHistoryMovie(id,date);
+    await ClearWatchHistoryMovie(id,date);
+    getdata();
   }
-  const clearButtontv = (e,id,date,season,episode) => {
+  const clearButtontv = async (e,id,date,season,episode) => {
     e.preventDefault();
-    ClearWatchHistoryTv(id,date,season,episode);
+    await ClearWatchHistoryTv(id,date,season,episode);
+    getdata();
     
   }
   

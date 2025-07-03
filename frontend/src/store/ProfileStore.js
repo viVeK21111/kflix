@@ -79,7 +79,7 @@ export const ProfileStore = create((set)=> ({
     ClearHistoryquery:async(query)=> {
         set({isLoading:true})
         try {
-            const response = await axios.delete(`/api/v1/search/removehistoryquery/${query}`);
+            const response = await axios.delete('/api/v1/search/removehistoryquery', { data: { query } });
             console.log(response.data.message);
             if(response.data.success) {
                 toast.success("success");
@@ -93,7 +93,7 @@ export const ProfileStore = create((set)=> ({
             set({data:null,isLoading:false});
         }
     },
-     ClearHistoryqueryAll:async(query)=> {
+     ClearHistoryqueryAll:async()=> {
         set({isLoading:true})
         try {
             const response = await axios.delete(`/api/v1/search/clearhistoryquery`);
