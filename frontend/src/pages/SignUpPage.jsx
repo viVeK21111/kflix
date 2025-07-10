@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react';
 import { userAuthStore } from '../store/authUser';
 import { Eye, EyeOff } from 'lucide-react';
+import { getBackendUrl } from '../utils/getBackendUrl';
 
 const SignUpPage = () => {
   const {searchParams} = new URL(document.location)

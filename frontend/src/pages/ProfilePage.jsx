@@ -81,7 +81,7 @@ export default function ProfilePage(){
   if(deleted ) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
-        <img className="w-32 sm:w-32 h-14" src='/kflix2.png'></img>
+        <img className="w-32 sm:w-32 h-14" src='/kflix3.png'></img>
         <p>Sorry to see u go...</p>
       </div>
     )

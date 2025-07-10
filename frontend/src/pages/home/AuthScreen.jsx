@@ -30,7 +30,7 @@ const AuthScreen = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        navigate("/signup?email=" + email);
+        navigate("/signup");
     };
 
     return (
@@ -47,23 +47,15 @@ const AuthScreen = () => {
 
             {/* hero section */}
             <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
-                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited free Movies, TV shows, and more</h1>
+                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited Free Movies, Tv shows, and More</h1>
  
-                <p className='mb-4 text-sm sm:text-lg md:text-xl font-semibold text-gray-200'>Ready to watch? Enter your email to create account.</p>
-
-                <form className='flex flex-col md:flex-row gap-4 w-64 md:w-1/2 mb-20' onSubmit={handleFormSubmit}>
-                    <input
-                        type='email'
-                        placeholder='Email address'
-                        className='p-2 rounded flex-1 bg-black/80 border border-gray-700'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button className='bg-blue-600 hover:bg-blue-700  text-xl px-2 lg:px-6 py-1 md:py-2 rounded flex justify-center items-center'>
+                <p className='mb-4 text-sm sm:text-lg md:text-xl font-semibold text-gray-200'>Ready to watch? Ready your popcorn.</p>
+                 
+                    <button onClick={handleFormSubmit} className='bg-blue-600 hover:bg-blue-700 text-lg  md:text-xl px-2 md:px-4 lg:px-6 py-2  rounded flex justify-center items-center'>
                         Get Started
-                        <ChevronRight className='size-8 md:size-8' />
+                        <ChevronRight className='size-6 pt-1 flex items-center justify-center md:size-7' />
                     </button>
-                </form>
+              
             </div>
 
             {/* separator */}

@@ -99,6 +99,8 @@ export const HomeScreen = () => {
     <>
       <div className='relative h-[80vh] text-white'>
         <Navbar movieSectionRef={movieSectionRef}/>
+      
+        {/* End Trailer Modal */}
         {ImageLoad && (<div className='absolute top-0 left-0 flex w-full h-full items-center bg-black/90 justify-center shimmer -z-10'> <Loader className='animate-spin w-8 h-8'/> </div>)}
         
         <div className="absolute top-0 left-0 w-full h-full bg-black/20 -z-40" />
@@ -129,7 +131,7 @@ export const HomeScreen = () => {
             <div className='absolute flex items-center mt-3'>
 						<Link
 							to={`/${contentType === 'movies' ? 'movie' : 'tv/details'}/?id=${trending?.id}&name=${trending?.name || trending?.title}`}
-							className='bg-red-600 hover:bg-red-800 text-white font-semibold px-1 py-1 md:px-2 rounded  flex
+							className='bg-blue-600 hover:bg-blue-700 text-white font-semibold px-1 py-1 md:px-2 rounded  flex
 							 items-center'
 						>
               {contentType==='movies' && (<div className='flex'>

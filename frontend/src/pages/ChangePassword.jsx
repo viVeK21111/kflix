@@ -54,7 +54,7 @@ export default function ChangePassword() {
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
           <div className="bg-slate-700 p-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gray-600 rounded-lg shadow-lg">
+              <div className="p-3 bg-blue-600 rounded-lg shadow-lg">
                 <Key size={22} className="text-white" />
               </div>
               <div>
@@ -117,8 +117,8 @@ export default function ChangePassword() {
               disabled={isSubmitting}
               className={`w-full p-3 rounded-lg font-medium text-white transition-all ${
                 isSubmitting 
-                  ? 'bg-gray-600 cursor-not-allowed' 
-                  : 'bg-gray-600 hover:bg-gray-600 shadow-lg hover:shadow-gray-600/20'
+                  ? 'bg-blue-600 cursor-not-allowed' 
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-gray-600/20'
               }`}
             >
               {isSubmitting ? 'Updating...' : 'Update Password'}

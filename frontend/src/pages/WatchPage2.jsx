@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Plus,
+  Clapperboard,
 } from 'lucide-react';
 import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
@@ -37,6 +38,16 @@ function WatchPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [directorId, setdirectorId] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [showIframe, setShowIframe] = useState(false);
+  const [selectedTrailer, setSelectedTrailer] = useState(null);
+  const [loadingTrailers, setLoadingTrailers] = useState(false);
+  const [trailerSources, setTrailerSources] = useState([
+    {
+      name: "The Odyssey (2026) IMAX teaser",
+      src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+    }
+  ]);
 
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
@@ -165,19 +176,23 @@ function WatchPage() {
   if(!Season) {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/media/tmdb-movie-${Id}` },
-      { name: "Source2 (rive)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
-      { name: "Source3 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/movie/${Id}`},
-      { name: "Source4 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/movie/${Id}` },
-      { name: "Source5 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
+      { name: "Source2 (rivestream)",description:"brave browser recommended", url: `https://rivestream.net/embed?type=movie&id=${Id}` },
+      { name: "Source3 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/movie/${Id}` },
+      { name: "Source4 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/movie/${Id}`},
+      { name: "Source5 (111movies)", description:"brave browser recommended",url: `https://111movies.com/movie/${Id}` },
+      { name: "Source6 (nontongo)", description:"brave browser only",url: `https://www.NontonGo.win/embed/movie/${Id}` },
+      { name: "Source7 (pstream)", description:"adfree",url: `https://iframe.pstream.org/media/tmdb-movie-${Id}` },
      
     ];
   } else {
     sources = [
       { name: "Source1 (Filmu)",description:"adfree", url: `https://embed.filmu.fun/embed/tmdb-tv-${Id}/${Season}/${Episode}` },
-      { name: "Source2 (rive)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
-      { name: "Source3 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/tv/${Id}/${Season}/${Episode}` },
-      { name: "Source4 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/tv/${Id}/${Season}/${Episode}` },
-      { name: "Source5 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
+      { name: "Source2 (rivestream)",description:"brave browser recommended" ,url: `https://rivestream.net/embed?type=tv&id=${Id}&season=${Season}&episode=${Episode}` },
+      { name: "Source3 (Videasy)",description:"brave browser recommended", url: `https://player.videasy.net/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source4 (vidlink)",description:"brave browser only", url: `https://vidlink.pro/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source5 (111movies)", description:"brave browser recommended",url: `https://111movies.com/tv/${Id}/${Season}/${Episode}` },
+      { name: "Source6 (nontong)", description:"brave browser only",url: `https://www.NontonGo.win/embed/tv/?id=${Id}&s=${Season}&e=${Episode}` },
+      { name: "Source7 (pstream)", description:"adfree", url: `https://iframe.pstream.org/embed/tmdb-tv-${Id}/${Season}/${Episode}`},
     
     ];
   }
@@ -197,6 +212,52 @@ function WatchPage() {
       setselectopen(true);
     }
   }
+
+  // Fetch trending movie trailer when opening modal
+  const handleOpenTrailerModal = async () => {
+    setShowTrailerModal(true);
+    setShowIframe(false);
+    setSelectedTrailer(null);
+    setLoadingTrailers(true);
+    try {
+      const res = await axios.get(`/api/v1/movies/trending`);
+      const trending = res.data.content;
+      console.log("trending "+trending)
+      if (trending) {
+        const trailerIdRes = await axios.get(`/api/v1/movies/trailers/${trending.id}`);
+        const trailerList = trailerIdRes?.data?.content || [];
+        const tid = trailerList.find(item => item.type === "Trailer" && item.site === "YouTube")
+          || trailerList.find(item => item.type === "Teaser" && item.site === "YouTube");
+        if (tid) {
+          setTrailerSources([
+            {
+              name: "The Odyssey (2026) IMAX teaser",
+              src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+            },
+            {
+              name: `${trending.title || trending.name} Official Trailer`,
+              src: `https://www.youtube.com/embed/${tid.key}`
+            }
+          ]);
+        } else {
+          setTrailerSources([
+            {
+              name: "The Odyssey (2026) IMAX teaser",
+              src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+            }
+          ]);
+        }
+      }
+    } catch (err) {
+      setTrailerSources([
+        {
+          name: "The Odyssey (2026) IMAX teaser",
+          src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+        }
+      ]);
+    }
+    setLoadingTrailers(false);
+  };
 
   if(Loading) {
     return (
@@ -288,6 +349,56 @@ function WatchPage() {
             </Link>
           </div>
         </div>
+          {/* Trailers Button */}
+          <div className="absolute right-4 top-20 z-50">
+          <button
+            className={(isLightsOut || Season) ? 'hidden' :  `hidden xl:flex bg-gray-700 bg-opacity-80 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded shadow-lg`} 
+            onClick={handleOpenTrailerModal}
+          >
+           
+            <Clapperboard size={21} className='flex items-center mr-1 justify-center pt-1' />
+            Trailers Exclusive
+          </button>
+        </div>
+        {/* Trailer Modal */}
+        {showTrailerModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+            <div className="bg-black rounded-lg shadow-lg  relative border border-gray-500 ">
+              <button
+                  className="absolute right-0 px-1 text-2xl bg-black rounded-tr-lg rounded-bl-lg  font-bold text-red-600"
+                onClick={() => { setShowTrailerModal(false); setShowIframe(false); setSelectedTrailer(null); }}
+                aria-label="Close"
+              >
+                ×
+              </button>
+              {loadingTrailers ? (
+                <div className="flex items-center  w-[20vw]  justify-center h-20 text-white text-lg">Loading trailers...</div>
+              ) : !showIframe ? (
+                <div className="flex flex-col gap-2 pr-7 pt-4 pl-2 pb-2">
+                  {trailerSources.map((trailer, idx) => (
+                    <button
+                      key={idx}
+                      className="block w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-black font-semibold"
+                      onClick={() => { setSelectedTrailer(idx); setShowIframe(true); }}
+                    >
+                      {trailer.name}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className=" w-[90vw] max-w-5xl bg-black shadow-2xl overflow-hidden">
+                  <iframe
+                    src={trailerSources[selectedTrailer]?.src}
+                    title={trailerSources[selectedTrailer]?.name}
+                    className="w-full aspect-video rounded"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         
         {/* Overlay when menu is open */}
         {mobileMenuOpen && (
@@ -317,22 +428,25 @@ function WatchPage() {
           
           <div className='flex w-full sm:max-w-4xl flex-wrap justify-between p-2 lg:p-0 items-center'>
             <div className='flex w-full max-w-4xl items-center mt-2'>
-              <div className='relative w-48'>
+              <div className='relative w-52'>
                 <div
                   className="appearance-none rounded-lg bg-slate-800 hover:bg-slate-700 text-white px-2 md:px-3 py-2 cursor-pointer flex justify-between items-center"
                   onClick={handleSelectChange}
                 > 
                   <p>{sources[srcIndex].name}</p>
-                  <p>{selectopen ? <ChevronUp /> : <ChevronDown />}</p>
+                  <p className='pl-1'>{selectopen ? <ChevronUp /> : <ChevronDown />}</p>
                 </div>
 
                 {/* Dropdown List */}
                 {selectopen && (
-                  <div className="absolute w-full bg-gray-800 text-white rounded-md z-10">
+                  <div className="absolute w-full max-h-60 overflow-y-auto scrollbar-thin  bg-black text-white rounded-md z-10"   style={{
+                    scrollbarColor: 'rgb(26, 25, 25) rgb(0, 0, 0)'
+                  }}>
+                  
                     {sources.map((source, index) => (
                       <div
                         key={index}
-                        className="flex w-full items-center justify-start p-1 sm:p-2 border-b border-white border-opacity-10 cursor-pointer hover:bg-slate-700"
+                        className="flex w-full items-center justify-start p-1 sm:p-2 border-b border-white border-opacity-10 cursor-pointer hover:bg-white hover:bg-opacity-10"
                         onClick={(e) => handleSourceChange(e,index)}
                       >
                         <div>

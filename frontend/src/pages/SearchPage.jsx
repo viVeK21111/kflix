@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal,Menu,X } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown } from 'lucide-react';
+import useDebounce from '../hooks/useDebounce';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
   const [query, setQuery] = useState('');
   const { getTv, getMovie, getPerson, data, Loading } = searchStore();
   const [numitems,setnumitems] = useState(sessionStorage.getItem("numitemss") || 10);
-  const [searchType2,setSearchType2] = useState(sessionStorage.getItem('searchType2') || 'movie');
   const [loading,setloading] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
-  const [Searchsubmit,setSearchsubmit] = useState(false);
   const [Loading1,setLoading1] = useState(true);
   const logo = new Image();
   logo.src = '/kflix3.png';
@@ -31,7 +30,6 @@ const SearchPage = () => {
   }, [searchType]);
 
   useEffect(() => {
-    setSearchsubmit(false);
     if(Array.isArray(data) && data.length > 0) {
       const imagePromises = data
       .slice(0, numitems)
@@ -50,35 +48,43 @@ const SearchPage = () => {
     }
     else {
       if(data) setImagesLoaded(true);
-      setSearchsubmit(true);
     }
    
   }, [data, numitems]);
 
+  const inputRef = useRef(null);
+  const debouncedQuery = useDebounce(query, 250);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setloading(true);
-    setImagesLoaded(false);
-    
-    sessionStorage.setItem('searchType2', searchType);
-    setSearchType2(searchType);
-    const sortResults = (data) => {
-      return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
-    };
-  
-    if (query.trim()) {
+  // Dynamic search effect
+  useEffect(() => {
+    if (debouncedQuery.length > 2) {
+      setloading(true);
+      setImagesLoaded(false);
+      sessionStorage.setItem('searchType', searchType);
+      const sortResults = (data) => {
+        return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+      };
       if (searchType === 'movie') {
-        getMovie(query.trim()).then(sortResults).finally(() =>
-           setloading(false),
-      );
+        getMovie(debouncedQuery.trim()).then(sortResults).finally(() => setloading(false));
       } else if (searchType === 'tv') {
-        getTv(query.trim()).then(sortResults).finally(() => setloading(false));
+        getTv(debouncedQuery.trim()).then(sortResults).finally(() => setloading(false));
       } else {
-        getPerson(query.trim()).then(sortResults).finally(() => setloading(false));
+        getPerson(debouncedQuery.trim()).then(sortResults).finally(() => setloading(false));
       }
+    } else {
+      // Clear results if query is too short
+      searchStore.setState({ data: null });
     }
-  };
+  }, [debouncedQuery, searchType]);
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const searchTypeOptions = [
+    { value: 'movie', label: 'Movies' },
+    { value: 'tv', label: 'TV Show' },
+    { value: 'person', label: 'Person' },
+  ];
+  const selectedLabel = searchTypeOptions.find(opt => opt.value === searchType)?.label || 'Movies';
+
   if( Loading1) {
     return (
         <div className="h-screen ">
@@ -149,37 +155,53 @@ const SearchPage = () => {
       
       
       {/* Search Section */}
-      <form onSubmit={handleSearch} className="flex max-w-2xl mt-28 md:mt-20 w-full px-3">
-        <select
-          value={searchType}
-          onChange={(e) => setSearchType(e.target.value)}
-          className="p-3 rounded-lg bg-gray-800 outline-none focus:ring-0 text-white border mr-2 border-gray-700 w-24"
-        >
-          <option value="movie">Movies</option>
-          <option value="tv">Tv Show</option>
-          <option value="person">Person</option>
-        </select>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Enter search term..."
-          className="py-3 px-2 rounded-l-lg bg-slate-700 outline-none focus:ring-0 text-white w-full flex-1"
-          required
-        />
-        <button
-          type="submit"
-          className="px-3 bg-slate-600 hover:bg-slate-500 rounded-r-lg font-semibold"
-        >
-          <Search size={25} />
-        </button>
-      </form>
+      <div className="flex max-w-2xl mt-28 md:mt-20 w-full px-3">
+        <div className="relative mr-2">
+          <button
+            type="button"
+            onClick={() => setDropdownOpen((open) => !open)}
+            className="flex items-center px-4 py-2 rounded-lg font-semibold transition-all border bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700 focus:outline-none focus:ring-0  min-w-[120px]"
+          >
+            <span className="mr-2 w-16">{selectedLabel}</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {dropdownOpen && (
+            <div className="absolute left-0 mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
+              {searchTypeOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    setSearchType(opt.value);
+                    setDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-lg transition-all ${searchType === opt.value ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 text-gray-200'}`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="relative w-full">
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Enter search term..."
+            className="py-3 px-2 rounded-lg bg-gray-900 border border-gray-700 outline-none focus:ring-0 text-white w-full flex-1"
+            required
+            autoComplete="off"
+          />
+        </div>
+      </div>
 
-      {(imagesLoaded===false && Searchsubmit===false) && (
+      {(imagesLoaded===false) && (
         <div className="flex justify-center mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
       )}
       {/* Search Results */}
-      {!Loading && data && imagesLoaded && (searchType==='movie' && searchType2==='movie') && !loading && (
+      {!Loading && data && imagesLoaded && searchType==='movie' && !loading && (
         Array.isArray(data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-2 lg:px-3 mb-3">
@@ -235,59 +257,7 @@ const SearchPage = () => {
           </div>
         )
       )}
-       {!Loading && data && imagesLoaded && (searchType==='person' && searchType2==='person') && !loading && (
-        Array.isArray(data) ? (
-          <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
-            {data.slice(0,numitems).map((item, index) => (
-              (item?.profile_path || item?.poster_path) && (
-                <Link 
-                key={item.id || index} 
-                to={`/${'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
-                className="block bg-gray-800 rounded-lg shadow-md hover:scale-105 transition-transform"
-              >
-                <img 
-                  src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-52 h-52 object-cover rounded-t-lg"} 
-                  alt={item?.title || item?.name} 
-                />
-                <h3 className="text-sm sm:text-base px-2 font-bold text-white mt-2 truncate">
-                  {item.title || item.name}
-                </h3>
-               
-                {item.popularity && searchType === 'person' && (
-                  <p className="text-xs p-2 sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
-                )}
-              </Link>
-              )
-              
-            ))}
-             
-          </div>
-          {numitems < data?.length && (
-            <div className="flex justify-center items-center mt-6 mb-3 ">
-              <button
-               onClick={() => {
-                setnumitems(prev => {
-                    const updatedNumItems = prev + 4;
-                    sessionStorage.setItem("numitemss", updatedNumItems); // Store the new value
-                    return updatedNumItems;
-                });
-            }}
-                className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
-              >
-                Load More
-              </button>
-            </div>
-          )}
-          </>
-        ) : (
-          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
-            <p>{data}</p>
-          </div>
-        )
-      )}
-       {!Loading && data && imagesLoaded && (searchType==='tv' && searchType2==='tv') && !loading && (
+       {!Loading && data && imagesLoaded && searchType==='tv' && !loading && (
         Array.isArray(data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
@@ -332,6 +302,58 @@ const SearchPage = () => {
                       return updatedNumItems;
                   });
               }}
+                className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
+              >
+                Load More
+              </button>
+            </div>
+          )}
+          </>
+        ) : (
+          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
+            <p>{data}</p>
+          </div>
+        )
+      )}
+       {!Loading && data && imagesLoaded && searchType==='person' && !loading && (
+        Array.isArray(data) ? (
+          <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
+            {data.slice(0,numitems).map((item, index) => (
+              (item?.profile_path || item?.poster_path) && (
+                <Link 
+                key={item.id || index} 
+                to={`/${'person/details'}/?id=${item?.id}&name=${item?.name || item?.title}`}
+                className="block bg-gray-800 rounded-lg shadow-md hover:scale-105 transition-transform"
+              >
+                <img 
+                  src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+                  className={ "w-52 h-52 object-cover rounded-t-lg"} 
+                  alt={item?.title || item?.name} 
+                />
+                <h3 className="text-sm sm:text-base px-2 font-bold text-white mt-2 truncate">
+                  {item.title || item.name}
+                </h3>
+               
+                {item.popularity && searchType === 'person' && (
+                  <p className="text-xs p-2 sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
+                )}
+              </Link>
+              )
+              
+            ))}
+             
+          </div>
+          {numitems < data?.length && (
+            <div className="flex justify-center items-center mt-6 mb-3 ">
+              <button
+               onClick={() => {
+                setnumitems(prev => {
+                    const updatedNumItems = prev + 4;
+                    sessionStorage.setItem("numitemss", updatedNumItems); // Store the new value
+                    return updatedNumItems;
+                });
+            }}
                 className="px-2 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold rounded-md transition-all"
               >
                 Load More

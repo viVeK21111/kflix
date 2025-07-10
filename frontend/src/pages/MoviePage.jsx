@@ -37,7 +37,8 @@ function WatchPage() {
 
  
   const [releasedate,setreleasedate] = useState(null);
-  const [trialerId,setTrailerId]  = useState(null);
+  const [trailerId,setTrailerId]  = useState(null);
+  const [showTrailerModal, setShowTrailerModal] = useState(false);
 
   const imgRef = useRef(null);
 
@@ -163,6 +164,29 @@ function WatchPage() {
            <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
        
       </div>
+      {showTrailerModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+            
+            <div className="bg-black rounded-lg shadow-lg  relative border border-gray-500 ">
+            <button
+                className="absolute right-0 px-1 text-2xl bg-black rounded-tr-lg rounded-bl-lg  font-bold text-red-600"
+                onClick={() => { setShowTrailerModal(false) }}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            <div className="w-[100vw]  max-w-4xl bg-black shadow-2xl overflow-hidden">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${trailerId}`}
+                    title={Name + "Official trailer"}
+                    className="w-full aspect-video rounded"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                </div>
+            </div>)
+          }
           
           <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
           <div className="md:absolute text-white lg:max-w-3xl p-1  bottom-5 left-3">
@@ -272,7 +296,7 @@ function WatchPage() {
                  <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )
               }
-            <div className='sm:hidden flex items-center mt-3 '> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><p className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-6' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Watch Trailer</p></p></Link> </div>
+            <div className='sm:hidden flex items-center mt-3' onClick={() => {setShowTrailerModal(true)}}> <div className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-6' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Watch Trailer</p></div> </div>
              
             </div>
           )}
@@ -298,7 +322,7 @@ function WatchPage() {
                        <Plus className='size-5' />
                        <p className='ml-1'>Watch List</p>
               </button>
-              <div className='flex items-center ml-2  hover:scale-105 transition-transform'> <Link target='_blanck' to={`https://www.youtube.com/watch?v=${trialerId}`}><img className='h-8' src='/youtube.png'></img></Link> </div>
+              <div className='flex items-center ml-2 hover:cursor-pointer  hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}> <img className='h-7' src='/youtube.png'></img><p className='ml-1 font-semibold text-md'>Trailer</p> </div>
               { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
                  <p className='flex ml-3 items-center'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )

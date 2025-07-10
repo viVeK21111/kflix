@@ -138,25 +138,41 @@ export default function PersonPage() {
         </div>
       </div>
 
-      {/* Biography Section bg-[#2e2f2e] */}
-      
-      <div className="max-w-full bg-[#282a26] bg-opacity-60 border-b border-gray-700 p-3 md:p-4 rounded--blg shadow-lg">
-        <h2 className="text-xl font-semibold text-white mb-2">Biography</h2>
-        {datap?.biography?.length===0 &&(
-              <p className="flex justify-center">No Biography</p>
+      {/* Biography Section */}
+      <div className="max-w-auto  bg-gray-900 bg-opacity-90 border border-gray-700 rounded-lg shadow-lg p-6">
+        <h2 className="md:text-2xl text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <span>Biography</span>
+        </h2>
+        {(!datap?.biography || datap?.biography.length === 0) ? (
+          <div className="flex items-center gap-2 text-gray-400 italic">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
+            No biography available for this person.
+          </div>
+        ) : (
+          <blockquote className="text-gray-200 text-md md:text-lg leading-relaxed relative transition-all duration-300">
+            {datap?.biography.length < readov ? datap?.biography : (
+              <>
+                {datap?.biography.slice(0, readov)}
+                {readov < datap?.biography.length && (
+                  <button
+                    className="ml-2 text-blue-400 hover:underline font-semibold focus:outline-none"
+                    onClick={() => setreadov(prev => prev + 300)}
+                  >
+                    ...Read more
+                  </button>
+                )}
+              </>
             )}
-        <p className="text-gray-300 text-base leading-relaxed">
-          {datap?.biography.length < readov ? datap?.biography : ( 
-              <> 
-            {datap?.biography.slice(0, readov)}
-            
-            {readov<datap?.biography.length && (
-               <button className="hover:underline text-white text-wheat-600" onClick={() => setreadov(prev => prev+300)}>...Read more</button> 
+            {readov >= datap?.biography.length && datap?.biography.length > 350 && (
+              <button
+                className="ml-2 text-blue-400 hover:underline font-semibold focus:outline-none"
+                onClick={() => setreadov(350)}
+              >
+                Read less
+              </button>
             )}
-           
-            </>
-          )}
-          </p>
+          </blockquote>
+        )}
       </div>
 
       {/* Movies Section */}
@@ -202,7 +218,7 @@ export default function PersonPage() {
               <div className="flex w-full justify-center mt-4 mb-3">
                 <button
                   onClick={() => setnumitems(prev => prev + 4)} // Show 6 more items
-                  className="px-3 py-2 bg-white bg-opacity-20 text-white font-semibold rounded-lg hover:bg-opacity-30 transition-all"
+                  className="px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
                 >
                   Load More
                 </button>

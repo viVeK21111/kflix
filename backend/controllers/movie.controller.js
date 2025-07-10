@@ -19,7 +19,7 @@ export const getMovieTrailer = async (req, res) => {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`);
         const trailer = data.results;
         res.json({success:true,content:trailer});
-        console.log("trailer fetched successfully");
+        //console.log("trailer fetched successfully");
     }
     catch(error) {
         console.log("Error in getting movie trailer: "+error.message);

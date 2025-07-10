@@ -100,7 +100,7 @@ useEffect(() => {
               <div className="text-center mt-6">
                 <button
                   onClick={() => setVisibleItems(prev => prev + 6)} // Show 6 more items
-                  className="px-3 py-2 bg-white bg-opacity-20 text-white font-semibold rounded-lg hover:bg-opacity-25 transition-all"
+                  className="px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
                 >
                   Load More
                 </button>
