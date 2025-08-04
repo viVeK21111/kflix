@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv } from 'lucide-react';
 import useDebounce from '../hooks/useDebounce';
 
 const SearchPage = () => {
@@ -103,6 +103,12 @@ const SearchPage = () => {
                <img src={'/kflix3.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
              </Link>
                    <div className='hidden md:flex ml-auto items-center p-2 '>
+              <a className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' href="https://www.rivestream.app/iptv" target="_blank" rel="noopener noreferrer">
+                <span className='flex items-center text-white '>
+                  <Tv className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
+                  <span className='font-semibold '>IPTV</span>
+                </span>
+              </a>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
                      <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
@@ -142,6 +148,13 @@ const SearchPage = () => {
                       <p className='font-semibold'>Search History</p>
                     </p>
                   </Link>
+                    
+                  <a onClick={toggleMobileMenu} href='https://www.rivestream.app/iptv' target='_blank' rel="noopener noreferrer" className='hover:bg-slate-700  border-b border-gray-700 p-4 text-base'>
+                    <p className='flex items-center text-white'>
+                      <Tv className='h-5 w-5 mr-3'/>
+                      <p className='font-semibold'>IPTV</p>
+                    </p>
+                  </a>
                 </div>
                 </div>
                 

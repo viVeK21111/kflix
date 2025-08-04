@@ -45,7 +45,7 @@ function WatchPage() {
   const [trailerSources, setTrailerSources] = useState([
     {
       name: "The Odyssey (2026) IMAX teaser",
-      src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+      src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
     }
   ]);
 
@@ -64,6 +64,7 @@ function WatchPage() {
   const [selectopen,setselectopen] = useState(false);
   const [isLightsOut, setIsLightsOut] = useState(false);
   const [datae,setDatae] = useState(null);
+  const [showTip, setShowTip] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -72,6 +73,44 @@ function WatchPage() {
   useEffect(() => {
     setBgColorClass(isLightsOut ? 'bg-black' : 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900');
   }, [isLightsOut]);
+
+  useEffect(() => {
+    // Check if tip has been shown in this session
+    const tipShown = sessionStorage.getItem('tip');
+    
+    // Detect Brave browser
+    const isBrave = navigator.brave?.isBrave() || false;
+    
+    // Detect ad blocker
+    const detectAdBlocker = () => {
+      return new Promise((resolve) => {
+        const testAd = document.createElement('div');
+        testAd.innerHTML = '&nbsp;';
+        testAd.className = 'adsbox';
+        testAd.style.position = 'absolute';
+        testAd.style.left = '-10000px';
+        document.body.appendChild(testAd);
+        
+        setTimeout(() => {
+          const isAdBlockerActive = testAd.offsetHeight === 0;
+          document.body.removeChild(testAd);
+          resolve(isAdBlockerActive);
+        }, 100);
+      });
+    };
+
+    const checkAndShowTip = async () => {
+      const hasAdBlocker = await detectAdBlocker();
+      
+      // Show tip only if not Brave and no ad blocker detected
+      if (!tipShown && !isBrave && !hasAdBlocker) {
+        setShowTip(true);
+        sessionStorage.setItem('tip', 'shown');
+      }
+    };
+
+    checkAndShowTip();
+  }, []);
 
   useEffect(() => {
     const getepisodes = async() => {
@@ -232,7 +271,7 @@ function WatchPage() {
           setTrailerSources([
             {
               name: "The Odyssey (2026) IMAX teaser",
-              src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+              src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
             },
             {
               name: `${trending.title || trending.name} Official Trailer`,
@@ -243,7 +282,7 @@ function WatchPage() {
           setTrailerSources([
             {
               name: "The Odyssey (2026) IMAX teaser",
-              src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+              src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
             }
           ]);
         }
@@ -252,7 +291,7 @@ function WatchPage() {
       setTrailerSources([
         {
           name: "The Odyssey (2026) IMAX teaser",
-          src: "https://drive.google.com/file/d/1wZurRzbkCdb9HQT-kIundQ5a7N4Hh48o/preview"
+          src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
         }
       ]);
     }
@@ -350,7 +389,7 @@ function WatchPage() {
           </div>
         </div>
           {/* Trailers Button */}
-          <div className="absolute right-4 top-20 z-50">
+          <div className="absolute right-2 top-20 z-50 ml-3">
           <button
             className={(isLightsOut || Season) ? 'hidden' :  `hidden xl:flex bg-gray-700 bg-opacity-80 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded shadow-lg`} 
             onClick={handleOpenTrailerModal}
@@ -406,6 +445,25 @@ function WatchPage() {
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={toggleMobileMenu}
           ></div>
+        )}
+
+        {/* Tip Display */}
+        {showTip && (
+          <div className="hidden lg:flex fixed top-20 left-1 z-50 bg-black bg-opacity-80 text-white p-3 rounded-lg shadow-lg max-w-64">
+            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                  <p className="font-semibold mb-1">💡 Tip</p>
+                  <p className="text-sm">Use Brave browser or <a href="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb?hl=en-US" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">Ad blocker</a> for ad free experience</p>
+                </div>
+              <button 
+                onClick={() => setShowTip(false)}
+                className="ml-2 text-white hover:text-gray-200 text-lg font-bold"
+                aria-label="Close tip"
+              >
+                ×
+              </button>
+            </div>
+          </div>
         )}
         
         {/* Rest of the component... */}

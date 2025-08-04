@@ -166,7 +166,7 @@ const Monitor = () => {
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} transition-colors duration-200`}>
       <header className={`flex w-full items-center ${darkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-black bg-opacity-5'} transition-colors duration-200`}>
         <Link to={'/'} className='flex items-center ml-1'>
-          <img src={'/pic4.png'} alt='kflix logo' className='w-30 sm:w-32 h-8 sm:h-10' />
+          <img src={darkMode ? `/kflix3.png` :`/pic4.png`} alt='kflix logo' className={ darkMode ?`w-30 sm:w-32 h-8 sm:h-14` : `w-30 sm:w-32 h-8 sm:h-10`} />
         </Link>
         <div className='ml-auto flex items-center p-2'>
           <button 
