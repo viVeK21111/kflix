@@ -8,6 +8,7 @@ import { protectRoute } from '../middleware/protectRoute.js';
 import { addTvWatch } from '../controllers/tv.controller.js';
 import {addEpisode} from '../controllers/tv.controller.js';
 import {removeEpisode} from '../controllers/tv.controller.js';
+import {getTvCredits} from '../controllers/tv.controller.js';
 
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get('/category/:category',protectRoute,getTvbyCategory)
 router.put('/addWatch/:id',protectRoute,addTvWatch);
 router.post('/episodes',protectRoute,getTvEpisodes)
 router.post('/addEpisode',protectRoute,addEpisode)
+router.get('/credits/:id',protectRoute,getTvCredits);
 router.delete('/removeWatchE/:id/:season/:episode',protectRoute ,removeEpisode);
 
 export default router;
