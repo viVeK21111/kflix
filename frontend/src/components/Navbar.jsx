@@ -30,6 +30,10 @@ const Navbar = ({ movieSectionRef }) => {
                 <button className={`hover:underline ${contentType==='tv'? 'underline':""}`}onClick={() => scrollToMovies('tv')}>Tv shows</button>
                 <Link to='/chat' className='hover:underline'>Flix Chat</Link>
                 <Link to='/watchlist' className='hover:underline'>Watchlist</Link>
+                <Link to='/fun' className='hover:underline flex items-center gap-1'>
+                    
+                    More...
+                </Link>
             </div>
             <div className='flex gap-2 ml-auto items-center z-50'>
             <Link className='flex ' to='/search'>
@@ -91,10 +95,16 @@ const Navbar = ({ movieSectionRef }) => {
                                     <p className='font-semibold'>Flix Chat</p>
                                   </p>
                             </Link>
-                    <Link to='/watchlist' className='block p-3 border-b hover:bg-slate-800  border-slate-700' onClick={toggleMobileMenu}>
+                    <Link to='/watchlist' className='block p-3 border-b hover:bg-slate-600  border-slate-700' onClick={toggleMobileMenu}>
                     <p className='flex items-center text-white'>
                                     <TvMinimal className='h-5 w-5 mr-3'/>
                                     <p className='font-semibold'>Watchlist</p>
+                                  </p>
+                    </Link>
+                    <Link to='/fun' className='block p-3 border-b hover:bg-slate-700  border-slate-700' onClick={toggleMobileMenu}>
+                    <p className='flex items-center text-white'>
+                            
+                                    <p className='font-semibold'>More...</p>
                                   </p>
                     </Link>
                 </div>

@@ -32,6 +32,10 @@ useEffect(() => {
     
   }
   
+  const handleClearAll = async () => {
+    await ClearWatchHistory();
+    await getdata();
+  };
 
   if(loading) {
     return (
@@ -60,8 +64,8 @@ useEffect(() => {
      
         <p className='flex items-center text-white text-xl'><TvMinimal size={20}/> <p className='ml-2'>Watch History</p></p>
         {datalocal?.watchHistory?.length > 0 && (
-        <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={ClearWatchHistory}><X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
-
+          <p className="flex justify-end items-center pb-2 w-fit ml-auto text-white text-base font-normal rounded-md hover:underline hover:cursor-pointer" onClick={handleClearAll}>
+            <X size={20}/> <p className='pl-1 pr-2'>Clear all</p> </p>
         )}
 
         {datalocal?.watchHistory?.length > 0 ? (

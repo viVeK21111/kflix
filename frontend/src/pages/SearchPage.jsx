@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv, Sparkles } from 'lucide-react';
 import useDebounce from '../hooks/useDebounce';
+import axios from 'axios';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
@@ -14,6 +15,7 @@ const SearchPage = () => {
   const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
   const [Loading1,setLoading1] = useState(true);
+  const [surpriseLoading, setSurpriseLoading] = useState(false);
   const logo = new Image();
   logo.src = '/kflix3.png';
    const [isMobileMenuOpen,setisMobileMenuOpen] = useState(false);
@@ -21,6 +23,36 @@ const SearchPage = () => {
       const toggleMobileMenu = () => {
           setisMobileMenuOpen(!isMobileMenuOpen);
       };
+
+  // Function to get a random content and populate search
+  const handleSurpriseMe = async () => {
+    try {
+      setSurpriseLoading(true);
+      let endpoint = '';
+      let contentType = '';
+      
+      if (searchType === 'movie') {
+        endpoint = '/api/v1/movies/category/now_playing';
+        contentType = 'movie';
+      } else if (searchType === 'tv') {
+        endpoint = '/api/v1/tv/category/on_the_air';
+        contentType = 'tv';
+      }
+      
+      const response = await axios.get(endpoint);
+      if (response.data.success && response.data.content && Array.isArray(response.data.content)) {
+        const content = response.data.content;
+        const randomIndex = Math.floor(Math.random() * content.length);
+        const randomItem = content[randomIndex];
+        setQuery(randomItem.title || randomItem.name);
+        setSearchType(contentType);
+      }
+    } catch (error) {
+      console.error('Error fetching random content:', error);
+    } finally {
+      setSurpriseLoading(false);
+    }
+  };
  
   logo.onload = () => {
     setLoading1(false);
@@ -103,12 +135,7 @@ const SearchPage = () => {
                <img src={'/kflix3.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
              </Link>
                    <div className='hidden md:flex ml-auto items-center p-2 '>
-              <a className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' href="https://www.rivestream.app/iptv" target="_blank" rel="noopener noreferrer">
-                <span className='flex items-center text-white '>
-                  <Tv className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
-                  <span className='font-semibold '>IPTV</span>
-                </span>
-              </a>
+              
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
                      <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
                      <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
@@ -149,12 +176,7 @@ const SearchPage = () => {
                     </p>
                   </Link>
                     
-                  <a onClick={toggleMobileMenu} href='https://www.rivestream.app/iptv' target='_blank' rel="noopener noreferrer" className='hover:bg-slate-700  border-b border-gray-700 p-4 text-base'>
-                    <p className='flex items-center text-white'>
-                      <Tv className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>IPTV</p>
-                    </p>
-                  </a>
+                 
                 </div>
                 </div>
                 
@@ -203,12 +225,43 @@ const SearchPage = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Enter search term..."
-            className="py-3 px-2 rounded-lg bg-gray-900 border border-gray-700 outline-none focus:ring-0 text-white w-full flex-1"
+            className="py-3 px-2 pr-16 rounded-lg bg-gray-900 border border-gray-700 outline-none focus:ring-0 text-white w-full flex-1"
             required
             autoComplete="off"
           />
+          {searchType !== 'person' && (
+            <button
+              type="button"
+              onClick={handleSurpriseMe}
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-gray-800  text-white hover:bg-gray-700 transition-all text-xs font-medium flex items-center gap-1"
+              disabled={surpriseLoading}
+              title="Surprise Me"
+            >
+              {surpriseLoading ? (
+                <Loader className="animate-spin h-3 w-3" />
+              ) : (
+                <>
+                  <Sparkles className="h-3 w-3" />
+                  <span>Surprise</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
+
+      {/* AI Recommendation Section */}
+      {!query.trim() && (
+        <div className="flex justify-center mt-5 text-gray-400 text-sm">
+          Not sure ? Ask our AI chatbot 
+          <Link 
+            to="/chat" 
+            className="text-gray-200 ml-1 hover:text-white hover:underline text-sm cursor-pointer flex items-center gap-2"
+          >
+            Flix 
+          </Link>
+        </div>
+      )}
 
       {(imagesLoaded===false) && (
         <div className="flex justify-center mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
@@ -385,3 +438,4 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+

@@ -45,7 +45,7 @@ function WatchPage() {
   const [trailerSources, setTrailerSources] = useState([
     {
       name: "The Odyssey (2026) IMAX teaser",
-      src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
+      src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
     }
   ]);
 
@@ -271,7 +271,8 @@ function WatchPage() {
           setTrailerSources([
             {
               name: "The Odyssey (2026) IMAX teaser",
-              src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
+       
+              src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
             },
             {
               name: `${trending.title || trending.name} Official Trailer`,
@@ -282,7 +283,7 @@ function WatchPage() {
           setTrailerSources([
             {
               name: "The Odyssey (2026) IMAX teaser",
-              src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
+              src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
             }
           ]);
         }
@@ -291,7 +292,7 @@ function WatchPage() {
       setTrailerSources([
         {
           name: "The Odyssey (2026) IMAX teaser",
-          src: "https://drive.google.com/file/d/1QX6sQZ35aw546L-yeCHid6Ve0XC09Fa_/preview"
+          src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
         }
       ]);
     }
@@ -537,15 +538,15 @@ function WatchPage() {
             )}
             {Season && datae?.episodes && (
               <div className='text-white sm:mt-2 flex items-center w-full max-w-4xl mb-4'>
-                <p className='flex font-extralight mt-2'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
+                <p className='flex font-extralight'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
                 <div className='hidden sm:flex ml-auto'>
                   {Episode > 1 && (
-                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-2'>
-                      <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
+                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-l-lg rounded-r-sm px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-1'>
+                      <p className='flex items-center'><ChevronLeft className='mr-1' size={14}/>Prev Ep</p>
                     </Link>
                   )}
                   {Episode < tEpisodes && (
-                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15'>
+                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-r-lg rounded-l-sm bg-white bg-opacity-10 hover:bg-opacity-15'>
                       <p className='flex items-center'>Next Ep <ChevronRight className='ml-1' size={14}/></p>
                     </Link>
                   )}
@@ -557,20 +558,21 @@ function WatchPage() {
                 <p className='sm:hidden text-white w-auto bg-black p-2 rounded-lg text-sm md:text-base font-thin'>{`S${Season} E${Episode}`}</p>
                 <div className='flex sm:hidden sm:mt-3'>
                   {Episode > 1 && (
-                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-lg px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-2'>
+                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-l-lg rounded-r-sm px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-1'>
                       <p className='flex items-center'>Prev Ep<ChevronLeft className='ml-1' size={14}/></p>
                     </Link>
                   )}
                   {Episode < tEpisodes && (
-                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-15'>
+                    <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode+1}&tepisodes=${tEpisodes}`} className='text-white p-1 px-2 rounded-r-lg rounded-l-sm bg-white bg-opacity-10 hover:bg-opacity-15'>
                       <p className='flex items-center'>Next Ep <ChevronRight className='ml-1' size={14}/></p>
                     </Link>
                   )}
                 </div>
               </>
             )}
-            <p className={bgColorClass!=='bg-black' ? `text-gray-400 text-sm flex pt-5 md:pt-2 md:pb-3` : 'hidden'}><p className='mr-1 font-semibold'>Tip:</p>Switch to different sources if the current one fails.</p>
+          
           </div>
+          <p className={bgColorClass!=='bg-black' ? Season ? `text-gray-400 text-sm flex pt-5 md:pt-2 md:pb-3`: `flex text-gray-400 text-sm w-full max-w-4xl items-center p-2 lg:p-0 m-3` : 'hidden'}><p className='mr-1 font-semibold'>Tip:</p>Switch to different sources if the current one fails.</p>
 
           {Loading ? (
             <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>

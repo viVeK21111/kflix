@@ -26,6 +26,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ChangePasswordH from "./pages/ChangePasswordH";
 import Monitor from "./pages/Monitor";
 import UserMonitor from "./pages/UserMonitor";
+import FunPage from "./pages/FunPage";
+import AdultPage from "./pages/AdultPage";
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -87,6 +89,8 @@ function App() {
       <Route path='/changepassword' element = {<ChangePasswordH/>} />
       <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
       <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
+      <Route path='/fun' element = {user ? <FunPage /> : <Navigate to={'/'}/>} />
+      <Route path='/fun/adult' element = {user ? <AdultPage /> : <Navigate to={'/'}/>} />
     </Routes>
     <FooterWithRouteCheck/>
     <Toaster/>
