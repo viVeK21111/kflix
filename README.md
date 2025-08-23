@@ -29,7 +29,9 @@ Login page
 <br><br>
 ![Login](/snapshots/loginpage.png)
 <br><br>
-![Homescreen](/snapshots/homepage2.png)
+Home Screen
+<br><br>
+![Homescreen](/snapshots/homepage3.png)
 <br><br>
 AI powered chat by multiple LLMs
 <br><br>
@@ -64,9 +66,9 @@ Streaming by Third party services
 -> Availability: one backup server. switches automatically by interceptors through axios <br>
 
 ### Production deployment
-Frontend server deployed on netlify, backend server deployed on render. <br>
+Frontend server deployed on vercel, backend server deployed on render. <br>
 Custom domain: https://kflix.site <br> 
-netlify: https://kflixx.netlify.app/ <br>
+vercel: https://kflix-five.vercel.app/ <br>
 
 #### Cors policy: <br>
 Frontend url is added in cors in backend server to allow the requests from specified url i.e frontend. 
