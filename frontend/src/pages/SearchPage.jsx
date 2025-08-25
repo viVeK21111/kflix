@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv, Sparkles } from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv, Shuffle,Plus} from 'lucide-react';
 import useDebounce from '../hooks/useDebounce';
 import axios from 'axios';
 
@@ -18,11 +18,8 @@ const SearchPage = () => {
   const [surpriseLoading, setSurpriseLoading] = useState(false);
   const logo = new Image();
   logo.src = '/kflix3.png';
-   const [isMobileMenuOpen,setisMobileMenuOpen] = useState(false);
-      
-      const toggleMobileMenu = () => {
-          setisMobileMenuOpen(!isMobileMenuOpen);
-      };
+ 
+     
 
   // Function to get a random content and populate search
   const handleSurpriseMe = async () => {
@@ -130,67 +127,14 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center ">
       {/* Header */}
-      <header className="flex w-full items-center py-1  bg-black bg-opacity-10 pl-1">
-             <Link to={'/'} className='mr-auto' >
-               <img src={'/kflix3.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-             </Link>
-                   <div className='hidden md:flex ml-auto items-center p-2 '>
-              
-                     <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                     <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-                     <Link to='/profile/searchHistory' className='flex items-center text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
-                   </div>
-               
-                   <div className='md:hidden'>
-                    <Menu className='size-8 cursor-pointer p-1 mx-2 rounded-lg ' onClick={toggleMobileMenu}/>
-                </div>
-     
-           </header>
+    
       
-               <div className={`fixed top-0 right-0 w-64 h-full bg-gray-800 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-               <div className="flex justify-between items-center p-4 border-b border-gray-600">
-                 <h2 className="text-white text-lg font-semibold">Menu</h2>
-                 <button onClick={toggleMobileMenu} className="text-white">
-                   <X size={24} />
-                 </button>
-                        </div>
-               
-                    <div className="flex flex-col ">
-                  <Link onClick={toggleMobileMenu} className='hover:bg-slate-700 border-b border-gray-700 p-4 text-base' to={'/'}>
-                    <p className='flex items-center text-white'>
-                      <House className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Home</p>
-                    </p>
-                  </Link>
-                  <Link onClick={toggleMobileMenu} className='hover:bg-slate-700 p-4 border-b border-gray-700 text-base' to={'/watchlist'}>
-                    <p className='flex items-center text-white'>
-                      <TvMinimal className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Watchlist</p>
-                    </p>
-                  </Link>
-                  
-                  <Link onClick={toggleMobileMenu} to='/profile/searchHistory' className='hover:bg-slate-700  border-b border-gray-700 p-4 text-base'>
-                    <p className='flex items-center text-white'>
-                      <History className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Search History</p>
-                    </p>
-                  </Link>
-                    
-                 
-                </div>
-                </div>
-                
-          
-              {isMobileMenuOpen && (
-                    <div 
-                      className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                      onClick={toggleMobileMenu}
-                    ></div>
-                  )}
-      
+      <Link to='/profile/searchHistory' className='flex items-center ml-auto m-4 text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
+  
       
       {/* Search Section */}
       <div className="flex max-w-2xl mt-28 md:mt-20 w-full px-3">
+
         <div className="relative mr-2">
           <button
             type="button"
@@ -218,7 +162,7 @@ const SearchPage = () => {
             </div>
           )}
         </div>
-        <div className="relative w-full">
+        <div className="relative w-full flex">
           <input
             ref={inputRef}
             type="text"
@@ -233,7 +177,7 @@ const SearchPage = () => {
             <button
               type="button"
               onClick={handleSurpriseMe}
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-gray-800  text-white hover:bg-gray-700 transition-all text-xs font-medium flex items-center gap-1"
+              className="hidden sm:flex ml-1 px-4 rounded-lg my-1 bg-gray-800  text-white hover:bg-gray-700 transition-all text-xs font-medium items-center gap-1"
               disabled={surpriseLoading}
               title="Surprise Me"
             >
@@ -241,8 +185,8 @@ const SearchPage = () => {
                 <Loader className="animate-spin h-3 w-3" />
               ) : (
                 <>
-                  <Sparkles className="h-3 w-3" />
-                  <span>Surprise</span>
+                  <Shuffle className="h-4 sm:h-5" />
+                 {/* <span className=''>random</span>*/} 
                 </>
               )}
             </button>
@@ -253,7 +197,7 @@ const SearchPage = () => {
       {/* AI Recommendation Section */}
       {!query.trim() && (
         <div className="flex justify-center mt-5 text-gray-400 text-sm">
-          Not sure ? Ask our AI chatbot 
+          Not sure? Ask our AI chatbot 
           <Link 
             to="/chat" 
             className="text-gray-200 ml-1 hover:text-white hover:underline text-sm cursor-pointer flex items-center gap-2"

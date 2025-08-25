@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DetailsStore } from "../store/tvdetails";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { ChevronDownIcon, ChevronUpIcon,CircleArrowLeft,House,TvMinimal } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon,CircleArrowLeft,House,TvMinimal,Menu,X } from "lucide-react";
 import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { creditStore } from "../store/credits";
@@ -31,6 +31,7 @@ const TvPage = () => {
   const [seasonLoading, setSeasonLoading] = useState(true);
   const [trailerId, setTrailerId] = useState(null);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect( ()=> {
     if(openSeason===null || openSeason==="0" || sessionStorage.getItem("navigating_from_tv_page") === null) {
@@ -214,20 +215,11 @@ const TvPage = () => {
     addTv(id);
   };
 
+ 
   return (
     <div className="text-white bg-slate-900 min-h-screen">
       <header className="relative">
-      <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
-            <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-            </Link>
-              <div className='ml-auto flex items-center p-2 '>
-                   
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-              </div>
-            
-          </header>
+     
         <img
           className="w-full md:h-[85vh] object-cover object-top shadow-2xl"
           src={imageSrc}
@@ -235,9 +227,8 @@ const TvPage = () => {
          onLoad = {() => setimageload(false)}
          onError = {() => setimageload(false)}
         />
-        <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
         
-      </div>
+        
 
       {showTrailerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
@@ -262,9 +253,9 @@ const TvPage = () => {
         </div>
       )}
 
-        <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/80 via-black/60 to-transparent"></div>
-        <div className="md:absolute inset-0 md:bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
-        <div className="md:absolute lg:max-w-3xl p-1 md:p-0 bottom-2 left-3 rounded-t-lg">
+        <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+        <div className="md:absolute inset-0 md:bg-gradient-to-r from-black/50  to-transparent"></div>
+        <div className="md:absolute lg:max-w-3xl p-1 sm:p-2 md:p-0 bottom-2 left-3 rounded-t-lg">
         <div className='mt-4 sm:hidden ml-1'>
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
@@ -334,11 +325,23 @@ const TvPage = () => {
             <p className="ml-2 flex"><p className="font-semibold mr-1">Episodes:</p>  {data?.number_of_episodes}</p>
           
             </div>
-            <div className="hidden sm:flex">
 
-
-
+            <div className="md:hidden flex items-center mb-2 sm:mb-0 sm:mt-2">
+            <button
+          className='flex bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg items-center'
+          onClick={(e) => addWatchList(e, data?.id)}
+        >
+          <Plus className='size-4 md:size-5' />
+          <p className='ml-1'>List</p>
+        </button>
+        {trailerId && (
+              <div className='flex items-center py-1 px-2 rounded-lg hover:bg-opacity-20 bg-white bg-opacity-10 ml-2 hover:cursor-pointer ' onClick={() => setShowTrailerModal(true)}>
+                <img className='h-5 items-center md:h-6' src='/youtube.png' alt='YouTube'></img>
+                <p className='ml-1 items-center font-semibold text-md'>Trailer</p>
+              </div>
+            )}
             </div>
+            
           <div className="sm:hidden pl-1 text-md mb-2">
           <p>
             <strong>Creator:</strong>{" "}
@@ -357,21 +360,24 @@ const TvPage = () => {
             <Play className='size-6 fill-white p-1'/>
             <p className='font-semibold text-base'>Play S1 E1</p>
             </button>
+        
+        <div className="hidden md:flex px-1 gap-2 items-center">
         <button
-          className='bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 ml-1 rounded-lg flex items-center'
+          className='flex items-center  bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 rounded-lg'
           onClick={(e) => addWatchList(e, data?.id)}
         >
           <Plus className='size-5' />
-          <p className='ml-1'>Watch List</p>
+          <p className='ml-1'>List</p>
         </button>
         {trailerId && (
-              <div className='flex items-center  mt-3 ml-2 hover:cursor-pointer hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}>
+              <div className='flex items-center pt-3  hover:cursor-pointer hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}>
                 <img className='h-6' src='/youtube.png' alt='YouTube'></img>
-                <p className='ml-1 font-semibold text-md'>Trailer</p>
+                <p className='ml-1 font-semibold items-center text-md'>Trailer</p>
               </div>
             )}
-            
-        <div className="hidden sm:flex items-center mt-3 pl-3 text-md">
+        </div>
+       
+        <div className="hidden sm:flex items-center mt-3 pl-1 pr-1 text-md">
           <p>
             <strong>Creator:</strong>{" "}
             {Array.isArray(data.created_by) &&
@@ -382,6 +388,8 @@ const TvPage = () => {
           </p>
          
         </div>
+       
+            
         </div>
         
         </div>
@@ -514,7 +522,7 @@ const TvPage = () => {
           <div className='flex text-white border-t border-white border-opacity-30 pl-3 pt-4 text-xl'>
             <h3 className='font-bold'>Cast</h3>
           </div>
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 sm:px-5">
+          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-2 py-2 sm:px-5">
             {datac?.cast?.slice(0, numitems).map((item, index) => (
               <Link
                 key={item.id || index} 

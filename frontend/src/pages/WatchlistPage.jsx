@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import axios from "axios";
-import { SquareX, Loader, House, TvMinimal, ChevronDown, Clapperboard } from 'lucide-react';
+import { SquareX, Loader, House, TvMinimal, Clapperboard, Menu, X,ArrowLeft } from 'lucide-react';
 import toast from "react-hot-toast";
-import { Listbox } from "@headlessui/react";
 
 const WatchlistPage = () => {
   const [datac, setDatac] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  
   const [selectContent, setSelectContent] = useState(() => {
     const savedContent = sessionStorage.getItem("content");
@@ -106,67 +106,94 @@ const WatchlistPage = () => {
     };
     remove(id, season, episode);
   };
+  
+  const handleSelect = (value) => {
+    console.log(`Changing content type from ${selectContent} to ${value}`);
+    sessionStorage.setItem("content", value);
+    setSelectContent(value);
+    setIsSidebarOpen(false);
+  };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-gray-900">
+    <div className="w-full h-screen overflow-hidden flex flex-col items-center bg-gray-900">
       <header className="flex w-full items-center bg-black bg-opacity-10">
-        <Link to={'/'} className='flex items-center ml-1'>
-          <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-        </Link>
-        <div className='ml-auto flex items-center p-2'>
-          <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/'}>
-            <p className='flex items-center text-white'>
-              <House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
-              <p className='font-semibold'>Home</p>
-            </p>
-          </Link>
-          
+       
+        
+        <div className='ml-auto flex items-center p-2 md:hidden'>
+          <button
+            aria-label="Open menu"
+            onClick={() => setIsSidebarOpen(true)}
+            className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'
+          >
+            <Menu className='h-6 w-6 text-white' />
+          </button>
         </div>
       </header>
-      
-      <div className="mr-auto mt-3 ml-2 rounded-lg items-center bg-white bg-opacity-5 hover:cursor-pointer hover:bg-opacity-10">
-        <Listbox value={selectContent} onChange={(value) => {
-          console.log(`Changing content type from ${selectContent} to ${value}`);
-          sessionStorage.setItem("content", value);
-          setSelectContent(value);
-        }}>
-          <Listbox.Button className="w-36 md:w-40 flex justify-center items-center text-gray-300 py-3 text-left font-semibold">
-            {selectContent}
-            <ChevronDown color="white" className="ml-1" size={22} />
-          </Listbox.Button>
-          <Listbox.Options className="absolute mt-1 font-semibold bg-slate-900 rounded-lg shadow-lg overflow-y-auto z-10">
-            <Listbox.Option
-              value='Movie'
-              className={({ active }) =>
-                `cursor-pointer text-base border-b border-gray-600 p-3 w-36 md:w-40 flex justify-center ${
-                  active ? "bg-white bg-opacity-20 text-white" : "text-white bg-white bg-opacity-10"
-                }`
-              }
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-40 md:hidden transform transition-transform duration-200 ease-in-out">
+          <div className="absolute inset-0 bg-black/50 " onClick={() => setIsSidebarOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-64 bg-slate-900 shadow-xl p-4 ">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-white font-bold text-lg">Menu</p>
+              <button aria-label="Close menu" onClick={() => setIsSidebarOpen(false)} className="p-2 rounded hover:bg-white/10">
+                <X className="h-6 w-6 text-white" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-2">
+              <button
+                onClick={() => handleSelect('Movie')}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Movie' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
+              >
+                <span className="flex items-center">
+                  <Clapperboard className="h-5 mr-2" /> Movie
+                </span>
+                <span className="text-sm text-gray-300">{movieCount}</span>
+              </button>
+              <button
+                onClick={() => handleSelect('Tv')}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Tv' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
+              >
+                <span className="flex items-center">
+                  <TvMinimal className="h-5 mr-2" /> Tv
+                </span>
+                <span className="text-sm text-gray-300">{tvCount}</span>
+              </button>
+           
+            </nav>
+          </div>
+        </div>
+      )}
+      <div className="w-full flex flex-1 min-h-0">
+        <aside className="hidden md:flex md:flex-col w-64 bg-white/5 border-r border-white/10 p-4 h-full">
+          <nav className="flex flex-col gap-2">
+            <button
+              onClick={() => handleSelect('Movie')}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Movie' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
             >
-              Movie
-            </Listbox.Option>
-            <Listbox.Option
-              value='Tv'
-              className={({ active }) =>
-                `cursor-pointer p-3 text-base border-b border-gray-700 w-36 md:w-40 flex justify-center ${
-                  active ? "bg-white bg-opacity-20 text-white" : "text-white bg-white bg-opacity-10"
-                }`
-              }
+              <span className="flex items-center">
+                <Clapperboard className="h-5 mr-2" /> Movie
+              </span>
+              <span className="text-sm text-gray-300">{movieCount}</span>
+            </button>
+            <button
+              onClick={() => handleSelect('Tv')}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Tv' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
             >
-              Tv
-            </Listbox.Option>
-          </Listbox.Options>
-        </Listbox>
-      </div>
+              <span className="flex items-center">
+                <TvMinimal className="h-5 mr-2" /> Tv show
+              </span>
+              <span className="text-sm text-gray-300">{tvCount}</span>
+            </button>
+          </nav>
+        </aside>
+        <div className="flex-1 flex flex-col items-center overflow-y-auto min-h-0" style={{scrollbarColor: 'transparent transparent'}}>
 
       {/* Section Title with Count */}
-      <div className="text-white w-full px-4 sm:px-6 max-w-6xl mt-8">
+      <div className="text-white w-full px-4 sm:px-6 max-w-6xl mt-6">
         <h3 className="flex items-center text-2xl font-bold">
-          <Clapperboard className="mr-2"/> 
-          Your Watchlist 
-          <span className="ml-2 text-base font-normal">
-            ({selectContent === 'Movie' ? movieCount : tvCount} {selectContent}s)
-          </span>
+         
+          {selectContent} Watchlist 
+        
         </h3>
       </div>
 
@@ -193,7 +220,7 @@ const WatchlistPage = () => {
       )}
 
       {/* Content Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-6xl">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-6xl">
         {filteredData.slice(0, displayCount).map((item, index) => {
           
           return (
@@ -232,11 +259,11 @@ const WatchlistPage = () => {
 
       {/* Load More/Less buttons */}
       {!loading && !error && filteredData.length > 0 && (
-        <div className="flex gap-4 mt-6 mb-10">
+        <div className="flex gap-4 mt-3 mb-10">
           {displayCount > 10 && (
             <button 
               onClick={loadLess} 
-              className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-all"
+              className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded-lg transition-all"
             >
               Load Less
             </button>
@@ -245,13 +272,15 @@ const WatchlistPage = () => {
           {displayCount < currentTypeCount && (
             <button 
               onClick={loadMore} 
-              className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition-all"
+              className="bg-blue-600 hover:bg-blue-500 text-white py-1 px-3 rounded-lg transition-all"
             >
               Load More
             </button>
           )}
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -151,7 +151,18 @@ const AdultPage = () => {
               </div>
               <ExternalLink className="h-5 w-5" />
             </div>
-            <p className="text-gray-400 mt-2">jasmin</p>
+            <p className="text-gray-400 mt-2">Jasmin</p>
+          </div>
+
+          <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors cursor-pointer"
+               onClick={() => window.open('https://xham.live/', '_blank', 'noopener,noreferrer')}>
+            <div className="flex items-center justify-between text-lg font-semibold text-red-400 hover:text-red-300 transition-colors">
+              <div className="flex items-center gap-3">
+                <span>Xham</span>
+              </div>
+              <ExternalLink className="h-5 w-5" />
+            </div>
+            <p className="text-gray-400 mt-2">Hamster</p>
           </div>
         
         </div>

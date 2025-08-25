@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
-import { Plus,Star,Play,Dot,Loader,CircleArrowLeft,House,TvMinimal } from 'lucide-react';
+import { Plus,Star,Play,Dot,Loader,CircleArrowLeft,House,TvMinimal,Menu,X } from 'lucide-react';
 
 import axios from 'axios';
 
@@ -39,6 +39,7 @@ function WatchPage() {
   const [releasedate,setreleasedate] = useState(null);
   const [trailerId,setTrailerId]  = useState(null);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const imgRef = useRef(null);
 
@@ -104,6 +105,8 @@ function WatchPage() {
       setselectopen(true);
     }
   }
+
+  
    useEffect(() => {
       const handleResize = () => {
         if (window.innerWidth >= 768 ) {
@@ -143,17 +146,28 @@ function WatchPage() {
 
       {!Loading && (
         <div className='relative '>
-           <header className={`md:absolute flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
+          {/* 
+           <header className={`md:absolute hidden sm:flex items-center bg-slate-900 md:bg-black md:bg-gradient-to-r from-black/50 via-transparent to-black/50 md:bg-opacity-60 z-10 w-full `}>
             <Link to={'/'} className='flex items-center ml-1'>
               <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
             </Link>
-              <div className='ml-auto flex items-center p-2 '>
-                   
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 text-base rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 p-2 text-base rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-              </div>
+            
+         
+            
+         
+            <div className='hidden sm:flex ml-auto items-center'>
+              <Link className='hover:bg-white hover:bg-opacity-10 rounded-md p-2 text-base border-gray-600' to={'/'}> 
+                <p className='flex items-center text-white'><p className='font-semibold'>Home</p></p>
+              </Link>
+              <Link className='hover:bg-white hover:bg-opacity-10 rounded-md p-2 text-base border-gray-600' to={'/watchlist'}> 
+                <p className='flex items-center text-white pl-1'><p className='font-semibold'>Watchlist</p></p>
+              </Link>
+            </div>
             
           </header>
+          */}
+
+
           <img  ref={imgRef} src={`${ORIGINAL_IMG_BASE_URL}${data?.backdrop_path || data?.profile_path || data?.poster_path}`}
           className='w-full object-top object-cover h-full md:h-[86vh]  shadow-2xl'
           onLoad={() =>{
@@ -161,9 +175,8 @@ function WatchPage() {
            
           }}
           ></img>
-           <div className="absolute top-4 right-4 flex items-center p-2 z-10 hover:scale-105 transition-transform">
-       
-      </div>
+        
+           
       {showTrailerModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
             
@@ -279,14 +292,18 @@ function WatchPage() {
             </div>
           )}
           </div>
-
+          <div className='flex gap-2 items-center'>
           <button
               className='sm:hidden bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg flex items-center'
               onClick={(e) => addWatchList(e, data?.id)}
               >
-              <Plus className='size-5' />
-            <p >Watch List</p>
+              <Plus className='size-4 items-center' />
+            <p className='px-1'> List</p>
               </button>
+              <div className='sm:hidden flex items-center' onClick={() => {setShowTrailerModal(true)}}> <div className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-5' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Trailer</p></div> </div>
+
+          </div>
+        
               {datac && (
             <div className='text-white sm:hidden text-base w-full max-w-4xl mt-4'> 
               <p className='flex'>Director: <Link to={dir!='Unknown'? '/person/details/?id=' + directorId + "&name=" + dir : `/watch/?id=${Id}&name=${Name}`} className='hover:underline hover:text-white'>
@@ -296,7 +313,6 @@ function WatchPage() {
                  <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
               )
               }
-            <div className='sm:hidden flex items-center mt-3' onClick={() => {setShowTrailerModal(true)}}> <div className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-6' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Watch Trailer</p></div> </div>
              
             </div>
           )}
@@ -320,7 +336,7 @@ function WatchPage() {
                        onClick={(e) => addWatchList(e, data?.id)}
                      >
                        <Plus className='size-5' />
-                       <p className='ml-1'>Watch List</p>
+                       <p className='ml-1'>List</p>
               </button>
               <div className='flex items-center ml-2 hover:cursor-pointer  hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}> <img className='h-7' src='/youtube.png'></img><p className='ml-1 font-semibold text-md'>Trailer</p> </div>
               { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
@@ -384,14 +400,14 @@ function WatchPage() {
         </div>
       )}
         <div className='text-white w-full  border-t-2 border-white border-opacity-30 pl-4 pt-5 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
-        <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3">
+        <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3 ">
                   {datas?.slice(0,numitemsm).map((item, index) => (
                     (item?.backdrop_path || item?.poster_path || item?.profile_path) &&
                       (
                         <Link 
                         key={item.id || index} 
                         to={'/movie'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
-                        className="block bg-gray-800 bg-opacity-60 p-1 rounded-lg shadow-md hover:scale-105 transition-transform"
+                        className="block bg-gray-800 bg-opacity-60 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
                       >
                         <img 
                           src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
@@ -433,6 +449,7 @@ function WatchPage() {
       )}
         </div>
         )}
+        
         
         </div>
       );

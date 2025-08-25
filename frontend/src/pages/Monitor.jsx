@@ -164,7 +164,7 @@ const Monitor = () => {
   
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} transition-colors duration-200`}>
-      <header className={`flex w-full items-center ${darkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-black bg-opacity-5'} transition-colors duration-200`}>
+      <header className={`hidden sm:flex w-full items-center ${darkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-black bg-opacity-5'} transition-colors duration-200`}>
         <Link to={'/'} className='flex items-center ml-1'>
           <img src={darkMode ? `/kflix3.png` :`/pic4.png`} alt='kflix logo' className={ darkMode ?`w-30 sm:w-32 h-8 sm:h-14` : `w-30 sm:w-32 h-8 sm:h-10`} />
         </Link>
@@ -175,25 +175,14 @@ const Monitor = () => {
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {darkMode ? (
-              <Sun className="h-5 w-5 text-white-300" />
+              <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-white-300" />
             ) : (
-              <Moon className="h-5 w-5 text-gray-600" />
+              <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
             )}
           </button>
-          
-          <Link className={`hover:${darkMode ? 'bg-gray-700' : 'bg-black hover:bg-opacity-10'} p-2 text-base rounded-lg transition-colors duration-200`} to={'/profile'}>
-            <p className={`flex items-center ${darkMode ? 'text-white' : 'text-black'}`}>
-              <UserCheck className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
-              <p className='font-semibold'>Profile</p>
-            </p>
-          </Link>
+       
 
-          <Link className={`hover:${darkMode ? 'bg-gray-700' : 'bg-black hover:bg-opacity-10'} p-2 text-base rounded-lg transition-colors duration-200`} to={'/'}>
-            <p className={`flex items-center ${darkMode ? 'text-white' : 'text-black'}`}>
-              <House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/>
-              <p className='font-semibold'>Home</p>
-            </p>
-          </Link>
+        
         </div>
       </header>
       

@@ -198,68 +198,25 @@ export default function ChatPage() {
       </Listbox>
         
         </div>
-        <div className=" hidden md:flex items-center mr-10">
+        <div className=" hidden md:flex items-center mr-32">
           <div className="flex items-center">
              <BotMessageSquare className="text-gray-600 w-10 h-10" />
             <h1 className="text-3xl ml-2 font-bold text-gray-600">Flix Chat</h1>
           </div>
         </div>
-         <button 
-              className='ml-auto md:hidden hover:bg-white hover:bg-opacity-10 rounded-lg p-2 text-white mr-2'
-              onClick={toggleMobileMenu}
-              >
-              <Menu size={24} />
-          </button>
         
-        <div className="ml-auto hidden md:flex items-center">
-        <Link className='hover:bg-white hover:bg-opacity-5 mb-1 py-1 px-2 rounded-lg mr-1'  to={'/'}> <p className='flex items-center text-gray-300 '><House size={20}  className='mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
+        
+        <div className="ml-auto flex items-center">
 
-          <Link className="ml-auto flex hover:bg-white hover:py-1 hover:bg-opacity-10 px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
+          <Link className="ml-auto flex bg-white bg-opacity-10 py-2  px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform" to={'/profile/chatHistory'}>
             <History size={22} />
           </Link>
-          <Link to={'/profile'} className="flex items-center ml-2 rounded-lg text-gray-400  bg-opacity-10 transition-all duration-300 hover:scale-110 cursor-pointer">
-            <CircleUserRound />
-          </Link>
+          
         </div>
       </header>
-        <div className={`fixed top-0 right-0 w-64 h-full bg-[#282727] z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                <div className="flex justify-between items-center p-4 border-b border-gray-600">
-                  <h2 className="text-white text-lg font-semibold">Menu</h2>
-                  <button onClick={toggleMobileMenu} className="text-white">
-                    <X size={24} />
-                  </button>
-                </div>
-                
-                <div className="flex flex-col ">
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white border-b border-gray-700 hover:bg-opacity-10 p-4 text-base' to={'/'}>
-                    <p className='flex items-center text-white'>
-                      <House className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Home</p>
-                    </p>
-                  </Link>
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-700 p-4 text-base' to={'/profile/chatHistory'}>
-                    <p className='flex items-center text-white'>
-                      <History className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Chat History</p>
-                    </p>
-                  </Link>
-                  <Link onClick={toggleMobileMenu} className='hover:bg-white hover:bg-opacity-10 border-b border-gray-700 p-4 text-base' to={'/profile'}>
-                    <p className='flex items-center text-white'>
-                      <CircleUserRound className='h-5 w-5 mr-3'/>
-                      <p className='font-semibold'>Profile</p>
-                    </p>
-                  </Link>
-                 
-                </div>
-              </div>
+        
               
-              {/* Overlay when menu is open */}
-              {mobileMenuOpen && (
-                <div 
-                  className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                  onClick={toggleMobileMenu}
-                ></div>
-              )}
+            
 
       {/* Chat content area - scrollable */}
       <div
@@ -345,7 +302,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input form - fixed at the bottom */}
-      <div className={(formEnd || DataText || conversationHistory.length>0) ? `pb-3 pt-2 bg-[#1e1d1d] sticky bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky ${isShortScreen ? 'sticky bottom-0 md:bottom-52' : 'sticky bottom-0 md:bottom-80'}`}>
+      <div className={(formEnd || DataText || conversationHistory.length>0) ? ` pt-2 bg-[#1e1d1d] sticky bottom-16 sm:bottom-0` :`pb-3 pt-2 bg-[#1e1d1d] sticky ${isShortScreen ? 'sticky bottom-16 sm:bottom-0 md:bottom-52' : 'sticky bottom-16 sm:bottom-0 md:bottom-80'} pb-12 sm:pb-3`}>
         <div className="max-w-2xl p-1 mx-auto ">
        
           {(!formEnd && !DataText && conversationHistory.length===0) && (
@@ -391,6 +348,7 @@ export default function ChatPage() {
           </form>
         </div>
       </div>
+      <p className="text-white mx-auto text-xs pb-1 hidden sm:block">AI can make mistakes and may not be up-to-date always.</p>
     </div>
   );
 }

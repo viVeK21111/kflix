@@ -39,19 +39,11 @@ useEffect(() => {
     )
   }
   return (
-    <div className='min-h-screen ' style={{ backgroundColor: "#1e1d1d" }}>
+    <div className='min-h-screen sm:pl-5' style={{ backgroundColor: "#1e1d1d" }}>
         {/* Search History Section */}
-      <div  className=" w-full  pb-3">
-        <header className='flex border-b border-gray-700 mb-5 items-center'>
-              <Link to={'/'} className='flex ml-1 items-center'> 
-                        <img src={'/kflix3.png'} alt='kflix logo' className='w-28 sm:w-32' />
-              </Link>
-        <div className='ml-auto flex '>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 mr-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-              </div>
-            
-        </header>
-        <div className='max-w-2xl ml-2 mt-10'>
+      <div  className=" w-full sm:pb-3">
+       
+        <div className='max-w-2xl ml-2 pt-10'>
         {datalocal?.chatHistory?.length > 0 ? (
           <>
                   <p className='flex items-center text-white text-xl mb-4'><MessagesSquare className='ml-3'/> <p className='ml-2'>chat History</p></p>

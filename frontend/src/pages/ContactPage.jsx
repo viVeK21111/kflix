@@ -84,18 +84,8 @@ const ContactPage = () => {
 
   return (
     <div className="relative contact-bg backdrop-blur justify-center items-center min-h-screen">
-      <header className={`flex w-full items-center bg-black bg-opacity-50`}>
-            <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix3.png'} alt='kflix logo' className='w-32 sm:w-36' />
-            </Link>
-              <div className='ml-auto flex items-center p-2 '>
-                   
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-              </div>
-            
-          </header>
-      <div className='flex justify-center md:mt-10'>
+      
+      <div className='flex justify-center pt-10'>
       <div className="max-w-xl w-full md:m-3 m-0 bg-black bg-opacity-80 p-5 rounded-lg shadow-md">
     <h2 className="text-2xl font-semibold text-white mb-3 text-center">Contact Us</h2>
     <form onSubmit={handleSubmit} className="space-y-4">

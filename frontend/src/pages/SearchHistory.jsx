@@ -2,7 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { ProfileStore } from "../store/ProfileStore";
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
-import { Trash2,X,Search,Loader,House,TvMinimal} from "lucide-react";
+import { Trash2,X,Search,Loader,House,TvMinimal,Menu,Plus} from "lucide-react";
 import {Link} from 'react-router-dom'
 
 const SearchHistory = () => {
@@ -10,6 +10,7 @@ const [visibleItems, setVisibleItems] = useState(6); // Show max 6 items initial
 const { getdata, data,ClearHistory,ClearHistoryid } = ProfileStore();
 const [datalocal,setdatalocal] = useState(null);
 const [loading,setloading] = useState(true);
+const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 useEffect(() => {
   getdata().finally(() => setloading(false));
@@ -30,6 +31,8 @@ useEffect(() => {
     await ClearHistoryid(id);
     getdata();
   }
+
+  
   if(loading) {
     return (
      <div className="h-screen ">
@@ -40,18 +43,9 @@ useEffect(() => {
     )
   }
   return (
-    <div className='min-h-screen bg-slate-900'>
-       <header className={`flex w-full items-center bg-black bg-opacity-10`}>
-            <Link to={'/'} className='flex items-center ml-1'>
-              <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-            </Link>
-              <div className='ml-auto flex items-center p-2 '>
-                   
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg'  to={'/'}> <p className='flex items-center text-white '><House  className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold '>Home</p></p></Link>
-                <Link className='hover:bg-white hover:bg-opacity-5 text-base p-2 rounded-lg' to={'/watchlist'}> <p className='flex items-center text-white pl-1'><TvMinimal className='h-5 w-4 sm:h-5 sm:w-5 mr-1 hover:scale-105 transition-transform'/><p className='font-semibold'>Watchlist</p></p></Link>
-              </div>
-            
-          </header>
+    <div className='min-h-screen bg-slate-900 sm:pl-5 pl-0'>
+          
+          
         {/* Search History Section */}
       <div className="pt-10 w-full max-w-2xl pl-3 pb-3">
      

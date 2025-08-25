@@ -179,8 +179,8 @@ export default function ProfilePage(){
         {settingSelected==="history" && (
               <div className="flex flex-col bg-black">
                 <Link to={'searchHistory'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-800"><p className="mr-2"><Search size={18}/></p>Search History </Link>
-                <Link to={'chatHistory'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-800"><p className="mr-2"><MessagesSquare size={18}/></p>chat History </Link>
                 <Link to={'watchHistory'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-800"><p className="mr-2"><Tv  size={18}/></p>Watch History </Link>
+                <Link to={'chatHistory'} className="flex pl-3 py-2 w-full items-center border-b border-white border-opacity-15 hover:bg-slate-800"><p className="mr-2"><MessagesSquare size={18}/></p>chat History </Link>
               </div>
          )} 
         </div>
