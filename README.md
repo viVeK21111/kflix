@@ -31,7 +31,7 @@ Login page
 <br><br>
 Home Screen
 <br><br>
-![Homescreen](/snapshots/homepage3.png)
+![Homescreen](/snapshots/homepage1.png)
 <br><br>
 AI powered chat by multiple LLMs
 <br><br>
@@ -39,7 +39,7 @@ AI powered chat by multiple LLMs
 <br><br>
 Streaming by Third party services
 <br><br>
-![watch page](/snapshots/watchpagetv2.png)
+![watch page](/snapshots/watchpagetv3.png)
 <br>
 
 ### Technology stack
