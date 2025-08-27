@@ -76,7 +76,15 @@ export async function signup(req,res) {
 
 export async function logout(req,res) {
     try {
-        res.clearCookie("token");
+       // res.clearCookie("token");
+       res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/',
+        domain: process.env.COOKIE_DOMAIN,
+      });
+  
         res.status(200).json({success:true,message:"logged out successfully"});
     }  
     catch {
@@ -176,6 +184,13 @@ export async function allusersdetails(req,res) {
 
 export async function deleteAccount(req,res) {
     try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/',
+            domain: process.env.COOKIE_DOMAIN,
+          });
         const deletedUser = await User.findByIdAndDelete(req.user._id);
         if(!deletedUser) {
             return res.status(404).json({sucess:false,message:"account not found"});
