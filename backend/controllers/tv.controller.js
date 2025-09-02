@@ -13,6 +13,53 @@ export const getTrendingTv = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+
+
+export const getAnimePopular = async (req,res) => {
+    try {
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc&page=2`);
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc&page=3`);
+        const data = [...data1.results, ...data2.results,...data3.results];
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting anime trending: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+export const getAnimeTopRated = async (req,res) => {
+    try {
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&vote_count.gte=200`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&page=2&vote_count.gte=200`);
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&page=3&vote_count.gte=200`);
+        const data = [...data1.results, ...data2.results,...data3.results];
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting anime top rated: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+const today = new Date();
+const TODAY = today.toISOString().split('T')[0];
+
+export const getAnimeOnAir = async (req,res) => {
+    try {
+        const TODAY = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
+        const data = [...data1.results,...data2.results]
+        res.json({ success: true, content: data });
+    } catch (error) {
+        console.log("Error in getting anime on air: " + error.message);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
 export const getTvTrailer = async (req, res) => {
     const {id} = req.params;
     try{
@@ -171,3 +218,4 @@ export const removeEpisode = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+

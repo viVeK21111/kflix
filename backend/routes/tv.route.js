@@ -9,7 +9,9 @@ import { addTvWatch } from '../controllers/tv.controller.js';
 import {addEpisode} from '../controllers/tv.controller.js';
 import {removeEpisode} from '../controllers/tv.controller.js';
 import {getTvCredits} from '../controllers/tv.controller.js';
-
+import {getAnimePopular} from '../controllers/tv.controller.js';
+import {getAnimeTopRated} from '../controllers/tv.controller.js';
+import {getAnimeOnAir} from '../controllers/tv.controller.js';
 
 const router = express.Router();
 
@@ -23,5 +25,8 @@ router.post('/episodes',protectRoute,getTvEpisodes)
 router.post('/addEpisode',protectRoute,addEpisode)
 router.get('/credits/:id',protectRoute,getTvCredits);
 router.delete('/removeWatchE/:id/:season/:episode',protectRoute ,removeEpisode);
+router.get('/anime/popular',protectRoute,getAnimePopular);
+router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
+router.get('/anime/on-air',protectRoute,getAnimeOnAir);
 
 export default router;

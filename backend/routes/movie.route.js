@@ -1,5 +1,5 @@
 import express from 'express';
-import {getTrendingMovies} from '../controllers/movie.controller.js';
+import {getTrendingMovies,getAnimePopular,getAnimeTopRated,getAnimeOnAir} from '../controllers/movie.controller.js';
 import { getMovieTrailer } from '../controllers/movie.controller.js';
 import { getMovieDetails } from '../controllers/movie.controller.js';
 import { getSimilarMovies } from '../controllers/movie.controller.js';
@@ -9,6 +9,7 @@ import { protectRoute } from '../middleware/protectRoute.js';
 import { addMovieWatch } from '../controllers/movie.controller.js';
 import {getWatchlist} from '../controllers/movie.controller.js';
 import { removeFromWatchlist } from '../controllers/movie.controller.js';
+
 const router = express.Router();
 
 router.get('/trending',protectRoute,getTrendingMovies)
@@ -20,4 +21,7 @@ router.get('/credits/:id',protectRoute,getMovieCredits);
 router.put('/addWatch/:id',protectRoute,addMovieWatch);
 router.get('/getWatchlist',protectRoute,getWatchlist);
 router.delete('/removeWatch/:id',protectRoute,removeFromWatchlist);
+router.get('/anime/popular',protectRoute,getAnimePopular);
+router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
+router.get('/anime/on-air',protectRoute,getAnimeOnAir);
 export default router;

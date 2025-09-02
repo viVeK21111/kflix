@@ -31,7 +31,7 @@ Login page
 <br><br>
 Home Screen
 <br><br>
-![Homescreen](/snapshots/homepage1.png)
+![Homescreen](/snapshots/homepage2.png)
 <br><br>
 AI powered chat by multiple LLMs
 <br><br>

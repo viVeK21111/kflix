@@ -13,6 +13,49 @@ export const getTrendingMovies = async (req, res) => {
         res.status(500).json({success:false,message:error.message});
     }
 }
+
+export const getAnimePopular = async (req,res) => {
+    try {
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=popularity.desc`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=popularity.desc&page=2`);
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=popularity.desc&page=3`);
+        const data = [...data1.results, ...data2.results,...data3.results];
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting anime movie trending: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+export const getAnimeTopRated = async (req,res) => {
+    try {
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=vote_average.desc&vote_count.gte=200`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=vote_average.desc&page=2&vote_count.gte=200`);
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?with_keywords=210024&sort_by=vote_average.desc&page=3&vote_count.gte=200`);
+        const data = [...data1.results, ...data2.results,...data3.results];
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting anime movie top rated: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }
+}
+
+
+export const getAnimeOnAir = async (req,res) => {
+    try {
+        const TODAY = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?&with_genres=16&with_origin_country=JP&sort_by=popularity.desc`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/movie?&with_genres=16&with_origin_country=JP&sort_by=popularity.desc&page=2`);
+        const data = [...data1.results,...data2.results]
+        res.json({ success: true, content: data });
+    } catch (error) {
+        console.log("Error in getting anime movie trending: " + error.message);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 export const getMovieTrailer = async (req, res) => {
     const {id} = req.params;
     try{
