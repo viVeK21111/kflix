@@ -118,7 +118,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       console.log("result \n"+result);
+       //console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -147,12 +147,12 @@ export const GetMovieList = async (req, res) => {
         if("movies" in result1) {
             content = "movie"
             contents = "movies"
-            console.log("movies successful via llm")
+           // console.log("movies successful via llm")
         }
         else if ("tv" in result1) {
             content = "tv"
             contents = content
-            console.log("tv successful via llm")
+           // console.log("tv successful via llm")
         }
         result1 = result1[contents];
        // console.log(result1);
