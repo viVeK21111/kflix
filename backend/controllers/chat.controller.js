@@ -147,12 +147,12 @@ export const GetMovieList = async (req, res) => {
         if("movies" in result1) {
             content = "movie"
             contents = "movies"
-           // console.log("movies successful via llm")
+            console.log("movies successful via llm")
         }
         else if ("tv" in result1) {
             content = "tv"
             contents = content
-           // console.log("tv successful via llm")
+            console.log("tv successful via llm")
         }
         result1 = result1[contents];
        // console.log(result1);
@@ -160,8 +160,8 @@ export const GetMovieList = async (req, res) => {
     
         for(let i=0;i<result1.length;i++) {
             let [title, year] = result1[i].match(/^(.*)\s\((\d{4})\)$/).slice(1);
-           console.log("title:",title.trim());
-           console.log("year:",year);
+           //console.log("title:",title.trim());
+          // console.log("year:",year);
             title = title.trim();
             year = year.toString();
             const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/${content}?query=${title}&primary_release_year=${year}&language=en-US&page=1`);
