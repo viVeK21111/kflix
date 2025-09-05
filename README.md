@@ -35,7 +35,7 @@ Home Screen
 <br><br>
 AI powered chat by multiple LLMs
 <br><br>
-![chat page2](/snapshots/chatf1.png)
+![chat page2](/snapshots/chatf2.png)
 <br><br>
 Streaming by Third party services
 <br><br>
