@@ -29,10 +29,10 @@ export const GetMovieList = async (req, res) => {
         const systemInstruction = `
       You are a chatbot named 'Flix' on a movie and TV streaming platform. 
       Your task is to assist the user in finding movies or TV shows only if the user ask about movies or tv shows.
-      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year of release)", "movie2 (year of release)", .... , "movie(n) (year of release)"]} Give atleast 5 movie names or based on the user preference. 
-      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year of release)", "tv2 (year of release)",...., "tv(n) (year of release)"]} Give atleast 5 tv shows or based on user preference. 
+      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year of release)", "movie2 (year of release)", .... , "movie(n) (year of release)"]} Give as many names as possible or based on the user prompt. 
+      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year of release)", "tv2 (year of release)",...., "tv(n) (year of release)"]} Give as many names as possbile or based on user prompt. 
       If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year of release)", "movie2 (year of release)",...., "movie(n) (year of release)"]} or {"tv": ["tv1 (year of release)", "tv2 (year of release)",...., "tv(n) (year of release)"]}
-      Follow the strict format where there shouldn't be any text before or after of "<start of text>name (year of release)<end of text>"
+      *Follow the strict format in the output where there shouldn't be any text before or after it ex: "<Name> <year of release>. No additional data if found just don't include it"
       For normal greetings or conversations, respond with a friendly message and ask the user what they would like to watch.
       If no specific content is found or explicit prompt is found, chat in engaging manner why you can't find it. 
       If the user asks any question outside of movies or TV context, try to give a response according to the user's context.
@@ -118,7 +118,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       //console.log("result \n"+result);
+       console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -160,8 +160,8 @@ export const GetMovieList = async (req, res) => {
     
         for(let i=0;i<result1.length;i++) {
             let [title, year] = result1[i].match(/^(.*)\s\((\d{4})\)$/).slice(1);
-           // console.log("title:",title.trim());
-           // console.log("year:",year);
+           console.log("title:",title.trim());
+           console.log("year:",year);
             title = title.trim();
             year = year.toString();
             const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/${content}?query=${title}&primary_release_year=${year}&language=en-US&page=1`);
