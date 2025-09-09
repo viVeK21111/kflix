@@ -131,7 +131,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       console.log("result \n"+result);
+      // console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
