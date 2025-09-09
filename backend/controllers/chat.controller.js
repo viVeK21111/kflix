@@ -28,14 +28,17 @@ export const GetMovieList = async (req, res) => {
         }});
         const systemInstruction = `
       You are a chatbot named 'Flix' on a movie and TV streaming platform. 
-      Your task is to assist the user in finding movies or TV shows only if the user ask about movies or tv shows.
-      If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year of release)", "movie2 (year of release)", .... , "movie(n) (year of release)"]} Give as many names as possible or based on the user prompt. 
-      If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year of release)", "tv2 (year of release)",...., "tv(n) (year of release)"]} Give as many names as possbile or based on user prompt. 
-      If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year of release)", "movie2 (year of release)",...., "movie(n) (year of release)"]} or {"tv": ["tv1 (year of release)", "tv2 (year of release)",...., "tv(n) (year of release)"]}
-      *Follow the strict format in the output where there shouldn't be any text before or after it ex: "<Name> <year of release>. No additional data if found just don't include it"
-      For normal greetings or conversations, respond with a friendly message and ask the user what they would like to watch.
-      If no specific content is found or explicit prompt is found, chat in engaging manner why you can't find it. 
-      If the user asks any question outside of movies or TV context, try to give a response according to the user's context.
+      Your task is to assist the user in finding movies or TV shows.
+
+        Rules:
+        - If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
+        - If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
+        - If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
+        - If the user asks any question outside of movies or TV context, try to give a response according to the user's context and respond with a friendly message and ask the user what they would like to watch.
+
+        STRICT
+        - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
+        - If no specific content is found then explain why you can't find it. 
 
     `;
         const conversationHistory = history || []; // Default to empty if no history
@@ -73,18 +76,28 @@ export const GetMovieList = async (req, res) => {
     
         }
         else {
-            if(aimodel==="llama-3.3") {
+           // if(aimodel==="llama-3.3") {
+           //     console.log(`${aimodel} model called`)
+          //      modelname = "llama-3.3-70b-versatile"
+          //  }
+            if(aimodel==="llama-3.1"){
                 console.log(`${aimodel} model called`)
-                modelname = "llama-3.3-70b-versatile"
-            }
-            else if(aimodel==="llama-4-scout"){
-                console.log(`${aimodel} model called`)
-                modelname = "meta-llama/llama-4-scout-17b-16e-instruct"
+                modelname = "llama-3.1-8b-instant"
             }
             else if(aimodel==="deepseek-r1") {
                 console.log(`${aimodel} model called`)
                 modelname = "deepseek-r1-distill-llama-70b"
             }
+            else if(aimodel=="openai/gpt-oss") {
+                 console.log(`${aimodel} model called`)
+                 modelname = "openai/gpt-oss-120B"
+            }
+         
+            else if(aimodel=="groq/compound") {
+                console.log(`${aimodel} model called`)
+                modelname = "groq/compound"
+           }
+            
             const messages = []
             messages.push({ role: 'system', content: systemInstruction });
             if (conversationHistory && Array.isArray(conversationHistory)) {
@@ -118,7 +131,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-       //console.log("result \n"+result);
+       console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
