@@ -37,6 +37,7 @@ export const GetMovieList = async (req, res) => {
         - If the user asks any question outside of movies or TV context, try to give a response according to the user's context and respond with a friendly message and ask the user what they would like to watch.
 
         STRICT
+        - If you find any movies or tv show content then it must be in json format as i mentioned in the Rules.
         - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
         - If no specific content is found then explain why you can't find it. 
 
