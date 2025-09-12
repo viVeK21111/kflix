@@ -14,6 +14,7 @@ export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
     const {query,history,aimodel} = req.body;
+    console.log("reqbody ",req.body);
     const user = await User.findById(req.user._id);
     const username = user?.username;
 
