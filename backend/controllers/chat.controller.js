@@ -30,7 +30,7 @@ export const GetMovieList = async (req, res) => {
 
     // checking latest or old data
     let lod;
-    const si = `If this question needs information beyond your training cutoff reply with "yes" Otherwise reply  with "no".\n
+    const si = `If this prompt needs information beyond your training cutoff reply with "yes" orelse reply with "no".\n
                 **STRICT RULE: only reply with "yes" or "no". No other extra text at any case.
                  `;
     let modelname = "llama-3.1-8b-instant";
@@ -39,8 +39,8 @@ export const GetMovieList = async (req, res) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",si });
         const chat = model.startChat({
             generationConfig: {
-              maxOutputTokens: 500, // Adjust as needed
-              temperature: 0.7,
+              maxOutputTokens: 50, // Adjust as needed
+              temperature: 1,
             },
           });
           lod = await chat.sendMessage(query.toLowerCase());
@@ -69,16 +69,17 @@ export const GetMovieList = async (req, res) => {
         const response = await groq.chat.completions.create({
               model: modelname,
               messages: messages,
-              temperature: 0.7,
+              temperature: 1,
             });
 
         lod = response.choices[0].message.content;
         lod = lod.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
+        lod = lod.replace(/<\/?think>/gi, '').trim();
         }
         
         console.log("lod ",lod);
         let lod1 = "no";
-        if (lod.toLowerCase().includes("yes")) {
+        if (lod.includes("yes")) {
             lod1 = "yes";
         }
         else {
@@ -95,26 +96,24 @@ export const GetMovieList = async (req, res) => {
                 })
                // console.log("tres ",tres);
                 let tavrep = tres.answer
-                const Sources = tres.results.map(r => `- ${r.title} (${r.url})`).join("\n");
-                tavrep = tavrep + `\n Sources:\n ${Sources}` ;
 
                 systemInstruction = `
                 You are a chatbot named 'Flix' on a movie and TV streaming platform. 
                 From the summary give below \n
                 ${tavrep} \n
-                give result according to the rules below
+                give outpu according to the rules below \n
 
-                  Rules:
+                  Rules:\n
                 - If included movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
                 - If includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
                 - If includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
 
 
-                **STRICT RULES**
+                **STRICT FORMAT\n
                 - Follow strict json format as i mentioned in the Rules if the content is found. 
                 - Titles in json must follow "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
                 - If the user asks any question outside of movies or TV context respond with a friendly message and ask the user what they would like to watch.
-                - Don't say 'here is the json format' in result
+                - Don't Include JSON keyword in the result
                 `;
         }
     
@@ -225,7 +224,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-     // console.log("result \n"+result);
+      console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
@@ -266,10 +265,9 @@ export const GetMovieList = async (req, res) => {
         const resf = []
     
         for(let i=0;i<result1.length;i++) {
-            let [title, year] = result1[i].match(/^(.*)\s\((\d{4})\)$/).slice(1);
-           //console.log("title:",title.trim());
-          // console.log("year:",year);
-            title = title.trim();
+            let match = result1[i].match(/^(.*?)(?:\s\(?(\d{4})\)?)$/);
+            let title = match[1].trim();
+            let year = match[2];
             year = year.toString();
             const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/${content}?query=${title}&primary_release_year=${year}&language=en-US&page=1`);
             const movie = data.results;
