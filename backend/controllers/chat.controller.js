@@ -31,7 +31,7 @@ export const GetMovieList = async (req, res) => {
     // checking latest or old data
     let lod;
     const si = `If this question needs information beyond your training cutoff, reply with "yes" Otherwise reply ONLY with "no" 
-                **STRICT: only reply with "yes" or "no". No other extra data.
+                **STRICT RULE: only reply with "yes" or "no". No other extra text at any case.
                  `
     let modelname = "llama-3.1-8b-instant";
     if(aimodel==="Gemini") {
@@ -84,7 +84,7 @@ export const GetMovieList = async (req, res) => {
         else {
             lod1 = "no";
         }
-       
+       console.log("lod1 ",lod1);
         let systemInstruction;
         if(lod1==="yes") {
             // To install: npm i @tavily/core
