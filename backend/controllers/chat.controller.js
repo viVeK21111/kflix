@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Groq } from 'groq-sdk';
+import { tavily } from '@tavily/core';
 
 export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
@@ -26,31 +27,124 @@ export const GetMovieList = async (req, res) => {
                 query : query,
             }
         }});
-        const systemInstruction = `
-      You are a chatbot named 'Flix' on a movie and TV streaming platform. 
-      Your task is to assist the user in finding movies or TV shows.
 
-        Rules:
-        - If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
-        - If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
-        - If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
-        - If the user asks any question outside of movies or TV context, try to give a response according to the user's context and respond with a friendly message and ask the user what they would like to watch.
+    // checking latest or old data
+    let lod;
+    const si = `If this question needs information beyond your training cutoff, reply with "yes" Otherwise reply ONLY with "no" 
+                **STRICT: only reply with "yes" or "no". No other extra data.
+                 `
+    let modelname = "llama-3.1-8b-instant";
+    if(aimodel==="Gemini") {
+        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",si });
+        const chat = model.startChat({
+            generationConfig: {
+              maxOutputTokens: 500, // Adjust as needed
+              temperature: 0.7,
+            },
+          });
+          lod = await chat.sendMessage(query.toLowerCase());
+          lod = lod.response.text();
+    }
+    else {
+        console.log(`${aimodel} called`);
+        if(aimodel==="llama-3.1"){
+            modelname = "llama-3.1-8b-instant"
+        }
+        else if(aimodel==="deepseek-r1") {
+            modelname = "deepseek-r1-distill-llama-70b"
+        }
+        else if(aimodel=="openai/gpt-oss") {
+             modelname = "openai/gpt-oss-120B"
+        }
+        else if(aimodel=="groq/compound") {
+            modelname = "groq/compound"
+       }
+        const messages = []
+        messages.push({ role: 'system', content: si });
+        messages.push({ role: 'user', content: query.toLowerCase() });
 
-        STRICT
-        - If you find any movies or tv show content then it must be in json format as i mentioned in the Rules.
-        - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
-        - If no specific content is found then explain why you can't find it. 
+        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+        
+        const response = await groq.chat.completions.create({
+              model: modelname,
+              messages: messages,
+              temperature: 0.7,
+            });
 
-    `;
+        lod = response.choices[0].message.content;
+        lod = lod.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
+        }
+        
+        console.log("lod ",lod);
+        let lod1 = "no";
+        if (lod.toLowerCase().includes("yes")) {
+            lod1 = "yes";
+        }
+        else {
+            lod1 = "no";
+        }
+       
+        let systemInstruction;
+        if(lod1==="yes") {
+            // To install: npm i @tavily/core
+                
+                const client = tavily({ apiKey: process.env.TAVILY_KEY });
+                const tres = await client.search(query, {
+                    includeAnswer: "advanced"
+                })
+               // console.log("tres ",tres);
+                let tavrep = tres.answer
+                const Sources = tres.results.map(r => `- ${r.title} (${r.url})`).join("\n");
+                tavrep = tavrep + `\n Sources:\n ${Sources}` ;
+
+                systemInstruction = `
+                You are a chatbot named 'Flix' on a movie and TV streaming platform. 
+                From the summary give below \n
+                ${tavrep} \n
+                give result according to the rules below
+
+                  Rules:
+                - If included movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
+                - If includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
+                - If includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
+
+
+                STRICT
+                - If you find any movies or tv show content then it must be in json format as i mentioned in the Rules.
+                - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
+                - If no specific content is found then explain why you can't find it. 
+                - Don't say here is the json format in result
+                `;
+        }
+    
+        else {
+            systemInstruction = `
+            You are a chatbot named 'Flix' on a movie and TV streaming platform. 
+            Your task is to assist the user in finding movies or TV shows.
+      
+              Rules:
+              - If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
+              - If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
+              - If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
+              - If the user asks any question outside of movies or TV context, try to give a response according to the user's context and respond with a friendly message and ask the user what they would like to watch.
+      
+              STRICT
+              - If you find any movies or tv show content then it must be in json format as i mentioned in the Rules.
+              - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
+              - If no specific content is found then explain why you can't find it. 
+      
+          `;
+        }
+       
         const conversationHistory = history || []; // Default to empty if no history
 
         
         let prompt = query.toLowerCase();
         let result;
-        let modelname = "llama-3.3-70b-versatile";
+        modelname = "llama-3.3-70b-versatile";
 
        
-
         if(aimodel==="Gemini") {
             console.log(`${aimodel} model called`)
             const formattedHistory = conversationHistory.map(item => [
@@ -112,7 +206,7 @@ export const GetMovieList = async (req, res) => {
                 });
             }
             messages.push({ role: 'user', content: prompt });
-            const groq = new Groq({ apiKey: process.env.YOUR_SECRET });
+            const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
             try {
                 const response = await groq.chat.completions.create({
                   model: modelname,
@@ -132,7 +226,7 @@ export const GetMovieList = async (req, res) => {
 
         
         try {
-      // console.log("result \n"+result);
+     // console.log("result \n"+result);
         let introText;
         let result1;
         let jsonMatch = result.match(/([\s\S]*?)```json([\s\S]*?)```/);
