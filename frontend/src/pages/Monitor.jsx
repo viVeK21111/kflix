@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft, UserCheck, User, Sun, Moon } from 'lucide-react';
+import { Search, Eye, Film, Tv, Clock, List, MessageSquare, Settings, Loader, House, ChevronRight, ChevronLeft, UserCheck, User, Sun, Moon, Lock, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
@@ -8,6 +8,14 @@ const Monitor = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  
+  // Password protection states
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  
   // For user listing and pagination
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
@@ -17,6 +25,14 @@ const Monitor = () => {
   const [darkMode, setDarkMode] = useState(false);
   
   const usersPerPage = 15;
+
+  // Check if user is already authenticated (from sessionStorage)
+  useEffect(() => {
+    const authStatus = sessionStorage.getItem('adminAuthenticated');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   // Initialize theme from localStorage when component mounts
   useEffect(() => {
@@ -77,6 +93,9 @@ const Monitor = () => {
     }, [email, users]);
 
   useEffect(() => {
+    // Only fetch users if authenticated
+    if (!isAuthenticated) return;
+    
     const fetchAllUsers = async () => {
       try {
         setUsersLoading(true);
@@ -102,7 +121,36 @@ const Monitor = () => {
       }
     };
     fetchAllUsers();
-  }, []);
+  }, [isAuthenticated]);
+
+  // Password authentication handler
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    setIsAuthenticating(true);
+    setPasswordError('');
+    
+    // Get admin password from environment variables
+    const adminPassword = import.meta.env.VITE_ADMIN_PASS;
+    
+    if (!adminPassword) {
+      setPasswordError('Admin password not configured');
+      setIsAuthenticating(false);
+      return;
+    }
+    
+    if (password === adminPassword) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('adminAuthenticated', 'true');
+      toast.success('Authentication successful!');
+    } else {
+      setPasswordError('Incorrect password. Please try again.');
+      setPassword('');
+    }
+    
+    setIsAuthenticating(false);
+  };
+
+ 
 
   // Pagination functions
   const nextPage = () => {
@@ -161,13 +209,92 @@ const Monitor = () => {
       toast.error("Invalid email");
     }
   }
+
+  // Render password prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} transition-colors duration-200`}>
+        <div className={`max-w-md w-full mx-4 p-8 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'} rounded-lg shadow-lg transition-colors duration-200`}>
+          <div className="text-center mb-8">
+            <div className={`inline-flex items-center justify-center w-16 h-16 ${darkMode ? 'bg-blue-900' : 'bg-blue-100'} rounded-full mb-4 transition-colors duration-200`}>
+              <Lock className={`w-8 h-8 ${darkMode ? 'text-blue-300' : 'text-blue-600'} transition-colors duration-200`} />
+            </div>
+            <h1 className="text-2xl font-bold mb-2">Access Required</h1>
+            
+          </div>
+          
+          <form onSubmit={handlePasswordSubmit} autoComplete="off">
+            <div className="mb-6">
+              <label className={`block text-sm font-medium ml-1 mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'} transition-colors duration-200`}>
+                Admin Password
+              </label>
+              <div className="relative">
+            
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="admin-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`w-full p-3 pr-12 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200`}
+                  placeholder="Enter admin password"
+                  required
+                  autoComplete="new-password"
+                  spellCheck="false"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'} transition-colors duration-200`}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {passwordError && (
+                <p className={`mt-2 text-sm ${darkMode ? 'text-red-400' : 'text-red-600'} transition-colors duration-200`}>
+                  {passwordError}
+                </p>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={isAuthenticating}
+              className={`w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors duration-200 ${darkMode ? 'focus:ring-offset-gray-800' : 'focus:ring-offset-white'}`}
+            >
+              {isAuthenticating ? (
+                <>
+                  <Loader className="w-5 h-5 animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                <>
+                  <Lock className="w-5 h-5" />
+                  Access Dashboard
+                </>
+              )}
+            </button>
+          </form>
+          
+          {/* Theme toggle for login screen */}
+          <div className="mt-6 flex justify-center">
+            <button 
+              onClick={toggleTheme}
+              className={`p-2 rounded-full ${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-200 hover:bg-gray-300 text-gray-600'} transition-colors duration-200`}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} transition-colors duration-200`}>
       <header className={`hidden sm:flex w-full items-center ${darkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-black bg-opacity-5'} transition-colors duration-200`}>
-        <Link to={'/'} className='flex items-center ml-1'>
-          <img src={darkMode ? `/kflix3.png` :`/pic4.png`} alt='kflix logo' className={ darkMode ?`w-30 sm:w-32 h-8 sm:h-14` : `w-30 sm:w-32 h-8 sm:h-10`} />
-        </Link>
+       
         <div className='ml-auto flex items-center p-2'>
           <button 
             onClick={toggleTheme}
@@ -180,15 +307,16 @@ const Monitor = () => {
               <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
             )}
           </button>
-       
-
-        
+         
         </div>
       </header>
       
       <div className="max-w-7xl mx-auto p-4">
         <div className={`${darkMode ? 'bg-gray-800 shadow-dark' : 'bg-white shadow-lg'} rounded-lg p-6 mb-6 transition-colors duration-200`}>
-          <h1 className="text-2xl font-bold mb-6">Admin Monitoring Dashboard</h1>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">Admin Monitoring Dashboard</h1>
+           
+          </div>
           
           {/* User Search */}
           <div className="mb-8">

@@ -139,7 +139,7 @@ function WatchPage() {
       {(Loading || imageload) &&  (
         <div className="h-screen ">
         <div className="flex justify-center items-center bg-black h-full">
-        <Loader className="animate-spin text-red-600 w-10 h-10"/>
+        <Loader className="animate-spin text-gray-500 w-10 h-10"/>
         </div>
       </div>
       )}
@@ -201,16 +201,21 @@ function WatchPage() {
             </div>)
           }
           
-          <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+          <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/80 via-black/60 to-transparent"></div>
+          <div className="md:absolute inset-0 md:bg-gradient-to-r from-black/40  to-transparent"></div>
           <div className="md:absolute text-white lg:max-w-3xl p-1  bottom-5 left-3">
-          <div className='mt-4 sm:hidden ml-1'>
-            
+          <div className='mt-3 sm:hidden ml-1'>
+              
+        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-3 text-white">
+            {data?.title}
+          </h1>
+          
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
                   {data?.adult ? "18+" : "PG-13"} 
           </p>
           <div className='flex items-center'>
-          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average}  </p>
+          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average?.toFixed(1)}  </p>
           <p className='ml-5 flex'>
           {data?.genres && data?.genres.slice(0,2).map((item, index) => (
           <div key={item.id} className="flex items-center text-white">
@@ -248,12 +253,11 @@ function WatchPage() {
            
         </div>
         
-        <div className='mx-2 md:mx-0'>
-          
-        <h1 className="text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-2 mt-3 text-white">
+        <div className='mx-2 md:mx-0 mt-3'>
+        <h1 className="hidden sm:flex text-xl md:text-2xl xl:text-3xl 2xl:text-3xl font-bold mb-3 text-white">
             {data?.title}
           </h1>
-          <p className={(window.innerWidth < 768 && data?.overview.length>readov) ? `text-base mb-2 max-w pb-2` : `text-sm md:text-base mb-2 max-w pb-2` }>
+          <p className={`text-base mb-2 max-w pb-2` }>
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
@@ -268,7 +272,7 @@ function WatchPage() {
                   {data?.adult ? "18+" : "PG-13"} 
           </p>
           <div className='flex items-center'>
-          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average}  </p>
+          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average?.toFixed(1)}  </p>
           <p className='ml-5 flex'>
           {data?.genres && data?.genres.slice(0,3).map((item, index) => (
           <div key={item.id} className="flex items-center text-white">

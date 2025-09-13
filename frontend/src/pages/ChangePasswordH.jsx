@@ -63,11 +63,7 @@ export default function ChangePasswordH() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900  justify-center">
-      <header className={`flex w-full items-center bg-black bg-opacity-50 lg:justify-start justify-center`}>
-            <Link to={'/'} className='flex items-center j ml-1'> 
-              <img src={'/kflix3.png'} alt='kflix logo' className='w-32 sm:w-36' />
-            </Link>
-          </header>
+      
       <div className="w-full max-w-md mt-14 mx-auto px-3 sm:px-0">
         <div className="bg-slate-800 rounded-xl shadow-xl overflow-hidden">
           <div className="bg-slate-700 px-6 py-4">

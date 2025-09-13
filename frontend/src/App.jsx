@@ -29,6 +29,8 @@ import UserMonitor from "./pages/UserMonitor";
 import FunPage from "./pages/FunPage";
 import AdultPage from "./pages/AdultPage";
 import BottomNavbar from "./components/BottomNavbar";
+import AnimePage from "./pages/AnimePage";
+import { Helmet } from "react-helmet-async";
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -51,6 +53,16 @@ function BottomNavbarReturn() {
   }
 }
 
+function CanonicalTag() {
+  const location = useLocation();
+  const canonicalUrl = `localhost:5173${location.pathname}`;
+  return (
+    <Helmet>
+      <link rel="canonical" href={canonicalUrl} />
+    </Helmet>
+  );
+}
+
 function App() {
 
   const {user,isCheckingauth,authCheck} = userAuthStore();
@@ -69,13 +81,15 @@ function App() {
     return (
       <div className="h-screen ">
         <div className="flex justify-center items-center bg-black h-full">
-        <Loader className="animate-spin text-red-600 w-10 h-10"/>
+        <Loader className="animate-spin text-gray-500 w-10 h-10"/>
         </div>
       </div>
     )
   }
   return (
     <>
+     {/* Canonical URL injected here */}
+     <CanonicalTag />
     <div className={user ? `pb-16 sm:pb-0 sm:pl-20` : ``}>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -101,6 +115,7 @@ function App() {
         <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
         <Route path='/fun' element = {user ? <FunPage /> : <Navigate to={'/'}/>} />
         <Route path='/fun/adult' element = {user ? <AdultPage /> : <Navigate to={'/'}/>} />
+        <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/'}/>} />
       </Routes>
     </div>
     <FooterWithRouteCheck/>

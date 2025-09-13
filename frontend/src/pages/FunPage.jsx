@@ -13,6 +13,10 @@ const FunPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile sidebar toggle
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scroll(0,0);
+  })
+
   // Define sections for the index bar
   const sections = [
     { id: 'live-feed', title: 'Live Feed', icon: <Tv className='h-5'/> },
@@ -293,20 +297,10 @@ const handleLAXLive = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900  to-slate-900 text-white">
       {/* Header */}
-      <header className="flex w-full items-center py-1 lg:py-0 sm: bg-black bg-opacity-10 pl-1">
-       
-        
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="lg:hidden p-2 text-white hover:bg-gray-700 ml-auto rounded-lg transition-colors"
-        >
-          {sidebarOpen ? <CloseIcon className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </header>
+      
 
       {/* Main Content with Side Index Bar */}
-      <div className="flex h-screen">
+      <div className="flex min-h-screen lg:h-screen">
         {/* Side Index Bar - Hidden on mobile by default */}
         <div className={`
           fixed lg:static inset-y-0 right-0 z-40 w-72 bg-gray-800 bg-opacity-95 lg:bg-opacity-50 
@@ -360,9 +354,19 @@ const handleLAXLive = () => {
             onClick={() => setSidebarOpen(false)}
           />
         )}
+        
 
         {/* Main Content Area - Scrollable */}
-        <div className="flex-1 overflow-y-auto" style={{scrollbarColor: 'rgb(53, 52, 52) transparent'}}>
+        <div className="flex-1 min-h-screen lg:overflow-y-auto" style={{scrollbarColor: 'rgb(53, 52, 52) transparent'}}>
+           
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="lg:hidden p-1 mx-4 mt-3 text-white hover:bg-gray-700  flex ml-auto rounded-lg transition-colors"
+        >
+          {sidebarOpen ? <CloseIcon className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+
           <div className="px-4 lg:px-16 py-8 mb-10">
             <h1 className="text-2xl lg:text-3xl font-bold pl-2 mb-8">
               Explore {sections.find(s => s.id === activeSection)?.title || 'Fun Page'}

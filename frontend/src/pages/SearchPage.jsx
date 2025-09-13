@@ -8,8 +8,9 @@ import axios from 'axios';
 
 const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(sessionStorage.getItem("squery") || '');
   const { getTv, getMovie, getPerson, data, Loading } = searchStore();
+  const [Data,setData] = useState(sessionStorage.getItem("data") || data)
   const [numitems,setnumitems] = useState(sessionStorage.getItem("numitemss") || 10);
   const [loading,setloading] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(null);
@@ -19,7 +20,16 @@ const SearchPage = () => {
   const logo = new Image();
   logo.src = '/kflix3.png';
  
-     
+  useEffect(()=> {
+    if(data) {
+      setData(data);
+      sessionStorage.setItem("data",data);
+    }
+  },[data])
+
+  useEffect(() => {
+    sessionStorage.setItem("squery",query);
+  },[query])
 
   // Function to get a random content and populate search
   const handleSurpriseMe = async () => {
@@ -59,8 +69,8 @@ const SearchPage = () => {
   }, [searchType]);
 
   useEffect(() => {
-    if(Array.isArray(data) && data.length > 0) {
-      const imagePromises = data
+    if(Array.isArray(Data) && Data.length > 0) {
+      const imagePromises = Data
       .slice(0, numitems)
       .map(item => {
         return new Promise((resolve, reject) => {
@@ -76,10 +86,10 @@ const SearchPage = () => {
       .catch(() => setImagesLoaded(true));
     }
     else {
-      if(data) setImagesLoaded(true);
+      if(Data) setImagesLoaded(true);
     }
    
-  }, [data, numitems]);
+  }, [Data, numitems]);
 
   const inputRef = useRef(null);
   const debouncedQuery = useDebounce(query, 250);
@@ -90,8 +100,8 @@ const SearchPage = () => {
       setloading(true);
       setImagesLoaded(false);
       sessionStorage.setItem('searchType', searchType);
-      const sortResults = (data) => {
-        return data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
+      const sortResults = (Data) => {
+        return Data.sort((a, b) => a.name?.localeCompare(b.name) || a.title?.localeCompare(b.title));
       };
       if (searchType === 'movie') {
         getMovie(debouncedQuery.trim()).then(sortResults).finally(() => setloading(false));
@@ -103,7 +113,10 @@ const SearchPage = () => {
     } else {
       // Clear results if query is too short
       searchStore.setState({ data: null });
+      setData(null);
+      setImagesLoaded(null);
     }
+    setData(data);
   }, [debouncedQuery, searchType]);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -118,7 +131,7 @@ const SearchPage = () => {
     return (
         <div className="h-screen ">
         <div className="flex justify-center items-center bg-black h-full">
-        <Loader className="animate-spin text-red-600 w-10 h-10"/>
+        <Loader className="animate-spin text-gray-500 w-10 h-10"/>
         </div>
       </div>
     )
@@ -168,8 +181,8 @@ const SearchPage = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter search term..."
-            className="py-3 px-2 pr-16 rounded-lg bg-gray-900 border border-gray-700 outline-none focus:ring-0 text-white w-full flex-1"
+            placeholder="Enter atleast 3 characters to search"
+            className="py-3 px-2  rounded-lg bg-gray-900 border placeholder-gray-600 border-gray-700 outline-none focus:ring-0 text-white w-full flex-1"
             required
             autoComplete="off"
           />
@@ -211,11 +224,12 @@ const SearchPage = () => {
         <div className="flex justify-center mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
       )}
       {/* Search Results */}
-      {!Loading && data && imagesLoaded && searchType==='movie' && !loading && (
-        Array.isArray(data) ? (
+      {/* Search Results */}
+      {!Loading && Data && imagesLoaded && searchType==='movie' && !loading && (
+        Array.isArray(Data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-2 lg:px-3 mb-3">
-            {data.slice(0,numitems).map((item, index) => (
+            {Data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link 
                 key={item.id || index} 
@@ -233,7 +247,7 @@ const SearchPage = () => {
                 {(item.release_date || item.first_air_date) && (
                   <p className="text-xs sm:text-sm pb-4 p-2 text-gray-400">
                     {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                    | Rating: <b>{item.vote_average}</b> 
+                    | Rating: <b>{item.vote_average.toFixed(1)}</b> 
                     | {item.adult ? "18+" : "PG-13"}
                   </p>
                 )}
@@ -244,7 +258,7 @@ const SearchPage = () => {
             ))}
              
           </div>
-          {numitems < data?.length &&  (
+          {numitems < Data?.length &&  (
             <div className="flex justify-center items-center mt-6 mb-3 ">
               <button
                 onClick={() => {
@@ -263,15 +277,15 @@ const SearchPage = () => {
           </>
         ) : (
           <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
-            <p>{data}</p>
+            <p>{Data}</p>
           </div>
         )
       )}
-       {!Loading && data && imagesLoaded && searchType==='tv' && !loading && (
-        Array.isArray(data) ? (
+      {!Loading && Data && imagesLoaded && searchType==='tv' && !loading && (
+        Array.isArray(Data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
-            {data.slice(0,numitems).map((item, index) => (
+            {Data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.poster_path) && (
                 <Link 
                 key={item.id || index} 
@@ -289,7 +303,7 @@ const SearchPage = () => {
                 {(item.release_date || item.first_air_date) && (
                   <p className="text-xs sm:text-sm text-gray-400 p-2 ">
                     {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                    | Rating: <b>{item.vote_average}</b> 
+                    | Rating: <b>{item.vote_average.toFixed(1)}</b> 
                     | {item.adult ? "18+" : "PG-13"}
                   </p>
                 )}
@@ -302,7 +316,7 @@ const SearchPage = () => {
             ))}
              
           </div>
-          {numitems < data?.length &&  (
+          {numitems < Data?.length &&  (
             <div className="flex justify-center items-center mt-6 mb-3 ">
               <button
                 onClick={() => {
@@ -321,15 +335,15 @@ const SearchPage = () => {
           </>
         ) : (
           <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
-            <p>{data}</p>
+            <p>{Data}</p>
           </div>
         )
       )}
-       {!Loading && data && imagesLoaded && searchType==='person' && !loading && (
-        Array.isArray(data) ? (
+      {!Loading && Data && imagesLoaded && searchType==='person' && !loading && (
+        Array.isArray(Data) ? (
           <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
-            {data.slice(0,numitems).map((item, index) => (
+            {Data.slice(0,numitems).map((item, index) => (
               (item?.profile_path || item?.poster_path) && (
                 <Link 
                 key={item.id || index} 
@@ -354,7 +368,7 @@ const SearchPage = () => {
             ))}
              
           </div>
-          {numitems < data?.length && (
+          {numitems < Data?.length && (
             <div className="flex justify-center items-center mt-6 mb-3 ">
               <button
                onClick={() => {
@@ -373,7 +387,7 @@ const SearchPage = () => {
           </>
         ) : (
           <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
-            <p>{data}</p>
+            <p>{Data}</p>
           </div>
         )
       )}

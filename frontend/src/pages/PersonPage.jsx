@@ -159,7 +159,7 @@ export default function PersonPage() {
             )}
             {readov >= datap?.biography.length && datap?.biography.length > 350 && (
               <button
-                className="ml-2 text-blue-400 hover:underline font-semibold focus:outline-none"
+                className="ml-2 text-gray-500 hover:underline font-semibold focus:outline-none"
                 onClick={() => setreadov(350)}
               >
                 Read less
@@ -175,7 +175,8 @@ export default function PersonPage() {
         <p className="ml-3 font-semibold">Movies Known For: </p>
       </div>
       {loading1 && (
-          <div className="flex justify-center h-screen mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
+                  <div className="flex justify-center h-screen mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
+
         )}
       <div className="mt-6 mb-3 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
        
@@ -195,7 +196,7 @@ export default function PersonPage() {
                 {(item.release_date || item.first_air_date) && (
                   <p className="text-xs sm:text-sm text-gray-300 pl-2 pb-3">
                     {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                    | Rating: <b>{item.vote_average}</b> 
+                    | Rating: <b>{item.vote_average.toFixed(1)}</b> 
                     | {item.adult ? "18+" : "PG-13"}
                   </p>
                 )}

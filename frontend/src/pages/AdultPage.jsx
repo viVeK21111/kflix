@@ -78,16 +78,7 @@ const AdultPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-slate-900 text-white">
-      {/* Header */}
-      <header className="flex w-full items-center py-1 bg-black bg-opacity-10 pl-1">
-        <Link to={'/'} className='mr-auto'>
-          <img src={'/kflix3.png'} alt='Kflix Logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-        </Link>
-        <Link to={'/fun'} className="flex items-center gap-2 mr-2 text-gray-300 hover:text-white transition-colors">
-          <ArrowLeft className="h-5 w-5" />
-          <span>Back to Fun</span>
-        </Link>
-      </header>
+     
 
       {/* Main Content */}
       <div className="px-4 py-8">

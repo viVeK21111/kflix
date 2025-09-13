@@ -85,10 +85,9 @@ const ContactPage = () => {
   return (
     <div className="relative contact-bg backdrop-blur justify-center items-center min-h-screen">
       
-      <div className='flex justify-center pt-10'>
-      <div className="max-w-xl w-full md:m-3 m-0 bg-black bg-opacity-80 p-5 rounded-lg shadow-md">
-    <h2 className="text-2xl font-semibold text-white mb-3 text-center">Contact Us</h2>
-    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="bg-black h-screen bg-opacity-60 p-5 rounded-lg shadow-md">
+    <h2 className="text-2xl font-semibold text-white mb-10 text-center">Contact Us</h2>
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto bg-gray-800 p-5 rounded-lg">
         <label htmlFor="name" className="flex text-white font-medium">Name</label>
         <input 
             type="text" 
@@ -123,7 +122,7 @@ const ContactPage = () => {
 
         <button 
             type="submit" 
-            className="w-full bg-blue-600 text-white py-2 font-semibold rounded-md hover:bg-blue-700"
+            className="flex w-20 mx-auto bg-blue-600 justify-center text-white py-2 font-semibold rounded-md hover:bg-blue-700"
         >
             Send
         </button>
@@ -133,9 +132,6 @@ const ContactPage = () => {
         </div>
     )}
     </form>
-    </div>
-
-    </div>
     <div className='flex justify-center pt-7 pb-3'>
             <p className='text-white'>Join our</p>
          <Link 
@@ -145,6 +141,11 @@ const ContactPage = () => {
       <img src="/d1.png" className="mr-2 h-4 mx-auto"></img><p>Discord</p>
         </Link>
         </div>
+    </div>
+    
+
+ 
+    
 
    
       </div>

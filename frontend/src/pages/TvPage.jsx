@@ -204,7 +204,7 @@ const TvPage = () => {
       
       <div className="h-screen ">
             <div className="flex justify-center items-center bg-black h-full">
-            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            <Loader className="animate-spin text-gray-500 w-10 h-10"/>
             </div>
       </div>
     );
@@ -256,13 +256,14 @@ const TvPage = () => {
         <div className="md:absolute inset-0 md:bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
         <div className="md:absolute inset-0 md:bg-gradient-to-r from-black/50  to-transparent"></div>
         <div className="md:absolute lg:max-w-3xl p-1 sm:p-2 md:p-0 bottom-2 left-3 rounded-t-lg">
-        <div className='mt-4 sm:hidden ml-1'>
+        <div className=' sm:hidden ml-1'>
+        <h3 className="flex text-xl my-3 font-bold text-white">{data?.name}</h3>
             <div className='flex'>
             <p className="flex gap-2 items-center bg-white bg-opacity-20 text-semibold rounded-md px-2 py-1">
                   {data?.adult ? "18+" : "PG-13"} 
           </p>
           <div className='flex items-center'>
-          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average}  </p>
+          <p className="flex ml-2"><Star className='size-5 pt-1'/>{data?.vote_average?.toFixed(1)}  </p>
           <p className='ml-5 flex'>
           {data?.genres && data?.genres.slice(0,2).map((item, index) => (
           <div key={item.id} className="flex items-center text-white">
@@ -294,10 +295,10 @@ const TvPage = () => {
             </button>
            
         </div>
-          <h1 className="text-xl px-1 md:text-2xl xl:text-3xl font-bold mb-4 mt-3 text-white">
+          <h1 className="hidden sm:flex text-xl px-1 md:text-2xl xl:text-3xl font-bold mb-3 mt-3 text-white">
             {data?.name}
           </h1>
-          <p className={(window.innerWidth < 768 && data?.overview.length>readov) ? `text-base mb-2 px-1 max-w pb-2` : `text-sm px-1 md:text-base mb-2 max-w pb-2` }>
+          <p className={`px-1 text-base mb-2 max-w pb-2 pt-3 sm:pt-0` }>
             {data?.overview.length < readov ? data?.overview : ( 
               <> 
             {data?.overview.slice(0, readov)}
@@ -308,7 +309,7 @@ const TvPage = () => {
           )}
           </p>
           <p className="hidden sm:flex items-center gap-2 mb-2">
-            <p className="bg-white bg-opacity-15 p-1 rounded-lg flex items-center ">{data?.adult ? "18+" : "PG-13"}</p> <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average}</p>
+            <p className="bg-white bg-opacity-15 p-1 rounded-lg flex items-center ">{data?.adult ? "18+" : "PG-13"}</p> <p className="flex"><Star className='size-5 pt-1' />{data?.vote_average?.toFixed(1)}</p>
             <p className="flex ml-2 items-center">
             {data?.genres && data?.genres.slice(0,2).map((item, index) => (
           <div key={item.id} className="flex items-center text-white">
@@ -326,7 +327,7 @@ const TvPage = () => {
           
             </div>
 
-            <div className="md:hidden flex items-center mb-2 sm:mb-0 sm:mt-2">
+            <div className="md:hidden flex items-center my-3 ml-2 sm:ml-0">
             <button
           className='flex bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg items-center'
           onClick={(e) => addWatchList(e, data?.id)}
@@ -342,7 +343,7 @@ const TvPage = () => {
             )}
             </div>
             
-          <div className="sm:hidden pl-1 text-md mb-2">
+          <div className="sm:hidden pl-2 text-md my-2">
           <p>
             <strong>Creator:</strong>{" "}
             {Array.isArray(data.created_by) &&
@@ -354,7 +355,7 @@ const TvPage = () => {
          
         </div>
         <div className="flex items-center">
-        <button className='hidden sm:flex mr-2 justify-center py-1 mt-3 bg-blue-600 items-center hover:bg-blue-800 px-2 rounded-md'
+        <button className='hidden sm:flex mr-2 justify-center py-1 mt-2 md:mt-3 mb-2 md:mb-0 bg-blue-600 items-center hover:bg-blue-800 px-2 rounded-md'
             onClick={() => handleNavigation1(1, 1)}
             >
             <Play className='size-6 fill-white p-1'/>
@@ -377,7 +378,7 @@ const TvPage = () => {
             )}
         </div>
        
-        <div className="hidden sm:flex items-center mt-3 pl-1 pr-1 text-md">
+        <div className="hidden sm:flex items-center mt-2 md:mt-3 pl-1 pr-1 text-md mb-2 md:mb-0">
           <p>
             <strong>Creator:</strong>{" "}
             {Array.isArray(data.created_by) &&

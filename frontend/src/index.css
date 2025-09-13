@@ -7,7 +7,7 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+
   min-height: 100vh;
 }
 .contact-bg {
@@ -16,3 +16,30 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width:4px;   /* thin width */
+  height:4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 160, 160, 0.7);  /* light gray thumb */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(200, 200, 200, 0.9);
+}
+
+::-webkit-scrollbar-track {
+  background: #000;   /* pure black track background */
+}
+
+/* Remove scrollbar arrows */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox support */

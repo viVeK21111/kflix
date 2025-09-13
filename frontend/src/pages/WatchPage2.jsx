@@ -43,12 +43,7 @@ function WatchPage() {
   const [showIframe, setShowIframe] = useState(false);
   const [selectedTrailer, setSelectedTrailer] = useState(null);
   const [loadingTrailers, setLoadingTrailers] = useState(false);
-  const [trailerSources, setTrailerSources] = useState([
-    {
-      name: "The Odyssey (2026) IMAX teaser",
-      src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
-    }
-  ]);
+  const [trailerSources, setTrailerSources] = useState([]);
 
   const Id = queryParams.get('id');
   const Name = queryParams.get('name');
@@ -264,40 +259,46 @@ function WatchPage() {
     setLoadingTrailers(true);
     try {
       const res = await axios.get(`/api/v1/movies/trending`);
-      const trending = res.data.content[Math.floor(Math.random() * res.data.content?.length)];
+      const trending = res.data.content.slice(0,5);
 
       //console.log("trending "+trending)
-      if (trending) {
-        const trailerIdRes = await axios.get(`/api/v1/movies/trailers/${trending.id}`);
-        const trailerList = trailerIdRes?.data?.content || [];
-        const tid = trailerList.find(item => item.type === "Trailer" && item.site === "YouTube")
-          || trailerList.find(item => item.type === "Teaser" && item.site === "YouTube");
-        if (tid) {
-          setTrailerSources([
-            {
-              name: "The Odyssey (2026) IMAX teaser",
-       
-              src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
-            },
-            {
-              name: `${trending.title || trending.name} Official Trailer`,
-              src: `https://www.youtube.com/embed/${tid.key}`
-            }
-          ]);
+      
+        const tmap = await Promise.all(
+          trending.map(async item => {
+            const res = await axios.get(`/api/v1/movies/trailers/${item.id}`);
+            const trailerList = res?.data?.content || [];
+            const tid = trailerList.find(t => t.type === "Trailer" && t.site === "YouTube")
+              || trailerList.find(t => t.type === "Teaser" && t.site === "YouTube");
+            return {
+              title: item.title || item.name,
+              key: tid?.key || null
+            };
+          })
+        );
+
+        // Build sources array (only include entries with a valid YouTube key)
+        const sources = tmap
+          .filter(item => item.key)
+          .map(item => ({
+            name: `${item.title} Official Trailer`,
+            src: `https://www.youtube.com/embed/${item.key}`,
+          }));
+
+        if (sources.length > 0) {
+          setTrailerSources(sources);
         } else {
           setTrailerSources([
             {
-              name: "The Odyssey (2026) IMAX teaser",
-              src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
-            }
+              name: "No trailer fetched",
+              src: "https://youtube.com/",
+            },
           ]);
         }
-      }
     } catch (err) {
       setTrailerSources([
         {
-          name: "The Odyssey (2026) IMAX teaser",
-          src: "https://drive.google.com/file/d/1dXLcH-_1ELu1V2hPr5YD6Ql9M-UuGoRm/preview"
+          name: "No trailer fetched",
+          src: "https://youtube.com/"
         }
       ]);
     }
@@ -308,7 +309,7 @@ function WatchPage() {
     return (
       <div className="h-screen">
         <div className="flex justify-center items-center bg-black h-full">
-          <Loader className="animate-spin text-red-600 w-10 h-10"/>
+          <Loader className="animate-spin text-gray-500 w-10 h-10"/>
         </div>
       </div>
     )
@@ -323,9 +324,7 @@ function WatchPage() {
       <div className=''>
         {/* Header with Mobile Menu */}
         <header className={bgColorClass!='bg-black'?`hidden sm:flex items-center bg-slate-900 bg-opacity-40 ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`:`hidden sm:flex items-center bg-black ${!Season ? 'py-0 sm:py-2' : 'py-0 sm:py-1'}`}>
-          <Link to={'/'} className='flex items-center ml-1'>
-            <img src={'/kflix3.png'} alt='kflix logo' className='w-30 sm:w-32 h-12 sm:h-14' />
-          </Link>
+         
           
         
           {showTip && (
@@ -368,7 +367,7 @@ function WatchPage() {
           >
            
             <Clapperboard size={21} className='flex  items-center  2xl:mr-1 h-4 ' />
-            <p className='hidden 2xl:flex'>Trailers Exclusive</p>
+            <p className='hidden 2xl:flex'>Trailers Trending</p>
           </button>
         </div>
         {/* Trailer Modal */}
@@ -385,7 +384,8 @@ function WatchPage() {
               {loadingTrailers ? (
                 <div className="flex items-center  w-[20vw]  justify-center h-20 text-white text-lg">Loading trailers...</div>
               ) : !showIframe ? (
-                <div className="flex flex-col gap-2 pr-7 pt-4 pl-2 pb-2">
+                <div className="flex flex-col gap-2 px-4 pt-5 pb-4">
+                  <p className='text-white p-1'>Select Trailer</p>
                   {trailerSources.map((trailer, idx) => (
                     <button
                       key={idx}
@@ -481,7 +481,7 @@ function WatchPage() {
                         <div className="lg:hidden 2xl:flex items-center justify-between">
                         <div className="flex items-center gap-1">
                       
-                          <p className="text-sm text-gray-500">Use <a href='https://brave.com/download/' className='text-blue-200' target='_blank'>Brave</a> browser or <a href="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb?hl=en-US" target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:underline">Ad blocker</a> for ad free experience</p>
+                          <p className="text-sm text-gray-500">Use <a href='https://brave.com/download/' className='text-gray-400 hover:underline' target='_blank'>Brave</a> browser or <a href="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb?hl=en-US" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:underline">Ad blocker</a> for ad free experience</p>
                         </div>
                      
                         </div>
@@ -517,7 +517,7 @@ function WatchPage() {
             </div>
           
             <h1 className={`flex flex-wrap mt-5 break-words items-center text-lg md:text-xl lg:text-2xl text-left gap-2 font-semibold ${text} mb-3`}>
-              Now Playing: <span className='font-extralight break-words'>{Name}</span>
+               <span className='font-extralight break-words'>{Name}</span>
             </h1>
             
             {datac && !Season && (
@@ -532,7 +532,7 @@ function WatchPage() {
             )}
             {Season && datae?.episodes && (
               <div className='text-white flex items-center w-full max-w-4xl mb-4'>
-                <p className='flex font-extralight'> <p className='font-semibold mr-2'>Name:</p> {datae.episodes[Episode-1]?.name} </p>
+                <p className='flex font-extralight'> <p className='font-semibold mr-2'>Episode:</p> {datae.episodes[Episode-1]?.name} </p>
                 <div className='hidden sm:flex ml-auto'>
                   {Episode > 1 && (
                     <Link to={`/watch/?id=${Id}&name=${Name}&season=${Season}&episode=${Episode-1}&tepisodes=${tEpisodes}`} className='text-white bg-white rounded-l-lg rounded-r-sm px-2 p-1 bg-opacity-10 hover:bg-opacity-15 mr-1'>
@@ -566,7 +566,7 @@ function WatchPage() {
             )}
           
           </div>
-          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-4xl items-center bg-yellow-600 bg-opacity-70 md:bg-opacity-100  lg:rounded-sm font-semibold text-black text-sm p-2 lg:p-1  mt-6 lg:mb-3`: `flex bg-yellow-600 bg-opacity-70 md:bg-opacity-100 lg:rounded-sm font-semibold text-black text-sm w-full max-w-5xl lg:max-w-4xl items-center p-2 lg:p-1 mt-3 lg:m-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
+          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-4xl items-center bg-gray-600 md:bg-blue-800 lg:rounded-sm font-semibold text-gray-300 text-sm p-2 mt-6 lg:mb-3`: `flex bg-gray-600 md:bg-blue-800 text-gray-300  lg:rounded-sm font-semibold text-sm w-full max-w-5xl lg:max-w-4xl items-center p-2 mt-3 lg:m-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
 
           {Loading ? (
             <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
@@ -576,12 +576,12 @@ function WatchPage() {
                 <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row mt-10` ):(datam?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`: `text-left w-full flex items-center justify-center flex-col mt-10`)}>
                   <img
                     src={`${ORIGINAL_IMG_BASE_URL}${datam?.seasons?.[Season]?.poster_path || (datam?.poster_path || datam?.backdrop_path || datam?.profile_path)}`}
-                    className="w-64 sm:w-80 h-52 sm:h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
+                    className="w-56 sm:w-64 h-64 object-cover rounded-lg mb-5 md:mb-2 lg:mb-2 xl:mb-2"
                     alt={datam?.title || datam?.name}
                   />
                   <p className={!Season ? `md:hidden` : `mb-3 md:mt-2`}>
                     {(datam?.release_date) && (
-                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
+                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
                     )}
                   </p>
                   <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
@@ -589,7 +589,7 @@ function WatchPage() {
                     {Season && <span className='hidden md:flex text-white mt-3 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2 w-full max-w-6xl'>{datae?.episodes?.[Episode-1]?.overview}</span>}
                     {!Season && (
                       <button
-                        className='hidden md:flex bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded items-center'
+                        className='hidden md:flex bg-gray-700 bg-opacity-85 hover:bg-gray-600 text-white text-sm font-semibold py-1 mt-5 mb-2 px-2 rounded items-center'
                         onClick={(e) => addWatchList(e, datam?.id)}
                       >
                         <Plus className='size-5' />
@@ -598,7 +598,7 @@ function WatchPage() {
                     )}
                     {Season && (
                       <button
-                        className='hidden md:flex bg-red-600 bg-opacity-85 hover:bg-red-800 text-white font-semibold py-1 mt-5 mb-2 px-2 rounded items-center'
+                        className='hidden md:flex bg-gray-700 bg-opacity-85 hover:bg-gray-600 text-white text-sm font-semibold py-1 mt-5 mb-2 px-2 rounded items-center'
                         onClick={(e) => addWatchEpisode(e)}
                       >
                         <Plus className='size-5' />
@@ -610,7 +610,7 @@ function WatchPage() {
                 <div className={(!Season && datam?.overview.length>0) ? `hidden md:flex w-full xl:pl-12 mt-2 mb-2` : (datam?.overview?.length==0 ? `hidden md:flex justify-center w-full mt-2 mb-2`:`hidden`) }>
                   <p>
                     {(datam?.release_date || datam?.first_air_date) && (
-                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
+                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
                     )}
                   </p>
                 </div>

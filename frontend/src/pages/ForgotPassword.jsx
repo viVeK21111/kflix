@@ -48,13 +48,8 @@ export default function ForgotPassword() {
 
   return (
     <div className=" justify-center min-h-screen bg-gray-100 px-4 contact-bg">
-        <header className='max-w-6xl mx-auto flex justify-center p-4'>
-              <Link to={'/'} className='flex items-center'>
-              <img src={'/kflix3.png'} alt='logo' className='w-52' />
-              
-              </Link>
-            </header>
-            <div className="flex items-center justify-center mt-24 sm:mt-28">
+        
+            <div className="flex items-center justify-center pt-32">
                 <div className="w-full max-w-md bg-black/70 rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold text-center text-white mb-6">Forgot Password</h2>
         

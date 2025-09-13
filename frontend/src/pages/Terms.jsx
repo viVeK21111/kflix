@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { House } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Terms() {
+  useEffect(() => {
+    window.scroll(0,0);
+  })
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
@@ -24,7 +28,7 @@ export default function Terms() {
         <div className="mb-6 sm:mb-8">
           <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">Important Notice</h2>
           <p className="text-base text-gray-400">
-            No movies or TV shows are stored on KFlix servers. All content is streamed directly from
+            No content of Movies or Tv shows stored in KFlix servers. All the content is streamed from
             third-party providers.
           </p>
         </div>
@@ -49,12 +53,7 @@ export default function Terms() {
             </Link>
             .
           </p>
-            <Link 
-          className="inline-flex items-center mt-2 text-gray-500 font-semibold rounded-lg"
-            to={'https://discord.gg/P3rcqHwp9d'} target="_blank"
-            >
-          <p>Join our Discord for discussions</p><img src="/d2.png" className="ml-2 h-4 mx-auto"></img>
-        </Link>
+          
         </div>
       </div>
     </div>

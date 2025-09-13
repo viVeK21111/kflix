@@ -22,7 +22,7 @@ const AuthScreen = () => {
         return (
             <div className="h-screen ">
             <div className="flex justify-center items-center bg-black h-full">
-            <Loader className="animate-spin text-red-600 w-10 h-10"/>
+            <Loader className="animate-spin text-gray-500 w-10 h-10"/>
             </div>
           </div>
         )
@@ -34,8 +34,9 @@ const AuthScreen = () => {
     };
 
     return (
-        <div className='hero-bg relative'>
+        <div className='relative '>
             {/* Navbar */}
+            <div className="hero-bg">
             <div className='flex items-center justify-between p-2  max-w-full ml-2  md:ml-3'>
                 
                 <img src='/kflix3.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
@@ -46,10 +47,9 @@ const AuthScreen = () => {
             </div>
 
             {/* hero section */}
-            <div className='h-screen flex flex-col items-center justify-center text-center  text-white max-w-6xl mx-auto'>
-                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Unlimited Free Movies, Tv shows, and More</h1>
+            <div className='h-screen flex flex-col pb-10 items-center justify-center text-center  text-white max-w-6xl mx-auto'>
+                <h1 className='text-xl sm:text-2xl md:text-3xl font-bold mb-4'>Watch Movies, Tv shows, and More</h1>
  
-                <p className='mb-4 text-sm sm:text-lg md:text-xl font-semibold text-gray-200'>Ready to watch? Ready your popcorn.</p>
                  
                     <button onClick={handleFormSubmit} className='bg-blue-600 hover:bg-blue-700 text-lg  md:text-xl px-2 md:px-4 lg:px-6 py-2  rounded flex justify-center items-center'>
                         Get Started
@@ -57,35 +57,13 @@ const AuthScreen = () => {
                     </button>
               
             </div>
+            </div>
+           
 
             {/* separator */}
-            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
+            <div className=' w-full bg-[#232323]' aria-hidden='true' />
 
-            {/* 1st section */}
-            <div className='py-5 bg-black text-white'>
-                <div className='flex max-w-6xl  items-center justify-center md:flex-row flex-col px-4 mx-10 xl:mx-auto md:px-2'>
-                    {/* left side */}
-                    <div className='flex-1 text-center md:text-left'>
-                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Enjoy your Movies and Tvshows</h2>
-                        <p className='text-lg md:text-xl'>
-                            For completely Free
-                        </p>
-                    </div>
-                    {/* right side */}
-                    <div className='flex-1 relative'>
-                        <img src='/tv.png' alt='Tv image' className='mt-4 z-20 relative' />
-                        <video
-                            className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 z-10'
-                            playsInline
-                            autoPlay={true}
-                            muted
-                            loop
-                        >
-                            <source src='/hero-vid.m4v' type='video/mp4' />
-                        </video>
-                    </div>
-                </div>
-            </div>
+            
 
             {/* separator */}
             <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
@@ -133,7 +111,7 @@ const AuthScreen = () => {
                     <div className='flex-1 text-center md:text-left'>
                         <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Watch everywhere</h2>
                         <p className='text-lg md:text-xl'>
-                            Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.
+                            Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV for completely free.
                         </p>
                     </div>
 
