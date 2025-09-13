@@ -27,114 +27,21 @@ export const GetMovieList = async (req, res) => {
                 query : query,
             }
         }});
+        const systemInstruction = `
+      You are a chatbot named 'Flix' on a movie and TV streaming platform. 
+      Your task is to assist the user in finding movies or TV shows.
 
-    // checking latest or old data
-    let lod;
-    const si = `If this prompt needs information beyond your training cutoff reply with "yes" orelse reply with "no".\n
-                **STRICT RULE: only reply with "yes" or "no". No other extra text at any case.
-                 `;
-    let modelname = "llama-3.1-8b-instant";
-    if(aimodel==="Gemini") {
-        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash",si });
-        const chat = model.startChat({
-            generationConfig: {
-              maxOutputTokens: 50, // Adjust as needed
-              temperature: 1,
-            },
-          });
-          lod = await chat.sendMessage(query.toLowerCase());
-          lod = lod.response.text();
-    }
-    else {
-        console.log(`${aimodel} called`);
-        if(aimodel==="llama-3.1"){
-            modelname = "llama-3.1-8b-instant"
-        }
-        else if(aimodel==="deepseek-r1") {
-            modelname = "deepseek-r1-distill-llama-70b"
-        }
-        else if(aimodel=="openai/gpt-oss") {
-             modelname = "openai/gpt-oss-120B"
-        }
-        else if(aimodel=="groq/compound") {
-            modelname = "groq/compound"
-       }
-        const messages = []
-        messages.push({ role: 'system', content: si });
-        messages.push({ role: 'user', content: query.toLowerCase() });
+        Rules:
+        - If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
+        - If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
+        - If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
+        - If the user asks any question outside of movies or TV context, try to give a response according to the user's context and respond with a friendly message and ask the user what they would like to watch.
 
-        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-        
-        const response = await groq.chat.completions.create({
-              model: modelname,
-              messages: messages,
-              temperature: 1,
-            });
+        STRICT
+        - Titles must in the format  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
+        - If no specific content is found then explain why you can't find it. 
 
-        lod = response.choices[0].message.content;
-        lod = lod.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
-        lod = lod.replace(/<\/?think>/gi, '').trim();
-        }
-        
-        console.log("lod ",lod);
-        let lod1 = "no";
-        if (lod.includes("yes")) {
-            lod1 = "yes";
-        }
-        else {
-            lod1 = "no";
-        }
-       console.log("lod1 ",lod1);
-        let systemInstruction;
-        if(lod1==="yes") {
-            // To install: npm i @tavily/core
-                
-                const client = tavily({ apiKey: process.env.TAVILY_KEY });
-                const tres = await client.search(query, {
-                    includeAnswer: "advanced"
-                })
-               // console.log("tres ",tres);
-                let tavrep = tres.answer
-
-                systemInstruction = `
-                You are a chatbot named 'Flix' on a movie and TV streaming platform. 
-                From the summary give below \n
-                ${tavrep} \n
-                give outpu according to the rules below \n
-
-                  Rules:\n
-                - If included movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
-                - If includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
-                - If includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
-
-
-                **STRICT FORMAT\n
-                - Follow strict json format as i mentioned in the Rules if the content is found. 
-                - Titles in json must follow "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
-                - If the user asks any question outside of movies or TV context respond with a friendly message and ask the user what they would like to watch.
-                - Don't Include JSON keyword in the result
-                `;
-        }
-    
-        else {
-            systemInstruction = `
-            You are a chatbot named 'Flix' on a movie and TV streaming platform. 
-            Your task is to assist the user in finding movies or TV shows.
-      
-              Rules:
-              - If prompt includes movies (e.g., "movie", "cinema", "film"), respond with a light, engaging conversation followed by a JSON string like {"movies": ["movie1 (year)", "movie2 (year)", .... , "movie(n) (year)"]} Give as many names as possible or based on the user prompt. 
-              - If prompt includes TV shows (e.g., "tv", "show", "anime", "series", "documentaries" or "documentary", "serial", "cartoon"), respond with a light conversation followed by a JSON string like {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]} Give as many names as possbile or based on user prompt. 
-              - If prompt includes multiple genres, put all of them in single json string {"movies": ["movie1 (year)", "movie2 (year)",...., "movie(n) (year)"]} or {"tv": ["tv1 (year)", "tv2 (year)",...., "tv(n) (year)"]}
-      
-              **STRICT RULES**
-              - Follow strict json format as i mentioned in the Rules if the content is found. 
-              - Titles in json must follow  "<Name> <year>" there shouldn't be any text before or after records in json, if found just don't include it.
-              - If the user asks any question outside of movies or TV context respond with a friendly message and ask the user what they would like to watch.
-
-          `;
-        }
-       
+    `;
         const conversationHistory = history || []; // Default to empty if no history
 
         
