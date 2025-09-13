@@ -14,8 +14,7 @@ export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
     const { query, history } = req.body;
-    let aimodel = req.body.aimodel || "deepseek-r1";
-
+    let aimodel = req.body.aimodel;
 
 
     if (!query || (typeof query === 'string' && query.trim().length === 0)) {
@@ -29,9 +28,18 @@ export const GetMovieList = async (req, res) => {
             }
         }});
         let lod;
-        const si = `If this prompt needs information beyond your training knowledge reply with "yes" or else reply with "no".\n
-                    **VERY STRICT RULE: only reply with "yes" or "no". No other extra text at any case.
-                     `;
+        const si = `You must respond with ONLY "yes" or "no" - nothing else.
+
+Question: Does this prompt need information beyond your training knowledge?
+
+Rules:
+- If YES, respond with exactly: yes
+- If NO, respond with exactly: no
+- Do not include any other text, explanations, or punctuation
+- Do not use quotes around your answer
+- Do not add periods, commas, or any other characters
+
+Your response must be exactly one word: either "yes" or "no"`;
         let modelname = "llama-3.1-8b-instant";
         if(aimodel==="Gemini") {
             const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
@@ -82,8 +90,41 @@ export const GetMovieList = async (req, res) => {
             
             console.log("lod ",lod);
             let lod1 = "no";
-            if (typeof lod === 'string' && /(^|\W)yes(\W|$)/i.test(lod)) {
-                lod1 = "yes";
+            if (typeof lod === 'string') {
+                // Clean the response and check for yes/no
+                const cleanLod = lod.toLowerCase().trim();
+                
+                // More comprehensive yes detection
+                if (cleanLod === 'yes' || 
+                    cleanLod.includes(' yes ') || 
+                    cleanLod.startsWith('yes ') || 
+                    cleanLod.endsWith(' yes') || 
+                    cleanLod === 'yes.' ||
+                    cleanLod.includes('yes,') ||
+                    cleanLod.includes('yes:') ||
+                    cleanLod.includes('yes!') ||
+                    cleanLod.includes('yes?') ||
+                    cleanLod.match(/^yes\s*[.,:!?]*$/)) {
+                    lod1 = "yes";
+                } 
+                // More comprehensive no detection
+                else if (cleanLod === 'no' || 
+                         cleanLod.includes(' no ') || 
+                         cleanLod.startsWith('no ') || 
+                         cleanLod.endsWith(' no') || 
+                         cleanLod === 'no.' ||
+                         cleanLod.includes('no,') ||
+                         cleanLod.includes('no:') ||
+                         cleanLod.includes('no!') ||
+                         cleanLod.includes('no?') ||
+                         cleanLod.match(/^no\s*[.,:!?]*$/)) {
+                    lod1 = "no";
+                } 
+                // If response is unclear or contains other text, default to "no" for safety
+                else {
+                    console.log('Unclear response from LLM, defaulting to "no":', lod);
+                    lod1 = "no";
+                }
             } else {
                 lod1 = "no";
             }
