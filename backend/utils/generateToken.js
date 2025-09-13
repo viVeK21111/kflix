@@ -13,6 +13,6 @@ export const generateToken = (userId,res) => {
     secure: true,
     sameSite: 'none',
     path : '/',
-  //  domain: process.env.COOKIE_DOMAIN,
+    domain: process.env.COOKIE_DOMAIN,
     });
 }
