@@ -13,12 +13,14 @@ import { tavily } from '@tavily/core';
 export const GetMovieList = async (req, res) => {
     //const __filename = fileURLToPath(import.meta.url);
     //const __dirname = path.dirname(__filename);
-    const {query,history,aimodel} = req.body;
-   
+    const { query, history } = req.body;
+    let aimodel = req.body.aimodel || "deepseek-r1";
 
-    if(query.length==0){
-       return res.status(500).json({success:false,message:"Query can't be empty"});
-    }   
+
+
+    if (!query || (typeof query === 'string' && query.trim().length === 0)) {
+       return res.status(400).json({ success: false, message: "Query can't be empty" });
+    }
         // save query in chathistory
         await User.findByIdAndUpdate(req.user._id,{
             $push:{
@@ -62,23 +64,27 @@ export const GetMovieList = async (req, res) => {
     
             const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
             
-            const response = await groq.chat.completions.create({
+            try {
+                const response = await groq.chat.completions.create({
                   model: modelname,
                   messages: messages,
                   temperature: 2,
                 });
-    
-            lod = response.choices[0].message.content;
-            lod = lod.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
-            lod = lod.replace(/<\/?think>/gi, '').trim();
+
+                lod = response.choices[0].message.content;
+                lod = (lod || '').replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
+                lod = lod.replace(/<\/?think>/gi, '').trim();
+            } catch (error) {
+                console.log('Error while calling groq for yes/no check:', error && error.message);
+                lod = 'no';
+            }
             }
             
             console.log("lod ",lod);
             let lod1 = "no";
-            if (lod.includes("yes")) {
+            if (typeof lod === 'string' && /(^|\W)yes(\W|$)/i.test(lod)) {
                 lod1 = "yes";
-            }
-            else {
+            } else {
                 lod1 = "no";
             }
            console.log("lod1 ",lod1);
