@@ -47,7 +47,7 @@ export const GetMovieList = async (req, res) => {
         
         let prompt = query.toLowerCase();
         let result;
-        modelname = "llama-3.3-70b-versatile";
+        let modelname = "llama-3.3-70b-versatile";
 
        
         if(aimodel==="Gemini") {
