@@ -106,7 +106,15 @@ export const getPersonCredits = async(req,res) => {
         if(data.length===0) {
             return res.json({success:false,message:"No person found"});
         }
-        res.json({success:true,content:data});
+        
+        // Sort by popularity in descending order
+        const sortedData = {
+            ...data,
+            cast: data.cast ? data.cast.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)) : [],
+            crew: data.crew ? data.crew.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)) : []
+        };
+        
+        res.json({success:true,content:sortedData});
         console.log("person credits success");
        
     }
