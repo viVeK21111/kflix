@@ -90,7 +90,7 @@ export const getPersonDetails = async(req,res) => {
             return res.json({success:false,message:"No person found"});
         }
         res.json({success:true,content:data});
-        console.log("person details success");
+       // console.log("person details success");
        
     }
     catch(error) {
@@ -115,7 +115,7 @@ export const getPersonCredits = async(req,res) => {
         };
         
         res.json({success:true,content:sortedData});
-        console.log("person credits success");
+       // console.log("person credits success");
        
     }
     catch(error) {
@@ -123,6 +123,25 @@ export const getPersonCredits = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }   
 }
+
+export const getPersonPopular = async(req,res) => {
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/person/popular?language=en-US&page=1`);
+        
+     
+        const sortedPeople = data.results.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        
+        res.json({success:true,content:sortedPeople});;
+       
+    }
+    catch(error) {
+        console.log("Error in searching popular person: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
+
+
+
 
 export const searchHistory = async(req,res) => {
     try {
