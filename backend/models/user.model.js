@@ -57,6 +57,12 @@ const userSchema = mongoose.Schema({
 			type:Boolean,
 			default:false
 		},
+	},
+	flappy : {
+		score : {
+			type: Number,
+			default: 0,
+		}
 	}
 });
 
