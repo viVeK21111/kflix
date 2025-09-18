@@ -12,6 +12,9 @@ import {getTvCredits} from '../controllers/tv.controller.js';
 import {getAnimePopular} from '../controllers/tv.controller.js';
 import {getAnimeTopRated} from '../controllers/tv.controller.js';
 import {getAnimeOnAir} from '../controllers/tv.controller.js';
+import { getKdramaOnAir } from '../controllers/tv.controller.js';
+import { getKdramaPopular } from '../controllers/tv.controller.js';
+import { getKdramaTopRated } from '../controllers/tv.controller.js';
 
 const router = express.Router();
 
@@ -28,5 +31,9 @@ router.delete('/removeWatchE/:id/:season/:episode',protectRoute ,removeEpisode);
 router.get('/anime/popular',protectRoute,getAnimePopular);
 router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
 router.get('/anime/on-air',protectRoute,getAnimeOnAir);
+router.get('/kdrama/popular',protectRoute,getKdramaPopular);
+router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
+router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
+
 
 export default router;
