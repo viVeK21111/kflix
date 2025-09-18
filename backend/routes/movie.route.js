@@ -9,6 +9,9 @@ import { protectRoute } from '../middleware/protectRoute.js';
 import { addMovieWatch } from '../controllers/movie.controller.js';
 import {getWatchlist} from '../controllers/movie.controller.js';
 import { removeFromWatchlist } from '../controllers/movie.controller.js';
+import { getKdramaOnAir } from '../controllers/movie.controller.js';
+import { getKdramaPopular } from '../controllers/movie.controller.js';
+import { getKdramaTopRated } from '../controllers/movie.controller.js';
 
 const router = express.Router();
 
@@ -24,4 +27,8 @@ router.delete('/removeWatch/:id',protectRoute,removeFromWatchlist);
 router.get('/anime/popular',protectRoute,getAnimePopular);
 router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
 router.get('/anime/on-air',protectRoute,getAnimeOnAir);
+router.get('/kdrama/popular',protectRoute,getKdramaPopular);
+router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
+router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
+
 export default router;

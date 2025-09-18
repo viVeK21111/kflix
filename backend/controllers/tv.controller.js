@@ -79,7 +79,9 @@ export const getAnimeOnAir = async (req,res) => {
         const TODAY = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
-        const data = [...data1.results,...data2.results]
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=3`);
+
+        const data = [...data1.results,...data2.results,data3.results]
         res.json({ success: true, content: data });
     } catch (error) {
         console.log("Error in getting anime on air: " + error.message);
@@ -92,7 +94,9 @@ export const getKdramaOnAir = async (req,res) => {
         const TODAY = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
-        const data = [...data1.results,...data2.results]
+        const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=3`);
+
+        const data = [...data1.results,...data2.results,data3.results]
         res.json({ success: true, content: data });
     } catch (error) {
         console.log("Error in getting anime on air: " + error.message);
