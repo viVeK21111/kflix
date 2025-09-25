@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Plane, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2 } from 'lucide-react';
+import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Plane, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -9,9 +9,11 @@ const FunPage = () => {
   const [videoId, setVideoId] = useState(""); // You'll provide the YouTube ID later
   const [adultPreference, setAdultPreference] = useState(false);
   const [showAdultWarning, setShowAdultWarning] = useState(false);
-  const [activeSection, setActiveSection] = useState('live-feed'); // Default to live feed
+  const [activeSection, setActiveSection] = useState(sessionStorage.getItem("funSelect") || 'live-feed'); // Default to live feed
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile sidebar toggle
   const navigate = useNavigate();
+  const [GameLink,setGameLink] = useState('');
+  const [showGamePlayer,setShowGamePlayer] = useState(false);
 
   useEffect(() => {
     window.scroll(0,0);
@@ -21,7 +23,9 @@ const FunPage = () => {
   const sections = [
     { id: 'live-feed', title: 'Live Feed', icon: <Tv className='h-5'/> },
     { id: 'documentaries', title: 'Documentaries', icon: <Video className=''/> },
-    {id:'games',title:'Games',icon: <Gamepad2 className='h-5'/>}
+    { id:'games',title:'Games',icon: <Gamepad2 className='h-5'/>},
+    { id: 'news',title: "News" , icon : <Newspaper className='h-5' />}
+
     // Add more sections here as needed
     // { id: 'section3', title: 'New Section', icon: '🔧' },
   ];
@@ -31,10 +35,7 @@ const FunPage = () => {
     setVideoId('xRPjKQtRXR8');
     setShowVideoPlayer(true);
   };
-const handleLAXLive = () => {
-  setVideoId('MjD3gnNFYUo');
-  setShowVideoPlayer(true);
-}
+
 
   const closeVideoPlayer = () => {
     setShowVideoPlayer(false);
@@ -43,6 +44,7 @@ const handleLAXLive = () => {
 
   // Close sidebar when section is selected on mobile
   const handleSectionSelect = (sectionId) => {
+    sessionStorage.setItem("funSelect",sectionId);
     setActiveSection(sectionId);
     setSidebarOpen(false); // Close sidebar on mobile after selection
   };
@@ -60,6 +62,15 @@ const handleLAXLive = () => {
     };
     getAdultPreference();
   }, []);
+
+  const handleGame = (Link) => {
+    setGameLink(Link);
+    setShowGamePlayer(true);
+  }
+  const closeGamePlayer = () => {
+    setShowGamePlayer(false);
+    setGameLink('');
+  }
 
   const handleNSFWCams = () => {
     if (adultPreference) {
@@ -263,6 +274,51 @@ const handleLAXLive = () => {
         case  'games':
         return (
           <div className="space-y-3 max-w-3xl">
+            
+            <Link className="bg-gray-800 flex rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              to={'flappy'}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <p>Flappy Flix</p>
+                </div>
+               
+              </div>
+            </Link>
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => handleGame('https://www.onlinegames.io/games/2022/unity/highway-traffic/index.html')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <p>Highway Traffic (Embed mode)</p>
+                </div>
+              
+              </div>
+              <p className="text-gray-400 mt-1">Powered by onlinegames.io</p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => handleGame('https://cloud.onlinegames.io/games/2021/1/jeep-driver/index-og.html')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <p>Jeep driver (Embed mode)</p>
+                </div>
+              
+              </div>
+              <p className="text-gray-400 mt-1">Powered by onlinegames.io</p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => handleGame('https://www.onlinegames.io/games/2023/q2/dinosaur-game/index.html')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <p>Dinosaur jump (Embed mode)</p>
+                </div>
+              
+              </div>
+              <p className="text-gray-400 mt-1">Powered by onlinegames.io</p>
+            </div>
+            
+            
 
             <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
               onClick={() => window.open('https://poki.com/', '_blank', 'noopener,noreferrer')}>
@@ -285,6 +341,67 @@ const handleLAXLive = () => {
               </div>
               <p className="text-gray-400 mt-1">Free online games. 4000+ browser games across genres like action, puzzle, driving, and .io games. Supports local and online multiplayer.</p>
             </div>
+
+            
+            
+
+
+          </div>
+        );
+
+        case  'news':
+        return (
+          <div className="space-y-3 max-w-3xl">
+            
+            
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://www.hollywoodreporter.com/c/movies//', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <img src='/hollywoodr.png' className='h-14'/>
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Industry-grade updates, legacy features, and breaking news.</p>
+            </div>
+
+           
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://deadline.com/v/film/', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <img src='/deadline.png' className='h-8'/>
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Industry-grade news, perfect for serious cinephiles.</p>
+            </div>
+
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://collider.com/', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <img src='/collider.png' className='h-12' />
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Deep dives into trailers, reviews, interviews, and upcoming releases. Great for cinephiles.</p>
+            </div>
+
+            
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://www.indiatoday.in/movies', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                <img src='/india_today.png' className='h-8'/>
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Get latest bollywood news from India.</p>
+            </div>
+            
 
           </div>
         );
@@ -400,6 +517,50 @@ const handleLAXLive = () => {
           </div>
         </div>
       )}
+     {showGamePlayer && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-5xl">
+            <button
+              onClick={closeGamePlayer}
+              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors z-10"
+            >
+              <X className="h-8 w-8" />
+            </button>
+
+            <button
+              onClick={() => {
+                const iframe = document.querySelector("#gameIframe");
+                if (iframe.requestFullscreen) {
+                  iframe.requestFullscreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                  iframe.webkitRequestFullscreen();
+                } else if (iframe.mozRequestFullScreen) {
+                  iframe.mozRequestFullScreen();
+                } else if (iframe.msRequestFullscreen) {
+                  iframe.msRequestFullscreen();
+                }
+              }}
+              className="absolute -top-10 left-0 text-white hover:text-gray-300 transition-colors z-10"
+            >
+             Full screen ⛶ 
+            </button>
+
+            {/* Game Iframe */}
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                id="gameIframe"
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                src={GameLink}
+                title="Game Player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Adult Warning Modal */}
       {showAdultWarning && (

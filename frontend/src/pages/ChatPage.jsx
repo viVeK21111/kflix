@@ -119,7 +119,6 @@ export default function ChatPage() {
   }, [Data, DataText, Loading, query1, ContentType]);
 
   const onSubmit = async (e) => {
-    sessionStorage.setItem("ModelType", selectedModel.value);
     const searchParams = new URLSearchParams(location.search);
     if (searchParams.has("query")) {
       searchParams.delete("query");
@@ -172,6 +171,14 @@ export default function ChatPage() {
     models.find((model) => model.value === defaultModelValue) || models[0]
   );
 
+  // Update session storage when selectedModel changes
+  useEffect(() => {
+    if (selectedModel && selectedModel.value) {
+      sessionStorage.setItem("ModelType", selectedModel.value);
+     
+    }
+  }, [selectedModel]);
+
   if (pLoading) {
     return (
       <div className="flex flex-col w-screen h-screen justify-center items-center bg-black">
@@ -218,7 +225,7 @@ export default function ChatPage() {
         <div className="ml-auto flex items-center">
           <Link
             className="ml-auto flex bg-white bg-opacity-10 py-2  px-2 items-center  rounded-lg text-gray-400 hover:scale-105 transition-transform"
-            to={"/profile/chatHistory"}
+            to={"/history?tab=chat"}
           >
             <History size={22} />
           </Link>
@@ -234,7 +241,7 @@ export default function ChatPage() {
         {conversationHistory.map((item, index) => (
           <div key={index} className="mb-4">
             <p
-              className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2 mb-5"
+              className="flex text-white font-semibold max-w-2xl ml-auto justify-end rounded-t-lg p-2 mt-5 mr-2 mb-5"
               ref={index === conversationHistory.length - 1 ? latestQueryRef : null}
             >
               <span className="bg-white bg-opacity-10 px-3 py-2 rounded-xl">{item.query}</span>
@@ -297,7 +304,7 @@ export default function ChatPage() {
         {/* New query bubble while submitting */}
         {query1 && submitloading && (
           <p
-            className="flex text-white font-semibold justify-end rounded-t-lg p-2 mt-5 mr-2"
+            className="flex text-white font-semibold max-w-2xl ml-auto justify-end rounded-t-lg p-2 mt-5 mr-2"
             ref={latestQueryRef}
           >
             <span className="bg-white bg-opacity-10 px-3 py-2 rounded-xl">{query1}</span>

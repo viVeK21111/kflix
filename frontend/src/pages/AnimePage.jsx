@@ -61,11 +61,7 @@ const AnimePage = () => {
     setData({ popular: [], topRated: [], onAir: [] });
     setVisibleCount({ popular: 12, topRated: 12, onAir: 12 });
     
-    // If switching to movies and current tab is onAir, switch to popular
-    if (newMedia === 'movies' && active === 'onAir') {
-      setActive('popular');
-      sessionStorage.setItem("animeActive", 'popular');
-    }
+    
     
     // The useEffect will trigger fetchSection due to media dependency
   };
@@ -126,7 +122,8 @@ const AnimePage = () => {
         <div className="flex gap-4 justify-start items-center mb-4">
           <button className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md  ${active==='popular' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30 '}`} onClick={() => handleTabClick('popular')}>Popular</button>
           <button className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md  ${active==='topRated' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30 '}`} onClick={() => handleTabClick('topRated')}>Top Rated</button>
-          {media==='tv' && <button className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md ${active==='onAir' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30'}`} onClick={() => handleTabClick('onAir')}>On Air</button>}
+          <button className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md  ${active==='onAir' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30 '}`} onClick={() => handleTabClick('onAir')}>Latest</button>
+
         </div>
 
         <div>

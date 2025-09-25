@@ -8,9 +8,10 @@ import MovieSlider from '../../components/MovieSlider';
 import { MOVIE_CATEGORIES, TV_CATEGORIES } from '../../utils/constants';
 import { useState,useEffect,useRef } from 'react';
 import {addWatchStore} from '../../store/watchStore';
-import { TvMinimalPlay,Clapperboard,Loader,Star,Clock,Plus,TvMinimal,Dot } from 'lucide-react';
+import { TvMinimalPlay,Clapperboard,Loader,Star,Clock,Plus,TvMinimal,Dot,ChevronLeft, ChevronRight } from "lucide-react";
 import emailjs from 'emailjs-com';
 import { userAuthStore } from '../../store/authUser';
+import axios from 'axios';
 
 export const HomeScreen = () => {
   const {user}  = userAuthStore();
@@ -53,6 +54,36 @@ export const HomeScreen = () => {
     // New state for carousel functionality
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pcontent, setpcontent] = useState([]);
+	const [pcontentLoading, setPcontentLoading] = useState(true);
+  const sliderRef = useRef(null);
+  const [showArrows, setShowArrows] = useState(false);
+  
+	const scrollLeft = () => {
+		if (sliderRef.current) {
+			sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
+		}
+	};
+	const scrollRight = () => {
+		sliderRef.current.scrollBy({ left: sliderRef.current.offsetWidth, behavior: "smooth" });
+	};
+
+  useEffect(() => {
+		const getpdata = async() =>{
+			try {
+				setPcontentLoading(true);
+				const pdata = await axios.get('/api/v1/search/person/popular'); 
+				setpcontent(pdata?.data?.content.results);
+			} catch (error) {
+				console.error("Error fetching popular people:", error);
+				setpcontent([]);
+			} finally {
+				setPcontentLoading(false);
+			}
+		}
+		getpdata();
+	},[])
+
 
      // Get current trending item
   const currentTrending = trending && trending.length > 0 ? trending[currentIndex] : null;
@@ -243,6 +274,60 @@ export const HomeScreen = () => {
         MOVIE_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)
         : TV_CATEGORIES.map((category) => <MovieSlider key={category} category={category} />)}
       </div>
+
+
+      <div
+			className='bg-black text-white relative px-4 pb-6'
+			onMouseEnter={() => setShowArrows(true)}
+			onMouseLeave={() => setShowArrows(false)}
+		>
+			<h2 className='mb-4 text-2xl font-bold'>
+				Popular People
+			</h2>
+
+			{pcontentLoading && (
+				<div className='flex justify-center items-center bg-black h-full'>	
+					<Loader className='animate-spin text-white w-8 h-8' />
+				</div>
+			)}
+			
+			<div className='flex space-x-4 overflow-x-scroll scrollbar-hide' ref={sliderRef}>
+				{Array.isArray(pcontent) && pcontent?.map((item) => (
+					<Link to={`/person/details/?id=${item?.id}&name=${item?.name}`} className='min-w-[180px] relative group' key={item.id}>
+						<div className='rounded-lg overflow-hidden'>
+							<img
+								src={ORIGINAL_IMG_BASE_URL + (item.profile_path || item.backdrop_path)}
+								alt='Person image'
+								className='h-64 w-full transition-transform duration-300 rounded-xl border border-white border-opacity-60 ease-in-out group-hover:scale-125'
+							/>
+						</div>
+						<p className='mt-2 text-center'>{item.name}</p>
+					</Link>
+				))}
+			</div>
+
+			{showArrows && (
+				<>
+					<button
+						className='absolute top-1/2 -translate-y-1/2 left-5 md:left-24 flex items-center justify-center
+            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10
+            '
+						onClick={scrollLeft}
+					>
+						<ChevronLeft size={24} />
+					</button>
+
+					<button
+						className='absolute top-1/2 -translate-y-1/2 right-5 md:right-24 flex items-center justify-center
+            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10
+            '
+						onClick={scrollRight}
+					>
+						<ChevronRight size={24} />
+					</button>
+				</>
+			)}
+		</div>
 
       </>
     )

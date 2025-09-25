@@ -352,7 +352,7 @@ function WatchPage() {
             <Link to={Season ? `/tv/details/?id=${Id}&name=${Name}` :`/movie/?id=${Id}&name=${Name}` } className='flex items-center text-white text-sm md:text-base ml-3 mr-2 hover:scale-105 transition-transform'> 
               <p className='flex items-center bg-white bg-opacity-10 hover:bg-opacity-20 p-1 rounded-lg'> <ArrowLeft className='mr-1' size={22}/></p>
             </Link>
-            <Link to='/profile/watchHistory' className='flex items-center text-gray-400 transition-all duration-300 hover:scale-110 cursor-pointer text-sm bg-white bg-opacity-10 py-1 px-2 rounded-md'>
+            <Link to='/history?tab=watch' className='flex items-center text-gray-400 transition-all duration-300 hover:scale-110 cursor-pointer text-sm bg-white bg-opacity-10 py-1 px-2 rounded-md'>
               <History />
             </Link>
           </div>
@@ -566,12 +566,11 @@ function WatchPage() {
             )}
           
           </div>
-          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-4xl items-center bg-gray-600 md:bg-blue-800 lg:rounded-sm font-semibold text-gray-300 text-sm p-2 mt-6 lg:mb-3`: `flex bg-gray-600 md:bg-blue-800 text-gray-300  lg:rounded-sm font-semibold text-sm w-full max-w-5xl lg:max-w-4xl items-center p-2 mt-3 lg:m-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
-
+          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-4xl items-center bg-blue-800 lg:rounded-sm font-semibold text-gray-300 text-sm p-2 mt-6 lg:mb-3`: `flex bg-blue-800 text-gray-300  lg:rounded-sm font-semibold text-sm w-full max-w-5xl lg:max-w-4xl items-center p-2 mt-3 lg:m-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
           {Loading ? (
             <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
           ) : (
-            <div className={bgColorClass!='bg-black'?`w-full mb-3 px-2 md:border-t md:border-gray-600`:`hidden`}>
+            <div className={bgColorClass!='bg-black'?`w-full mb-3 px-2 md:border-t md:border-gray-600`:`hidden`}> 
               <div className='pb-4 md:pb-0'>
                 <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row mt-10` ):(datam?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-10`: `text-left w-full flex items-center justify-center flex-col mt-10`)}>
                   <img
@@ -581,7 +580,7 @@ function WatchPage() {
                   />
                   <p className={!Season ? `md:hidden` : `mb-3 md:mt-2`}>
                     {(datam?.release_date) && (
-                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
+                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.runtime} Min </p>
                     )}
                   </p>
                   <div className='text-sm md:text-base ml-1 sm:ml-1 md:ml-4 lg:ml-4 xl:ml-4'>
@@ -610,7 +609,7 @@ function WatchPage() {
                 <div className={(!Season && datam?.overview.length>0) ? `hidden md:flex w-full xl:pl-12 mt-2 mb-2` : (datam?.overview?.length==0 ? `hidden md:flex justify-center w-full mt-2 mb-2`:`hidden`) }>
                   <p>
                     {(datam?.release_date || datam?.first_air_date) && (
-                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.adult ? "18+" : "PG-13"} </p>
+                      <p className="text-sm text-gray-300">{datam.release_date?.split("-")[0] || datam.first_air_date?.split("-")[0]} | Rating: <b> {datam?.vote_average?.toFixed(1)}</b> | {datam?.runtime} Min </p>
                     )}
                   </p>
                 </div>

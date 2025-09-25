@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { Home, Search, Bot, User, Bookmark,Ellipsis, Clapperboard, TvMinimal,Menu ,X,Tv,Eclipse  } from 'lucide-react';
+import { Home, Search, Bot, User, Bookmark,Ellipsis, Clapperboard, TvMinimal,Menu ,X,Tv,Eclipse,Drama,Film  } from 'lucide-react';
 import { useContentStore } from '../store/content';
 
 const BottomNavbar = ({ className = "" }) => {
@@ -30,17 +30,14 @@ const BottomNavbar = ({ className = "" }) => {
       label: 'Flix chat',
       path: '/chat',
     },
-    {
-      icon: Bookmark,
-      label: 'Watchlist',
-      path: '/watchlist',
-    },
+
+    
     
   ];
 
   return (
     <nav className={`fixed bottom-0 right-0 left-0 sm:bottom-0 sm:right-auto sm:top-0 sm:left-0 bg-black sm:border-r sm:border-gray-800 border-gray-700 z-40 ${className}`}>
-      <div className="flex sm:flex-col justify-around items-center h-16 px-7 sm:h-full sm:overflow-y-auto sm:pt-12 sm:pb-20 sm:gap-10 scrollbar-hide">
+      <div className="flex sm:flex-col justify-around items-center h-16 px-7 sm:h-full sm:overflow-y-auto sm:py-12 sm:gap-12 scrollbar-hide">
         {/* Custom scrollbar styles */}
         <style jsx>{`
           .scrollbar-hide {
@@ -54,7 +51,7 @@ const BottomNavbar = ({ className = "" }) => {
         
         <Link
               to={'/'}
-              className={`group flex items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+              className={`group relative flex items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                 isActive('/')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
@@ -63,15 +60,15 @@ const BottomNavbar = ({ className = "" }) => {
                 <Home
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/') ? 'text-white' : ''
+                    isActive('/') ? 'text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Home</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Home</span>
         </Link>
         
         <Link
               to={'/search'}
-              className={`group flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+              className={`group relative flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                 isActive('/search')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
@@ -80,42 +77,42 @@ const BottomNavbar = ({ className = "" }) => {
                 <Search
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/search') ? 'fill-white text-white' : ''
+                    isActive('/search') ? 'text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Search</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Search</span>
         </Link>
 
         <Link
               to={'/'}
               onClick={() => scrollToMovies('movies')}
-              className={`group hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 text-gray-400 hover:text-white`}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 text-gray-400 hover:text-white`}
                 
               >
                 <Clapperboard
                   size={23}
                   className={`transition-all duration-200 stroke-2`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Movies</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Movies</span>
         </Link>
 
         <Link
               to={'/'}
               onClick={() => scrollToMovies('tv')}
-              className={`group hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 text-gray-400  hover:text-white`}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 text-gray-400  hover:text-white`}
                 
               >
                 <TvMinimal
                   size={23}
                   className={`transition-all duration-200  stroke-2`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Tvshow</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Tvshow</span>
         </Link>
 
         
         <Link
               to={'/anime'}
-              className={`group hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                 isActive('/anime')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
@@ -124,10 +121,27 @@ const BottomNavbar = ({ className = "" }) => {
                 <Eclipse 
                   size={23}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/anime') ? 'text-white' : ''
+                    isActive('/anime') ? 'text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Anime</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Anime</span>
+          </Link>
+
+          <Link
+              to={'/kdrama'}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/kdrama')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Drama  
+                  size={25}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/kdrama') ? 'text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Kdrama</span>
           </Link>
 
           {navItems.map((item) => {
@@ -137,26 +151,65 @@ const BottomNavbar = ({ className = "" }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`group flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                className={`group relative  flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                   active
                     ? 'text-gray-400'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                <IconComponent
-                  size={24}
-                  className={`transition-all duration-200 stroke-3 ${
-                    active ? 'fill-white text-white' : ''
-                  }`}
-                />
-                <span className="absolute text-sm  hidden sm:group-hover:flex items-center w-16 bg-black ml-28 rounded-lg py-1 text-gray-400 font-medium">{item.label}</span>
+                <div className="flex flex-col items-center">
+                  {item.path==='/chat' && (
+                    <p className="text-[9px] ml-auto text-gray-400 -mt-3">AI</p>
+                    )}
+                  <IconComponent
+                    size={24}
+                    className={`transition-all duration-200 stroke-3 ${
+                      active ? 'text-blue-400' : ''
+                    }`}
+                  />
+                </div>
+                <span className="absolute text-sm pl-1 hidden sm:group-hover:flex items-center w-16 bg-black top-7 rounded-lg py-1 text-gray-400 font-medium">{item.label}</span>
               </Link>
             );
           })}
 
           <Link
+              to={'/directors'}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/directors')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Film
+                  size={24}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/directors') ? ' text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Directors</span>
+          </Link>
+
+          <Link
+              to={'/watchlist'}
+              className={`group relative flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/watchlist')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Bookmark
+                  size={24}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/watchlist') ? ' text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Watchlist</span>
+          </Link>
+
+          <Link
               to={'/profile'}
-              className={`group hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                 isActive('/profile')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
@@ -165,10 +218,10 @@ const BottomNavbar = ({ className = "" }) => {
                 <User
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/profile') ? 'fill-white text-white' : ''
+                    isActive('/profile') ? ' text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-24 items-center font-medium text-gray-400">Profile</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Profile</span>
           </Link>
 
                 <div className='sm:hidden flex ml-5 mr-3 items-center z-50'>
@@ -177,7 +230,7 @@ const BottomNavbar = ({ className = "" }) => {
 
             <Link
               to={'/fun'}
-              className={`group hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
                 isActive('/fun')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
@@ -186,10 +239,10 @@ const BottomNavbar = ({ className = "" }) => {
                 <Ellipsis
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/fun') ? 'text-white' : ''
+                    isActive('/fun') ? 'text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg ml-20 items-center font-medium text-gray-400">Fun</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-6 items-center font-medium text-gray-400">Fun</span>
             </Link>
 
                 
@@ -231,6 +284,28 @@ const BottomNavbar = ({ className = "" }) => {
                                     </p>
 
                       </Link>
+
+                      <Link to='/kdrama' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                          toggleMobileMenu();
+                          }}>
+                               <p className='flex items-center text-white'>
+                                      <Drama size={18} className=' mr-2'/>
+                                      <p className=''>Kdrama</p>
+                                    </p>
+
+                      </Link>
+
+                      
+                      <Link to='/directors' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                          toggleMobileMenu();
+                          }}>
+                               <p className='flex items-center text-white'>
+                                      <Film size={16} className=' mr-2'/>
+                                      <p className=''>Directors</p>
+                                    </p>
+
+                      </Link>
+
 
                       <Link to='/fun' className='block p-3  hover:bg-slate-700  border-slate-700' onClick={toggleMobileMenu}>
                       <p className='flex items-center text-white'>

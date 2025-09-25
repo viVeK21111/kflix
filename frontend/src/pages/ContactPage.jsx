@@ -76,7 +76,7 @@ const ContactPage = () => {
     return (
       <div className="h-screen ">
       <div className="flex justify-center items-center bg-black h-full">
-      <Loader className="animate-spin text-red-600 w-10 h-10"/>
+      <Loader className="animate-spin text-white w-10 h-10"/>
       </div>
 </div>
     )

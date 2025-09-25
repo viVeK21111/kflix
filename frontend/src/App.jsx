@@ -19,6 +19,7 @@ import ChangePassword from "./pages/ChangePassword";
 import SearchHistory from "./pages/SearchHistory";
 import ChatHistory from "./pages/ChatHistory";
 import WatchHistory from "./pages/WatchHistory"
+import HistoryPage from "./pages/HistoryPage"
 import MoviePage from "./pages/MoviePage";
 import Terms from "./pages/Terms";
 import {useLocation}  from  'react-router-dom';
@@ -30,7 +31,11 @@ import FunPage from "./pages/FunPage";
 import AdultPage from "./pages/AdultPage";
 import BottomNavbar from "./components/BottomNavbar";
 import AnimePage from "./pages/AnimePage";
-import { Helmet } from "react-helmet-async";
+import NotFoundPage from "./pages/NotFoundPage";
+import FlappyFlix from "./pages/FlappyFlix";
+import KdramaPage from "./pages/KdramaPage";
+import DirectorsPage from "./pages/DirectorsPage";
+
 
 function FooterWithRouteCheck() {
   // Import useLocation here to ensure it's updated on every route change
@@ -53,15 +58,6 @@ function BottomNavbarReturn() {
   }
 }
 
-function CanonicalTag() {
-  const location = useLocation();
-  const canonicalUrl = `localhost:5173${location.pathname}`;
-  return (
-    <Helmet>
-      <link rel="canonical" href={canonicalUrl} />
-    </Helmet>
-  );
-}
 
 function App() {
 
@@ -88,8 +84,7 @@ function App() {
   }
   return (
     <>
-     {/* Canonical URL injected here */}
-     <CanonicalTag />
+
     <div className={user ? `pb-16 sm:pb-0 sm:pl-20` : ``}>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -108,6 +103,7 @@ function App() {
         <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
         <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
         <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
+        <Route path='/history' element = {user ? <HistoryPage/> : <Navigate to={'/'}/>} />
         <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
         <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
         <Route path='/changepassword' element = {<ChangePasswordH/>} />
@@ -115,7 +111,12 @@ function App() {
         <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
         <Route path='/fun' element = {user ? <FunPage /> : <Navigate to={'/'}/>} />
         <Route path='/fun/adult' element = {user ? <AdultPage /> : <Navigate to={'/'}/>} />
+        <Route path='/fun/flappy' element = {user ? <FlappyFlix /> : <Navigate to={'/'}/>} />
         <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/'}/>} />
+        <Route path='/kdrama' element = {user ? <KdramaPage /> : <Navigate to={'/'}/>} />
+        <Route path='/directors' element = {user ? <DirectorsPage /> : <Navigate to={'/'}/>} />
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
     <FooterWithRouteCheck/>

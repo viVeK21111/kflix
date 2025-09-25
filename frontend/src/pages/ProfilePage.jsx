@@ -168,30 +168,15 @@ export default function ProfilePage(){
 
         {/* History Section */}
         <div className="bg-zinc-800 rounded-lg overflow-hidden">
-          <button
-            onClick={() => toggleDesktopSection('history')}
+          <Link
+            to={'/history'}
             className="w-full flex items-center justify-between p-4 text-left hover:bg-zinc-700 transition-colors"
           >
             <h3 className="text-lg font-medium">History</h3>
-            {desktopExpanded.history ? <ChevronDown size={20}/> : <ChevronRight size={20}/>}
-          </button>
+        
+          </Link>
           
-          {desktopExpanded.history && (
-            <div className="px-4 pb-4 space-y-2">
-              <Link to={'searchHistory'} className="flex items-center p-2 rounded hover:bg-zinc-700 transition-colors">
-                <Search className="mr-3" size={18}/>
-                Search History
-              </Link>
-              <Link to={'watchHistory'} className="flex items-center p-2 rounded hover:bg-zinc-700 transition-colors">
-                <Tv className="mr-3" size={18}/>
-                Watch History
-              </Link>
-              <Link to={'chatHistory'} className="flex items-center p-2 rounded hover:bg-zinc-700 transition-colors">
-                <MessagesSquare className="mr-3" size={18}/>
-                Chat History
-              </Link>
-            </div>
-          )}
+        
         </div>
       </div>
     </div>
@@ -300,7 +285,7 @@ export default function ProfilePage(){
           className="block bg-zinc-800 p-4 rounded-lg hover:bg-zinc-700 transition-colors"
         >
           <div className="flex items-center">
-            <img src="/d2.png" className="h-5 w-6 mr-3" alt="Discord"/>
+            <img src="/d1.png" className="h-4 w-5 mr-3" alt="Discord"/>
             Discord Community
           </div>
         </a>
@@ -420,23 +405,9 @@ export default function ProfilePage(){
                     </div>
                   </div>
 
-                  <div className="bg-zinc-700 p-4 rounded-lg">
-                    <h4 className="font-medium mb-3">History</h4>
-                    <div className="space-y-2">
-                      <Link to={'searchHistory'} className="flex items-center p-2 rounded hover:bg-zinc-600 transition-colors">
-                        <Search className="mr-3" size={16}/>
-                        Search History
-                      </Link>
-                      <Link to={'watchHistory'} className="flex items-center p-2 rounded hover:bg-zinc-600 transition-colors">
-                        <Tv className="mr-3" size={16}/>
-                        Watch History
-                      </Link>
-                      <Link to={'chatHistory'} className="flex items-center p-2 rounded hover:bg-zinc-600 transition-colors">
-                        <MessagesSquare className="mr-3" size={16}/>
-                        Chat History
-                      </Link>
-                    </div>
-                  </div>
+                  <Link className="bg-zinc-700 flex p-4 rounded-lg hover:bg-zinc-600" to={'/history'}>
+                    <p  className="font-medium">History</p>
+                  </Link>
                 </div>
               )}
             </div>
@@ -556,7 +527,7 @@ export default function ProfilePage(){
                     className="block bg-zinc-700 p-3 rounded-lg hover:bg-zinc-600 transition-colors"
                   >
                     <div className="flex items-center">
-                      <img src="/d2.png" className="h-5 w-6 mr-3" alt="Discord"/>
+                      <img src="/d1.png" className="h-4 w-5 mr-3" alt="Discord"/>
                       Discord Community
                     </div>
                   </a>

@@ -17,6 +17,7 @@ const SearchPage = () => {
   sessionStorage.setItem("numitems",6);
   const [Loading1,setLoading1] = useState(true);
   const [surpriseLoading, setSurpriseLoading] = useState(false);
+  const [TrendingData,setTrendingData] = useState([]);
   const logo = new Image();
   logo.src = '/kflix3.png';
  
@@ -30,6 +31,42 @@ const SearchPage = () => {
   useEffect(() => {
     sessionStorage.setItem("squery",query);
   },[query])
+
+  useEffect(() => {
+    const func = async() => {
+      const trendingM = await axios.get('/api/v1/movies/trending')
+      const trendingT = await axios.get('/api/v1/tv/trending');
+      const movies = trendingM.data.content.map(item => ({
+        ...item,
+        type: 'movie'
+      }));
+      
+      const tvShows = trendingT.data.content.map(item => ({
+        ...item,
+        type: 'tv'
+      }));
+      
+
+    
+
+      const combined = [];
+        let mIndex = 0;
+        let tIndex = 0;
+
+        while (mIndex < movies.length || tIndex < tvShows.length) {
+          // Add 2 movies
+          for (let i = 0; i < 2 && mIndex < movies.length; i++) {
+            combined.push(movies[mIndex++]);
+          }
+          // Add 2 TV shows
+          for (let i = 0; i < 2 && tIndex < tvShows.length; i++) {
+            combined.push(tvShows[tIndex++]);
+          }
+        }
+        setTrendingData(combined);
+    }
+    func();  
+  },[]);
 
   // Function to get a random content and populate search
   const handleSurpriseMe = async () => {
@@ -137,16 +174,18 @@ const SearchPage = () => {
     )
   }
 
+ 
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-gray-800 to-slate-900 text-white overflow-auto flex flex-col items-center ">
       {/* Header */}
     
       
-      <Link to='/profile/searchHistory' className='flex items-center ml-auto m-4 text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
+      <Link to='/history?tab=search' className='flex items-center ml-auto m-4 text-gray-400  transition-all duration-300 hover:scale-110 cursor-pointer text-sm  bg-white bg-opacity-10 py-1 px-2  mx-2 rounded-md'><History size={22} /></Link>
   
       
       {/* Search Section */}
-      <div className="flex max-w-2xl mt-28 md:mt-20 w-full px-3">
+      <div className="flex max-w-2xl mt-8 md:mt-6 w-full px-3">
 
         <div className="relative mr-2">
           <button
@@ -207,9 +246,10 @@ const SearchPage = () => {
         </div>
       </div>
 
+
       {/* AI Recommendation Section */}
       {!query.trim() && (
-        <div className="flex justify-center mt-5 text-gray-400 text-sm">
+        <div className="flex justify-center mt-5 mb-12 text-gray-400 text-sm">
           Not sure? Ask our AI chatbot 
           <Link 
             to="/chat" 
@@ -219,17 +259,64 @@ const SearchPage = () => {
           </Link>
         </div>
       )}
+      
 
       {(imagesLoaded===false) && (
-        <div className="flex justify-center mt-20"><Loader className="animate-spin text-white w-7 h-7"/></div>
+        <div className="flex justify-center my-auto absolute items-center h-screen"><Loader className="animate-spin text-white w-7 h-7"/></div>
       )}
       {/* Search Results */}
       {/* Search Results */}
+
+      { query.length==0 && (
+        <>
+        <div className='text-gray-400 flex mr-auto'><p className='font-semibold text-xl ml-4 lg:ml-11 md:text-2xl'>Trending Searches</p></div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mr-auto gap-4 lg:gap-8 mt-8 px-3 lg:px-10 mb-3">
+          
+          {TrendingData.slice(0,14).map((item, index) => (
+            (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
+              <Link 
+              key={item.id || index} 
+              to={item.type==='movie' ? `/movie/?id=${item?.id}&name=${item?.name || item?.title}` : `/tv/details/?id=${item?.id}&name=${item?.name || item?.title}`}
+              className="block bg-[#172c47] rounded-lg shadow-md hover:scale-105 transition-transform"
+            >
+              <img 
+                src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
+                className={ "h-[179px] object-cover rounded-t-lg"} 
+                alt={item?.title || item?.name} 
+              />
+              <h3 className="text-sm px-2 sm:text-base font-bold text-gray-300 pt-2 truncate">
+                {item.title || item.name}
+              </h3>
+              {(item.release_date || item.first_air_date) && (
+                <p className="text-xs sm:text-sm pb-4 p-2 text-gray-400">
+                  {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
+                  | Rating: <b>{item.vote_average.toFixed(1)}</b> 
+                  | {item.type}
+                </p>
+              )}
+             
+            </Link>
+            )
+           
+          ))}
+           
+        </div>
+        </>
+        
+      )}
+
+      {query.length>0 && (
+        <div className='flex justify-start mr-auto pl-4 xl:pl-10 pt-5'><p className='font-semibold text-xl lg:text-2xl flex '>Showing results for <p className='pl-2 text-yellow-500'>"{query}"</p></p></div>
+      )}
+      
+
+
       {!Loading && Data && imagesLoaded && searchType==='movie' && !loading && (
         Array.isArray(Data) ? (
           <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-2 lg:px-3 mb-3">
-            {Data.slice(0,numitems).map((item, index) => (
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6  mt-8 px-3 xl:px-10 mb-3">
+        {Data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link 
                 key={item.id || index} 
@@ -238,7 +325,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-t-lg"} 
+                  className={ "w-[330px] h-[183px] object-cover rounded-t-lg"} 
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm px-2 sm:text-base font-bold text-white pt-2 truncate">
@@ -284,8 +371,8 @@ const SearchPage = () => {
       {!Loading && Data && imagesLoaded && searchType==='tv' && !loading && (
         Array.isArray(Data) ? (
           <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
-            {Data.slice(0,numitems).map((item, index) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 xl:px-10  mt-8 px-3 mb-3">
+          {Data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.poster_path) && (
                 <Link 
                 key={item.id || index} 
@@ -294,7 +381,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-full h-52 object-cover rounded-t-lg"}
+                  className={ "w-[330px] h-[183px] object-cover rounded-t-lg"}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white px-2 mt-2 truncate">
@@ -342,8 +429,8 @@ const SearchPage = () => {
       {!Loading && Data && imagesLoaded && searchType==='person' && !loading && (
         Array.isArray(Data) ? (
           <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-3 mt-8 px-1 lg:px-3 mb-3">
-            {Data.slice(0,numitems).map((item, index) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8  mt-8 px-3 mb-3">
+          {Data.slice(0,numitems).map((item, index) => (
               (item?.profile_path || item?.poster_path) && (
                 <Link 
                 key={item.id || index} 
@@ -352,15 +439,15 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-52 h-52 object-cover rounded-t-lg"} 
+                  className={ "w-72 object-cover rounded-t-lg"} 
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base px-2 font-bold text-white mt-2 truncate">
                   {item.title || item.name}
                 </h3>
                
-                {item.popularity && searchType === 'person' && (
-                  <p className="text-xs p-2 sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
+                {item.known_for_department && searchType === 'person' && (
+                  <p className="text-xs p-2 sm:text-sm text-gray-400">Known for: {(item.known_for_department)}</p>
                 )}
               </Link>
               )

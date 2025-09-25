@@ -117,11 +117,12 @@ const WatchlistPage = () => {
     <div className="w-full min-h-screen bg-gray-900">
      
       <div className="w-full flex flex-1 min-h-screen">
-        <aside className="hidden lg:flex md:flex-col w-64 bg-white/5 border-r border-white/10 p-4 h-screen sticky top-0">
+        <aside className="hidden lg:flex md:flex-col w-64 bg-gray-800 p-4 h-screen sticky top-0">
+        <h2 className="text-white text-xl pb-6 font-bold">Watchlist</h2>
           <nav className="flex flex-col gap-2">
             <button
               onClick={() => handleSelect('Movie')}
-              className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Movie' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
+              className={`flex items-center justify-between p-3 rounded-lg text-left ${selectContent === 'Movie' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
             >
               <span className="flex items-center">
                 <Clapperboard className="h-5 mr-2" /> Movie
@@ -130,7 +131,7 @@ const WatchlistPage = () => {
             </button>
             <button
               onClick={() => handleSelect('Tv')}
-              className={`flex items-center justify-between px-3 py-2 rounded-lg text-left ${selectContent === 'Tv' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
+              className={`flex items-center justify-between p-3 rounded-lg text-left ${selectContent === 'Tv' ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-200 hover:bg-white/20'}`}
             >
               <span className="flex items-center">
                 <TvMinimal className="h-5 mr-2" /> Tv show
@@ -143,8 +144,10 @@ const WatchlistPage = () => {
         {/* Main content area with proper background */}
         <div className="flex-1 bg-gray-900 min-h-0 lg:overflow-y-auto ">
           <div className="flex flex-col items-center">
+            
  
             <div className='ml-auto flex items-center px-4 pt-4 lg:hidden'>
+              
               <select
                 aria-label="Select content type"
                 value={selectContent}
