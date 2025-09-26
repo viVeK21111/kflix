@@ -185,6 +185,7 @@ export const getSimilarMovies = async(req,res) => {
     try {
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=1`);
         const movies = data.results;
+        movies.sort((a, b) => b.popularity - a.popularity);
         res.json({success:true,content:movies});
     }
     catch(error) {
