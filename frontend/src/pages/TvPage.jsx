@@ -588,9 +588,9 @@ const TvPage = () => {
                 {item.title || item.name}
               </h3>
 
-              {item?.popularity && (
-                <p className="text-xs sm:text-sm text-gray-400">Popularity: {(item.popularity).toFixed(2)}</p>
-              )}
+              <div>
+                          <p className="text-xs flex items-center sm:text-sm text-gray-400">{item.first_air_date.split("-")[0]} | <Star size={13} className='mx-1' />{item.vote_average?.toFixed(1)} </p>
+                </div>
             </Link>
             )
           ))}

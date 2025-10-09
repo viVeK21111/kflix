@@ -161,12 +161,12 @@ export default function ChatPage() {
   const models = [
     { name: "Gemini 2.0 Flash", value: "Gemini" },
     { name: "llama-3.1" , value:"llama-3.1"},
-    { name: "deepseek-r1", value: "deepseek-r1" },
+    //{ name: "deepseek-r1", value: "deepseek-r1" },
     { name: "openai/gpt-oss", value: "openai/gpt-oss" },
     { name: "groq/compound", value: "groq/compound" },
   ];
 
-  const defaultModelValue = sessionStorage.getItem("ModelType") || "deepseek-r1";
+  const defaultModelValue = sessionStorage.getItem("ModelType") || "llama-3.1";
   const [selectedModel, setSelectedModel] = useState(
     models.find((model) => model.value === defaultModelValue) || models[0]
   );

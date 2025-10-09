@@ -247,6 +247,18 @@ const FunPage = () => {
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+            onClick={() => window.open('https://topdocumentaryfilms.com/', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold transition-colors">
+                <div className="flex items-center gap-2">
+                  <Video className="h-7 w-8 text-blue-500" />
+                  <span className='flex'><p className='text-gray-300'>DOCUMENTARY</p><p className='text-blue-400'>FILMS</p></span>
+                </div>
+                <ExternalLink className="h-5 w-5 text-blue-500" />
+              </div>
+              <p className="text-gray-400 mt-1">Watch free Documentaries online powered by topdocumentaryfilms.com</p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
             onClick={() => window.open('https://www.youtube.com/playlist?list=PLivjPDlt6ApSiD2mk9Ngp-5dZ9CDDn72O', '_blank', 'noopener,noreferrer')}>
               <div className="flex items-center justify-between text-lg font-semibold text-gray-200 hover:text-gray-300 transition-colors">
                 <div className="flex items-center gap-2">
@@ -258,17 +270,32 @@ const FunPage = () => {
               <p className="text-gray-400 mt-1">Watch National Geographic full episodes - including Hostile Planet, Lost Cities with Albert Lin, To Catch a Smuggler, Drain the Oceans, and more.</p>
             </div>
 
+            
+            
             <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
-            onClick={() => window.open('https://topdocumentaryfilms.com/', '_blank', 'noopener,noreferrer')}>
+            onClick={() => window.open('https://www.youtube.com/playlist?list=PLdXIHLhslM0mQnprBRjD3NuIBrvlO-dJ9', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold transition-colors">
+                <div className="flex items-center gap-2">
+                  <Video className="h-7 w-8 text-green-600" />
+                  <span className='flex'><p className='text-gray-300'>Nature Documentaries</p></span>
+                </div>
+                <ExternalLink className="h-5 w-5 text-red-600" />
+              </div>
+              <p className="text-gray-400 mt-1">Watch curated playist of extraordinary nature documentaries</p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+            onClick={() => window.open('https://www.youtube.com/playlist?list=PLeCPQtbuJaPsD-TBP4QqBAHCJttYd4ABw', '_blank', 'noopener,noreferrer')}>
               <div className="flex items-center justify-between text-lg font-semibold transition-colors">
                 <div className="flex items-center gap-2">
                   <Video className="h-7 w-8 text-blue-500" />
-                  <span className='flex'><p className='text-gray-300'>DOCUMENTARY</p><p className='text-blue-400'>FILMS</p></span>
+                  <span className='flex'><p className='text-gray-300'>Best Ocean Documentaries</p></span>
                 </div>
-                <ExternalLink className="h-5 w-5 text-blue-500" />
+                <ExternalLink className="h-5 w-5 text-red-600" />
               </div>
-              <p className="text-gray-400 mt-1">Watch free Documentaries online powered by topdocumentaryfilms.com</p>
+              <p className="text-gray-400 mt-1">Watch the best ocean Documentaries powered by FreeDocumentaryNature</p>
             </div>
+
           </div>
         );
         case  'games':

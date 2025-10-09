@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { searchStore } from '../store/searchStore';
 import { Link } from 'react-router-dom';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
-import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv, Shuffle,Plus} from 'lucide-react';
+import { Search,History,Loader,House,TvMinimal,Menu,X, ChevronDown,Tv, Shuffle,Star} from 'lucide-react';
 import useDebounce from '../hooks/useDebounce';
 import axios from 'axios';
 
@@ -288,9 +288,9 @@ const SearchPage = () => {
                 {item.title || item.name}
               </h3>
               {(item.release_date || item.first_air_date) && (
-                <p className="text-xs sm:text-sm pb-4 p-2 text-gray-400">
-                  {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                  | Rating: <b>{item.vote_average.toFixed(1)}</b> 
+                <p className="text-xs flex items-center sm:text-sm pb-4 p-2 text-gray-400">
+                  {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} {" "} 
+                  |<Star size={13} className='mx-1' /> <b className='pr-1'>{item.vote_average.toFixed(1)}</b> 
                   | {item.type}
                 </p>
               )}

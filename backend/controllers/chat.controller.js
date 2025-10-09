@@ -57,9 +57,6 @@ Your response must be exactly one word: either "yes" or "no"`;
             if(aimodel==="llama-3.1"){
                 modelname = "llama-3.1-8b-instant"
             }
-            else if(aimodel==="deepseek-r1") {
-                modelname = "deepseek-r1-distill-llama-70b"
-            }
             else if(aimodel=="openai/gpt-oss") {
                  modelname = "openai/gpt-oss-120B"
             }
@@ -221,10 +218,10 @@ Your response must be exactly one word: either "yes" or "no"`;
                 console.log(`${aimodel} model called`)
                 modelname = "llama-3.1-8b-instant"
             }
-            else if(aimodel==="deepseek-r1") {
-                console.log(`${aimodel} model called`)
-                modelname = "deepseek-r1-distill-llama-70b"
-            }
+           // else if(aimodel==="deepseek-r1") {
+            //    console.log(`${aimodel} model called`)
+            //    modelname = "deepseek-r1-distill-llama-70b"
+           // }
             else if(aimodel=="openai/gpt-oss") {
                  console.log(`${aimodel} model called`)
                  modelname = "openai/gpt-oss-120B"

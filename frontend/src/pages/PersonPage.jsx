@@ -4,7 +4,7 @@ import { PersonStore } from "../store/PersonStore"; // Assuming store import
 import { ORIGINAL_IMG_BASE_URL } from "../utils/constants"; // Import Image base URL
 import { DetailsStore } from "../store/tvdetails";
 import { Link } from 'react-router-dom';
-import {Loader,House,TvMinimal,Menu,X} from 'lucide-react'
+import {Loader,House,TvMinimal,Menu,X,Star} from 'lucide-react'
 
 export default function PersonPage() {
   const { datap, getPersonDetails, datac, getPersonCredits } = PersonStore();
@@ -258,9 +258,9 @@ export default function PersonPage() {
                     {item.title || item.name}
                   </h3>
                   {(item.release_date || item.first_air_date) && (
-                    <p className="text-xs sm:text-sm text-gray-300 pl-2 pb-3">
+                    <p className="text-xs flex items-center sm:text-sm text-gray-300 pl-2 pb-3">
                       {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
-                      | Rating: <b>{item.vote_average?.toFixed(1)}</b> 
+                      | <Star size={12} className='mx-1' /> <b>{item.vote_average?.toFixed(1)}</b> 
                       | {item.adult ? "18+" : "PG-13"}
                     </p>
                   )}

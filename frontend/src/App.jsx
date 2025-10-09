@@ -71,13 +71,17 @@ function App() {
   useEffect (()=> {
     authCheck();
   },[authCheck]);
+  
   console.log("user auth: ",user);
   const isChatPage = location.pathname === '/chat';
   if(isCheckingauth) {
     return (
-      <div className="h-screen ">
-        <div className="flex justify-center items-center bg-black h-full">
-        <Loader className="animate-spin text-gray-500 w-10 h-10"/>
+      <div className="h-screen">
+        <div className="flex justify-center items-center bg-gray-900 h-full">
+        <div className="absolute inset-0 md:bg-gradient-to-r bg-gradient-to-b from-black/50 via-black/20  to-transparent/50 "></div>
+
+        <img src="/klogo1.png" className="h-36 z-50"/>
+       
         </div>
       </div>
     )

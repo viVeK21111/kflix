@@ -83,7 +83,7 @@ const AnimePage = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 py-3">
           {visible.map((item) => (
             (item?.poster_path || item?.backdrop_path) && (
-              <div key={item.id} className="cursor-pointer group transform transition duration-200 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl" onClick={() => goToTvDetails(item)}>
+              <div key={item.id} className="cursor-pointer group transform transition duration-200 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl p-1" onClick={() => goToTvDetails(item)}>
                 <div className="overflow-hidden rounded-lg">
                   <img src={`${SMALL_IMG_BASE_URL}${item.poster_path || item.backdrop_path}`} alt={item.name || item.title} className="w-full h-56 object-cover rounded-lg transform transition-transform duration-200 group-hover:scale-105" />
                 </div>
