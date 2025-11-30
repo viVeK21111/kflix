@@ -12,6 +12,7 @@ import { removeFromWatchlist } from '../controllers/movie.controller.js';
 import { getKdramaOnAir } from '../controllers/movie.controller.js';
 import { getKdramaPopular } from '../controllers/movie.controller.js';
 import { getKdramaTopRated } from '../controllers/movie.controller.js';
+import {getAnimationOnAir,getAnimationPopular,getAnimationTopRated} from '../controllers/movie.controller.js'
 
 const router = express.Router();
 
@@ -27,6 +28,9 @@ router.delete('/removeWatch/:id',protectRoute,removeFromWatchlist);
 router.get('/anime/popular',protectRoute,getAnimePopular);
 router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
 router.get('/anime/on-air',protectRoute,getAnimeOnAir);
+router.get('/animation/popular',protectRoute,getAnimationPopular);
+router.get('/animation/top-rated',protectRoute,getAnimationTopRated);
+router.get('/animation/on-air',protectRoute,getAnimationOnAir);
 router.get('/kdrama/popular',protectRoute,getKdramaPopular);
 router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
 router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
