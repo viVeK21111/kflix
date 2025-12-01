@@ -9,6 +9,7 @@ import chatRoutes from './routes/chat.route.js'
 import contactRoutes from './routes/contact.route.js'
 import cronroutes from './routes/cron.route.js'
 import watchRoutes from './routes/watch.route.js'
+import galleryRoutes from './routes/gallery.route.js';
 import cors from "cors";
 
 import {connectDB} from './config/db.js'
@@ -39,6 +40,7 @@ app.use('/api/v1/chat',chatRoutes);
 app.use('/api/v1/contact',contactRoutes);
 app.use('/cronjob',cronroutes)
 app.use('/api/v1/watch',watchRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 
 //app.listen(PORT,() => {

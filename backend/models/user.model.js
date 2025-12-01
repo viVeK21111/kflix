@@ -63,7 +63,25 @@ const userSchema = mongoose.Schema({
 			type: Number,
 			default: 0,
 		}
-	}
+	},
+	galleryImages: [{
+		imageUrl: {
+			type: String,
+			required: true,
+		},
+		uploadedAt: {
+			type: Date,
+			default: Date.now,
+		},
+		uploaderEmail: {
+			type: String,
+			required: true,
+		},
+		uploaderUsername: {
+			type: String,
+			required: true,
+		}
+	}]
 });
 
 export const User = mongoose.model("User", userSchema);
