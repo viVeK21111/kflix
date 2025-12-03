@@ -13,6 +13,7 @@ import { getKdramaOnAir } from '../controllers/movie.controller.js';
 import { getKdramaPopular } from '../controllers/movie.controller.js';
 import { getKdramaTopRated } from '../controllers/movie.controller.js';
 import {getAnimationOnAir,getAnimationPopular,getAnimationTopRated} from '../controllers/movie.controller.js'
+import { getGoatMovies } from "../controllers/movie.controller.js";
 
 const router = express.Router();
 
@@ -34,5 +35,6 @@ router.get('/animation/on-air',protectRoute,getAnimationOnAir);
 router.get('/kdrama/popular',protectRoute,getKdramaPopular);
 router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
 router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
+router.post('/goat-movies', protectRoute, getGoatMovies);
 
 export default router;

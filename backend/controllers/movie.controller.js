@@ -262,3 +262,64 @@ export const getMovieCredits = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }   
 }
+
+export const getGoatMovies = async (req, res) => {
+	const { movies } = req.body; // Array of {title, year} objects
+	
+	try {
+		if (!movies || !Array.isArray(movies) || movies.length === 0) {
+			return res.status(400).json({ 
+				success: false, 
+				message: "Invalid movies data" 
+			});
+		}
+
+		console.log(`Fetching ${movies.length} GOAT movies from TMDB...`);
+
+		// Fetch all movies in parallel
+		const moviePromises = movies.map(async (movie) => {
+			try {
+				const data = await fetchFromTMDB(
+					`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movie.title)}&primary_release_year=${movie.year}&language=en-US&page=1`
+				);
+				
+				// Return the first result if found
+				if (data.results && data.results.length > 0) {
+					return data.results[0];
+				}
+				
+				// If no exact year match, try without year
+				const fallbackData = await fetchFromTMDB(
+					`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movie.title)}&language=en-US&page=1`
+				);
+				
+				return fallbackData.results && fallbackData.results.length > 0 
+					? fallbackData.results[0] 
+					: null;
+			} catch (error) {
+				console.error(`Error fetching ${movie.title}:`, error.message);
+				return null;
+			}
+		});
+
+		const results = await Promise.all(moviePromises);
+		
+		// Filter out null results
+		const validMovies = results.filter(movie => movie !== null);
+
+		console.log(`Successfully fetched ${validMovies.length}/${movies.length} movies`);
+
+		res.status(200).json({ 
+			success: true, 
+			content: validMovies,
+			total: validMovies.length
+		});
+
+	} catch (error) {
+		console.error("Error in getGoatMovies:", error.message);
+		res.status(500).json({ 
+			success: false, 
+			message: "Internal server error" 
+		});
+	}
+}
