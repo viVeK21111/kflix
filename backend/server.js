@@ -10,6 +10,7 @@ import contactRoutes from './routes/contact.route.js'
 import cronroutes from './routes/cron.route.js'
 import watchRoutes from './routes/watch.route.js'
 import galleryRoutes from './routes/gallery.route.js';
+import playlistRoutes from './routes/playlist.route.js';
 import cors from "cors";
 
 import {connectDB} from './config/db.js'
@@ -41,6 +42,7 @@ app.use('/api/v1/contact',contactRoutes);
 app.use('/cronjob',cronroutes)
 app.use('/api/v1/watch',watchRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/v1/playlist', playlistRoutes);
 
 
 //app.listen(PORT,() => {

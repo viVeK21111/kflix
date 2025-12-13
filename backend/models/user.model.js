@@ -52,6 +52,50 @@ const userSchema = mongoose.Schema({
 		type: Array,
 		default: [],
 	},
+	// NEW Playlist System
+	playlists: [{
+		playlistId: {
+			type: String,
+			required: true,
+		},
+		name: {
+			type: String,
+			required: true,
+		},
+		isDefault: {
+			type: Boolean,
+			default: false, // true for 'Movies' and 'TV Shows'
+		},
+		type: {
+			type: String, // 'movie', 'tv', or 'mixed'
+			default: 'mixed'
+		},
+		createdAt: {
+			type: Date,
+			default: Date.now,
+		},
+		items: [{
+			type: {
+				type: String, // 'movie' or 'tv'
+				required: true,
+			},
+			id: {
+				type: Number,
+				required: true,
+			},
+			image: String,
+			title: String,
+			// TV specific fields
+			season: Number,
+			episode: Number,
+			name: String,
+			totalEpisodes: Number,
+			addedAt: {
+				type: Date,
+				default: Date.now,
+			}
+		}]
+	}],
 	Preferences: {
 		adult: {
 			type:Boolean,
