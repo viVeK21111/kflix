@@ -30,7 +30,7 @@ Streaming by Third party services
 <br><br>
 Library 
 <br><br>
-![library page](/snapshots/library.png)
+![library page](/snapshots/library1.png)
 <br>
 
 ### Technology stack
@@ -47,14 +47,14 @@ Library
 (Note: This site doesn't store any movies or tv shows, all are grabbed from third party streaming services)<br>
 -> User profile with Settings which includes Security,History and Contact us <br>
 -> Library to save movies or Tv shows in desired playlist <br>
--> Flix Chatbot to chat or ask anything related to movies or tv shows. Also helpful for custom recommendation.  <br>
+-> Flix Chatbot to chat or ask anything related to movies or tv shows. Also helpful for custom recommendation <br>
 -> Dedicated Search for tv,movies or person <br>
--> signin and signup with google for faster logins
+-> signin and signup with google for faster logins<br>
 -> History (Search History,chat history and Watch history) <br>
 -> person details like director,cast and others <br>
--> Contact Us page for users
--> Miscellaneous page to provide live cams, documentaries, radio and news from external sites.
--> Settings to manage content and account privacy
+-> Contact Us page for complaints or recommendation<br>
+-> Miscellaneous page to provide live cams, documentaries, radio and news from external sites <br>
+-> Settings to manage content and account privacy <br>
 -> Availability: one backup server. switches automatically by interceptors through axios <br>
 
 ### Production deployment
