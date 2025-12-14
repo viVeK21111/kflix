@@ -159,7 +159,7 @@ const SearchPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const searchTypeOptions = [
     { value: 'movie', label: 'Movies' },
-    { value: 'tv', label: 'TV Show' },
+    { value: 'tv', label: 'Tv Show' },
     { value: 'person', label: 'Person' },
   ];
   const selectedLabel = searchTypeOptions.find(opt => opt.value === searchType)?.label || 'Movies';
@@ -208,7 +208,7 @@ const SearchPage = () => {
                   }}
                   className={`w-full text-left px-4 py-2 rounded-lg transition-all ${searchType === opt.value ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 text-gray-200'}`}
                 >
-                  {opt.label}
+                 <p>{opt.label}</p> 
                 </button>
               ))}
             </div>
@@ -281,7 +281,7 @@ const SearchPage = () => {
             >
               <img 
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                className={ "h-[179px] object-cover rounded-t-lg"} 
+                className={ " object-cover rounded-t-lg"} 
                 alt={item?.title || item?.name} 
               />
               <h3 className="text-sm px-2 sm:text-base font-bold text-gray-300 pt-2 truncate">

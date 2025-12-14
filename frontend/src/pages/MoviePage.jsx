@@ -8,6 +8,7 @@ import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
 import { Plus,Star,Play,Dot,Loader,CircleArrowLeft,House,TvMinimal,Menu,X } from 'lucide-react';
+import AddToPlaylistModal from '../components/AddToPlaylistModal';
 
 import axios from 'axios';
 
@@ -20,6 +21,8 @@ function WatchPage() {
   const [bgColorClass, setBgColorClass] = useState(null);
   const [dir,setDir] = useState("");
   const [Loading,setLoading] = useState(true);
+
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
 
   const [directorId, setdirectorId] = useState(null);
   const [numitems,setnumitems] = useState(5);
@@ -298,12 +301,12 @@ function WatchPage() {
           </div>
           <div className='flex gap-2 items-center'>
           <button
-              className='sm:hidden bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg flex items-center'
-              onClick={(e) => addWatchList(e, data?.id)}
-              >
-              <Plus className='size-4 items-center' />
-            <p className='px-1'> List</p>
-              </button>
+          className={`sm:hidden bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg flex items-center`}
+          onClick={() => setShowPlaylistModal(true)}
+        >
+          <Plus className='size-5' />
+          <p className='ml-1'>Save</p>
+        </button>
               <div className='sm:hidden flex items-center' onClick={() => {setShowTrailerModal(true)}}> <div className='flex items-center py-1 px-2 rounded-lg bg-slate-700 hover:bg-slate-600'><img className='h-5' src='/youtube.png'></img><p className='ml-1 text-sm font-semibold'>Trailer</p></div> </div>
 
           </div>
@@ -322,31 +325,39 @@ function WatchPage() {
           )}
           
         
-        <div className='hidden sm:flex mt-4 sm:mb-2 md:mb-0'>
-          
+              <div className='hidden sm:flex mt-4 gap-2 sm:mb-2 md:mb-0'>
           {releasedate!==null && releasedate?.getTime() < new Date().getTime() && (
             <Link className='flex justify-center' to={`/${'watch'}/?id=${Id}&name=${Name}`}>
-              <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'
-             >
-             <Play className='size-6 fill-white p-1'/>
-             <p className='font-semibold'>Play</p>
-             </button>
-            </Link>
-           
-          )}
-       
-              <button
-                       className={releasedate!==null && releasedate?.getTime() < new Date().getTime() ? `bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center`:`bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1  px-2 rounded-lg flex items-center`}
-                       onClick={(e) => addWatchList(e, data?.id)}
-                     >
-                       <Plus className='size-5' />
-                       <p className='ml-1'>List</p>
+              <button className='flex bg-red-600 items-center hover:bg-red-800 px-2 rounded-md'>
+                <Play className='size-6 fill-white p-1'/>
+                <p className='font-semibold'>Play</p>
               </button>
-              <div className='flex items-center ml-2 hover:cursor-pointer  hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}> <img className='h-7' src='/youtube.png'></img><p className='ml-1 font-semibold text-md'>Trailer</p> </div>
-              { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
-                 <p className='flex ml-3 items-center'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
-              )
-              }
+            </Link>
+          )}
+
+          <button
+          className={`bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1  px-2 rounded-lg flex items-center`}
+          onClick={() => setShowPlaylistModal(true)}
+          >
+            <Plus className='size-5' />
+            <p className='ml-1'>Save</p>
+          </button>
+
+          <div className='flex items-center hover:cursor-pointer hover:scale-105 transition-transform' 
+              onClick={() => setShowTrailerModal(true)}>
+            <img className='h-7' src='/youtube.png'></img>
+            <p className='ml-1 font-semibold text-md'>Trailer</p>
+          </div>
+          
+          {dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
+            <p className='flex ml-3 items-center'>
+              Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'>
+                <Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>
+                  IMAX
+                </Link>
+              </p>
+            </p>
+          )}
         </div>
         </div>
         
@@ -455,9 +466,22 @@ function WatchPage() {
         </div>
         )}
         
-        
+        <AddToPlaylistModal
+        isOpen={showPlaylistModal}
+        onClose={() => setShowPlaylistModal(false)}
+        item={{
+          type: 'movie',
+          id: data?.id,
+          image: data?.poster_path,
+          title: data?.title
+        }}
+      />
         </div>
+
+        
       );
+      
+
 }
 export default WatchPage;
 //<span className="mt-2 w-full text-left flex items-center whitespace-nowrap text-gray-400">Enjoy your favorite movie in high quality!</span>

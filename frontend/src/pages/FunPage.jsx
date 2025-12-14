@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Plane, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper } from 'lucide-react';
+import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Radio, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper,Camera } from 'lucide-react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
 
 const FunPage = () => {
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
@@ -24,7 +23,8 @@ const FunPage = () => {
     { id: 'live-feed', title: 'Live Feed', icon: <Tv className='h-5'/> },
     { id: 'documentaries', title: 'Documentaries', icon: <Video className=''/> },
     { id:'games',title:'Games',icon: <Gamepad2 className='h-5'/>},
-    { id: 'news',title: "News" , icon : <Newspaper className='h-5' />}
+    { id: 'news',title: "News" , icon : <Newspaper className='h-5' />},
+    {id: 'radio', title:"Radio", icon: <Radio className='h-5' />},
 
     // Add more sections here as needed
     // { id: 'section3', title: 'New Section', icon: '🔧' },
@@ -433,10 +433,37 @@ const FunPage = () => {
           </div>
         );
 
+        case 'radio' :
+          return (
+            <div className="space-y-3 max-w-3xl">
+
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://radio.garden/', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                 Radio Garden
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Radio stations worldwide 3d.</p>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
+              onClick={() => window.open('https://radiomap.org/', '_blank', 'noopener,noreferrer')}>
+              <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
+                <div className="flex items-center gap-2">
+                 Radio map
+                </div>
+                <ExternalLink className="h-5 w-5" />
+              </div>
+              <p className="text-gray-400 mt-3">Radio stations worldwide 2d.</p>
+            </div>
+          </div>
+          );      
       default:
         return <div>Section not found</div>;
     }
   };
+   
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900  to-slate-900 text-white">
@@ -479,6 +506,13 @@ const FunPage = () => {
                 <span className="font-medium">{section.title}</span>
               </button>
             ))}
+             <Link
+                to={'/gallery-shot'}
+                className={`w-full text-left p-3 rounded-lg transition-all duration-200 flex items-center gap-3 hover:bg-blue-500  `}
+              >
+                <span className="text-lg"><Camera className='h-5'/></span>
+                <span className="font-medium">Flixery</span>
+              </Link>
           </div>
           
           {/* Contact info at bottom of sidebar */}

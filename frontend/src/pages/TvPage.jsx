@@ -7,6 +7,8 @@ import { SimilarStore } from "../store/SimilarStore";
 import { addWatchStore } from "../store/watchStore";
 import { creditStore } from "../store/credits";
 import { Plus, Star, Dot, Play, Loader } from "lucide-react";
+import AddToPlaylistModal from '../components/AddToPlaylistModal';
+
 import axios from "axios";
 
 const TvPage = () => {
@@ -32,6 +34,8 @@ const TvPage = () => {
   const [trailerId, setTrailerId] = useState(null);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+
 
   useEffect( ()=> {
     if(openSeason===null || openSeason==="0" || sessionStorage.getItem("navigating_from_tv_page") === null) {
@@ -329,12 +333,12 @@ const TvPage = () => {
 
             <div className="md:hidden flex items-center my-3 ml-2 sm:ml-0">
             <button
-          className='flex bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 px-2 rounded-lg items-center'
-          onClick={(e) => addWatchList(e, data?.id)}
-        >
-          <Plus className='size-4 md:size-5' />
-          <p className='ml-1'>List</p>
-        </button>
+          className={`bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1  px-2 rounded-lg flex items-center`}
+          onClick={() => setShowPlaylistModal(true)}
+          >
+            <Plus className='flex items-center size-5' />
+            <p className='ml-1'>Save</p>
+          </button>
         {trailerId && (
               <div className='flex items-center py-1 px-2 rounded-lg hover:bg-opacity-20 bg-white bg-opacity-10 ml-2 hover:cursor-pointer ' onClick={() => setShowTrailerModal(true)}>
                 <img className='h-5 items-center md:h-6' src='/youtube.png' alt='YouTube'></img>
@@ -364,11 +368,11 @@ const TvPage = () => {
         
         <div className="hidden md:flex px-1 gap-2 items-center">
         <button
-          className='flex items-center  bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 mt-4 mb-1 px-2 rounded-lg'
-          onClick={(e) => addWatchList(e, data?.id)}
+          className={`bg-white mt-3 bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1  px-2 rounded-lg flex items-center`}
+          onClick={() => setShowPlaylistModal(true)}
         >
-          <Plus className='size-5' />
-          <p className='ml-1'>List</p>
+          <Plus className='flex items-center size-5' />
+          <p className='flex ml-1 items-center'>Save</p>
         </button>
         {trailerId && (
               <div className='flex items-center pt-3  hover:cursor-pointer hover:scale-105 transition-transform' onClick={() => setShowTrailerModal(true)}>
@@ -608,6 +612,16 @@ const TvPage = () => {
      
         </>
       )}
+       <AddToPlaylistModal
+        isOpen={showPlaylistModal}
+        onClose={() => setShowPlaylistModal(false)}
+        item={{
+          type: 'tv',
+          id: data?.id,
+          image: data?.poster_path,
+          title: data?.name
+        }}
+      />
       
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { Home, Search, Bot, User, Bookmark,Ellipsis, Clapperboard, TvMinimal,Menu ,X,Tv,Eclipse,Drama,Film  } from 'lucide-react';
+import { Home, Search, Bot, User, Bookmark,Popcorn, Clapperboard,Camera, TvMinimal,Menu ,X,Tv,Eclipse,Drama,Film,Panda,Atom ,Piano } from 'lucide-react';
 import { useContentStore } from '../store/content';
 
 const BottomNavbar = ({ className = "" }) => {
@@ -36,7 +36,7 @@ const BottomNavbar = ({ className = "" }) => {
   ];
 
   return (
-    <nav className={`fixed bottom-0 right-0 left-0 sm:bottom-0 sm:right-auto sm:top-0 sm:left-0 bg-black sm:border-r sm:border-gray-800 border-gray-700 z-40 ${className}`}>
+    <nav className={`fixed bottom-0 right-0 left-0 sm:bottom-0 sm:right-auto sm:top-0 sm:left-0 bg-black sm:border-r sm:border-gray-800 border-gray-700 z-50 ${className}`}>
       <div className="flex sm:flex-col justify-around items-center h-16 px-7 sm:h-full sm:overflow-y-auto sm:py-12 sm:gap-12 scrollbar-hide">
         {/* Custom scrollbar styles */}
         <style jsx>{`
@@ -108,6 +108,23 @@ const BottomNavbar = ({ className = "" }) => {
                 />
                 <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Tvshow</span>
         </Link>
+
+        <Link
+              to={'/goat-movies'}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/goat-movies')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Popcorn
+                  size={24}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/goat-movies') ? ' text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">GMOAT</span>
+          </Link>
 
         
         <Link
@@ -204,8 +221,11 @@ const BottomNavbar = ({ className = "" }) => {
                     isActive('/watchlist') ? ' text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Watchlist</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Library</span>
           </Link>
+
+
+         
 
           <Link
               to={'/profile'}
@@ -224,6 +244,42 @@ const BottomNavbar = ({ className = "" }) => {
                 <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Profile</span>
           </Link>
 
+          <Link
+              to={'/animation'}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/animation')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Panda 
+                  size={24}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/animation') ? 'text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Animation</span>
+          </Link>
+
+        
+
+          <Link
+              to={'/musicCom'}
+              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
+                isActive('/musicCom')
+                    ? 'text-gray-400 '
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Piano
+                  size={24}
+                  className={`transition-all duration-200 stroke-3 ${
+                    isActive('/musicCom') ? ' text-blue-400' : ''
+                  }`}
+                />
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Composers</span>
+          </Link>
+
                 <div className='sm:hidden flex ml-5 mr-3 items-center z-50'>
                       <Menu className='size-8 cursor-pointer text-gray-400 p-1 rounded-lg transition-all duration-400 hover:scale-110' onClick={toggleMobileMenu}/>
               </div>
@@ -236,13 +292,13 @@ const BottomNavbar = ({ className = "" }) => {
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                <Ellipsis
+                <Atom
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
                     isActive('/fun') ? 'text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-6 items-center font-medium text-gray-400">Fun</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-6 items-center font-medium text-gray-400">Misc.</span>
             </Link>
 
                 
@@ -275,6 +331,16 @@ const BottomNavbar = ({ className = "" }) => {
 
                       </Link>
 
+                      <Link to='/goat-movies' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                          toggleMobileMenu();
+                          }}>
+                               <p className='flex items-center text-white'>
+                                      <Popcorn size={17} className=' mr-2'/>
+                                      <p className=''>GMOAT</p>
+                                    </p>
+                      </Link>
+
+
                       <Link to='/anime' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
                           toggleMobileMenu();
                           }}>
@@ -294,6 +360,16 @@ const BottomNavbar = ({ className = "" }) => {
                                     </p>
 
                       </Link>
+                      <Link to='/animation' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                          toggleMobileMenu();
+                          }}>
+                               <p className='flex items-center text-white'>
+                                      <Panda size={17} className=' mr-2'/>
+                                      <p className=''>Animation</p>
+                                    </p>
+
+                      </Link>
+                     
 
                       
                       <Link to='/directors' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
@@ -306,11 +382,22 @@ const BottomNavbar = ({ className = "" }) => {
 
                       </Link>
 
+                      <Link to='/musicCom' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                          toggleMobileMenu();
+                          }}>
+                               <p className='flex items-center text-white'>
+                                      <Piano size={18} className=' mr-2'/>
+                                      <p className=''>Composers</p>
+                                    </p>
+
+                      </Link>
+
+                      
 
                       <Link to='/fun' className='block p-3  hover:bg-slate-700  border-slate-700' onClick={toggleMobileMenu}>
                       <p className='flex items-center text-white'>
-                        <Ellipsis className='mr-2 h-5 w-4' />
-                                      <p className=''>Fun</p>
+                        <Atom className='mr-2 h-5 w-4' />
+                                      <p className=''>Miscellaneous</p>
                                     </p>
                       </Link>
                   </div>

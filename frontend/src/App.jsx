@@ -8,7 +8,7 @@ import {Toaster} from 'react-hot-toast';
 import { userAuthStore } from "./store/authUser";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
-import WatchPage2 from "./pages/WatchPage2"; 
+import WatchPage2 from "./pages/WatchPage3"; 
 import TvPage from "./pages/TvPage";
 import SearchPage from './pages/SearchPage'
 import ProfilePage from './pages/ProfilePage'
@@ -35,6 +35,13 @@ import NotFoundPage from "./pages/NotFoundPage";
 import FlappyFlix from "./pages/FlappyFlix";
 import KdramaPage from "./pages/KdramaPage";
 import DirectorsPage from "./pages/DirectorsPage";
+import AnimationPage from "./pages/AnimationPage";
+import GalleryShot from './pages/GalleryShot';
+import UserGalleryImages from './pages/UserGalleryImages';
+import GoatMovies from './pages/GoatMovies';
+import GoatCategoryPage from './pages/GoatCategoryPage';
+import MusicComPage from "./pages/MusicComPage";
+
 
 
 function FooterWithRouteCheck() {
@@ -117,8 +124,14 @@ function App() {
         <Route path='/fun/adult' element = {user ? <AdultPage /> : <Navigate to={'/'}/>} />
         <Route path='/fun/flappy' element = {user ? <FlappyFlix /> : <Navigate to={'/'}/>} />
         <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/'}/>} />
+        <Route path='/animation' element = {user ? <AnimationPage /> : <Navigate to={'/'}/>} />
         <Route path='/kdrama' element = {user ? <KdramaPage /> : <Navigate to={'/'}/>} />
         <Route path='/directors' element = {user ? <DirectorsPage /> : <Navigate to={'/'}/>} />
+        <Route path="/gallery-shot" element={<GalleryShot />} />
+	      <Route path="/user/gallery-img" element={<UserGalleryImages />} />
+        <Route path="/goat-movies" element={<GoatMovies />} />
+        <Route path="/goat-movies/:category" element={<GoatCategoryPage />} />
+        <Route path="/musicCom" element={<MusicComPage />} />
         {/* Catch-all route for 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

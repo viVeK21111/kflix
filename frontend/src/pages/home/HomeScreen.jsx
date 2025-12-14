@@ -11,6 +11,8 @@ import {addWatchStore} from '../../store/watchStore';
 import { TvMinimalPlay,Clapperboard,Loader,Star,Clock,Plus,TvMinimal,Dot,ChevronLeft, ChevronRight } from "lucide-react";
 import emailjs from 'emailjs-com';
 import { userAuthStore } from '../../store/authUser';
+import AddToPlaylistModal from '../../components/AddToPlaylistModal';
+
 import axios from 'axios';
 
 export const HomeScreen = () => {
@@ -50,6 +52,9 @@ export const HomeScreen = () => {
   const movieSectionRef = useRef(null);
   const {addWatch,addTv} = addWatchStore();
   const [imageSrc, setImageSrc] = useState("");
+
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+
 
     // New state for carousel functionality
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -177,12 +182,6 @@ export const HomeScreen = () => {
 
   };
   
-  const addWatchList = async(e,id) => {
-    e.preventDefault();
-    console.log("id "+id);
-    if(contentType === 'movies') addWatch(id);
-    else if(contentType === 'tv') addTv(id);
-  }
   
 
   return (
@@ -256,12 +255,12 @@ export const HomeScreen = () => {
                 </Link>
                 
                 <button
-                  className='flex bg-slate-600 hover:bg-slate-700 rounded-lg bg-opacity-80 text-base text-white py-1 px-2 items-center transition-colors'
-                  onClick={(e) => addWatchList(e, currentTrending?.id)}
-                >
-                  <Plus className='size-5' />
-                  <p className='ml-1 font-semibold'>WatchLater</p>
-                </button>
+                className={`bg-white bg-opacity-15 hover:bg-opacity-25 text-white font-semibold py-1 ml-2 px-2 rounded-lg flex items-center`}
+                onClick={() => setShowPlaylistModal(true)}
+              >
+                <Plus className='size-5' />
+                <p className='ml-1'>Save</p>
+              </button>
               </div>
             </div>
          </div>
@@ -328,8 +327,18 @@ export const HomeScreen = () => {
 				</>
 			)}
 		</div>
-
+    <AddToPlaylistModal
+        isOpen={showPlaylistModal}
+        onClose={() => setShowPlaylistModal(false)}
+        item={{
+          type: contentType === 'movies'? 'movie' : 'tv',
+          id: currentTrending?.id,
+          image: currentTrending?.poster_path,
+          title: contentType === 'movies'? currentTrending?.title : currentTrending?.name 
+        }}
+      />
       </>
+      
     )
 };
 

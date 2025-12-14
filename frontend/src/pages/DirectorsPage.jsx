@@ -66,6 +66,8 @@ const DirectorsPage = () => {
     { name: "Claire Denis", id: "9888" },
     { name: "Agnès Varda", id: "6817" },
     { name: "James Wan", id: "2127"},
+    { name: "Ritwik Ghatak", id: "543652"},
+    { name: "Guru Dutt", id: "125354"},
     { name: "K. Viswanath", id:"544978"}, 
     { name: "John Ford", id:"8500"},
     { name: "Sofia Coppola", id: "1769"}
