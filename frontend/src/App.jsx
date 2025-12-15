@@ -41,6 +41,7 @@ import UserGalleryImages from './pages/UserGalleryImages';
 import GoatMovies from './pages/GoatMovies';
 import GoatCategoryPage from './pages/GoatCategoryPage';
 import MusicComPage from "./pages/MusicComPage";
+import AspectRatiosPage from "./pages/AspectRatiosPage";
 
 
 
@@ -132,6 +133,7 @@ function App() {
         <Route path="/goat-movies" element={<GoatMovies />} />
         <Route path="/goat-movies/:category" element={<GoatCategoryPage />} />
         <Route path="/musicCom" element={<MusicComPage />} />
+        <Route path="/aspect-ratios" element={<AspectRatiosPage />} />
         {/* Catch-all route for 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

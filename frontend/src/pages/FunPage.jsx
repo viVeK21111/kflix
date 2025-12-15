@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Radio, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper,Camera } from 'lucide-react';
+import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Radio, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper,Camera, Film } from 'lucide-react';
 import axios from 'axios';
 
 const FunPage = () => {
@@ -512,6 +512,13 @@ const FunPage = () => {
               >
                 <span className="text-lg"><Camera className='h-5'/></span>
                 <span className="font-medium">Flixery</span>
+              </Link>
+              <Link
+                to={'/aspect-ratios'}
+                className={`w-full text-left p-3 rounded-lg transition-all duration-200 flex items-center gap-3 hover:bg-blue-500  `}
+              >
+                <span className="text-lg"><Film className='h-5'/></span>
+                <span className="font-medium">Film aspect</span>
               </Link>
           </div>
           
