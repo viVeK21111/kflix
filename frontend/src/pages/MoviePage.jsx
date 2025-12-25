@@ -317,7 +317,7 @@ function WatchPage() {
                 <p className=' font-semibold ml-2'> {dir} </p>
               </Link></p>
               { dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 &&(
-                 <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>IMAX</Link></p></p>
+                 <p className='flex mt-2'>Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'><Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase().trim().replace(/\s+/g, '-')}`}>IMAX</Link></p></p>
               )
               }
              
@@ -343,16 +343,16 @@ function WatchPage() {
             <p className='ml-1'>Save</p>
           </button>
 
-          <div className='flex items-center hover:cursor-pointer hover:scale-105 transition-transform' 
+          <div className='flex items-center hover:cursor-pointer ' 
               onClick={() => setShowTrailerModal(true)}>
             <img className='h-7' src='/youtube.png'></img>
-            <p className='ml-1 font-semibold text-md'>Trailer</p>
+            <p className='ml-1 font-semibold text-md hover:scale-105 transition-transform'>Trailer</p>
           </div>
           
           {dir==='Christopher Nolan' && new Date(data?.release_date).getFullYear()>=2008 && (
             <p className='flex ml-3 items-center'>
               Filmed For <p className='ml-1 text-blue-600 hover:underline font-semibold'>
-                <Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase()}`}>
+                <Link target='_blank' to={`https://www.imax.com/en/in/movie/${data?.title.toLowerCase().trim().replace(/\s+/g, '-')}`}>
                   IMAX
                 </Link>
               </p>

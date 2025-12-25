@@ -27,12 +27,24 @@ export const DetailsStore = create((set)=> ({
             set({data:null,isLoading:false});
         }
     },
+    getTvDetail: async(id)=> {
+        set({isLoading:true})
+        try {
+            const response = await axios.get(`/api/v1/tv/details/${id}`);
+            return {...response.data.content, media_type: 'tv'};
+
+        } catch (error) {
+           // toast.error(error.response.data.message || "an error occured");
+           return null;
+            
+        }
+    },
     getMovieDetail: async(id)=> {
         set({isLoading:true})
         try {
             const response = await axios.get(`/api/v1/movies/details/${id}`);
             console.log("movie detail succuessfull");
-            return response.data.content;
+            return {...response.data.content, media_type: 'movie'};
 
         } catch (error) {
            // toast.error(error.response.data.message || "an error occured");

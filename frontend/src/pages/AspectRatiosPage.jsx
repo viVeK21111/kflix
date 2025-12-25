@@ -321,6 +321,21 @@ export default function AspectRatiosPage() {
               </div>
             </div>
           </div>
+
+          <div className="bg-gray-800 rounded-lg p-3 sm:p-4 overflow-hidden">
+              <img 
+                src="/ratios/oban.jpeg" 
+                alt="One Battle After Another"
+                className="w-[700px] mx-auto rounded mb-3"
+              />
+              <p className="text-center font-semibold text-yellow-400">One Battle After Another (2025)</p>
+              <p className="text-xs sm:text-sm text-gray-400 text-center mt-1">
+                Different aspect ratio presentation
+              </p>
+              <p className='mt-2'><b>Note</b>: Both 1.50:1 and 1.43:1 aspect ratios have the same height but 1.50 is slightly wider, balanced between IMAX height and theatrical width. 
+                1.43 IMAX feels taller and more overwhelming — it fills your vertical field of view. Whereas 1.50 giving a more balanced panoramic look.</p>
+            </div>
+
           </div>
         </section>
     </div>

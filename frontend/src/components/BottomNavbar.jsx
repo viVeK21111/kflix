@@ -302,7 +302,7 @@ const BottomNavbar = ({ className = "" }) => {
             </Link>
 
                 
-                <div className={`fixed bottom-20 right-0 w-72 rounded-l-lg h-58 bg-gray-800 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className={`fixed bottom-20 right-0 w-72 rounded-l-lg h-[350px] overflow-y-scroll bg-gray-800 z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                  <div className="flex justify-between items-center p-4 border-b border-gray-600">
                    <h2 className="text-white text-lg font-semibold">More</h2>
                    <button onClick={toggleMobileMenu} className="text-white">

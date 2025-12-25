@@ -10,30 +10,36 @@ const SearchPage = () => {
   const [searchType, setSearchType] = useState(() => sessionStorage.getItem('searchType') || 'movie');
   const [query, setQuery] = useState(sessionStorage.getItem("squery") || '');
   const { getTv, getMovie, getPerson, data, Loading } = searchStore();
-  const [Data,setData] = useState(sessionStorage.getItem("data") || data)
+  const [Data,setData] = useState(sessionStorage.getItem("data") || null)
   const [numitems,setnumitems] = useState(sessionStorage.getItem("numitemss") || 10);
   const [loading,setloading] = useState(false);
+  const [trendingLoading, setTrendingLoading] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(null);
   sessionStorage.setItem("numitems",6);
-  const [Loading1,setLoading1] = useState(true);
   const [surpriseLoading, setSurpriseLoading] = useState(false);
   const [TrendingData,setTrendingData] = useState([]);
-  const logo = new Image();
-  logo.src = '/kflix3.png';
+
  
   useEffect(()=> {
     if(data) {
       setData(data);
-      sessionStorage.setItem("data",data);
+      sessionStorage.setItem("data",Data);
     }
   },[data])
 
   useEffect(() => {
     sessionStorage.setItem("squery",query);
+    if(query.length==0) {
+      sessionStorage.removeItem("data");
+      setData(null);
+      searchStore.setState({ data: null })
+    }
   },[query])
 
   useEffect(() => {
     const func = async() => {
+      try {
+      setTrendingLoading(true); // Start loading
       const trendingM = await axios.get('/api/v1/movies/trending')
       const trendingT = await axios.get('/api/v1/tv/trending');
       const movies = trendingM.data.content.map(item => ({
@@ -64,6 +70,12 @@ const SearchPage = () => {
           }
         }
         setTrendingData(combined);
+      }
+      catch (error) {
+        console.error("Error fetching trending data:", error);
+      } finally {
+        setTrendingLoading(false); // Stop loading
+      }
     }
     func();  
   },[]);
@@ -98,9 +110,7 @@ const SearchPage = () => {
     }
   };
  
-  logo.onload = () => {
-    setLoading1(false);
-  }
+
   useEffect(() => {
     sessionStorage.setItem('searchType', searchType);
   }, [searchType]);
@@ -163,16 +173,6 @@ const SearchPage = () => {
     { value: 'person', label: 'Person' },
   ];
   const selectedLabel = searchTypeOptions.find(opt => opt.value === searchType)?.label || 'Movies';
-
-  if( Loading1) {
-    return (
-        <div className="h-screen ">
-        <div className="flex justify-center items-center bg-black h-full">
-        <Loader className="animate-spin text-gray-500 w-10 h-10"/>
-        </div>
-      </div>
-    )
-  }
 
  
 
@@ -269,31 +269,27 @@ const SearchPage = () => {
 
       { query.length==0 && (
         <>
-        <div className='text-gray-400 flex mr-auto'><p className='font-semibold text-xl ml-4 lg:ml-11 md:text-2xl'>Trending Searches</p></div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mr-auto gap-4 lg:gap-8 mt-8 px-3 lg:px-10 mb-3">
-          
+        <div className='text-gray-400 flex mr-auto'><p className='font-semibold mt-8 text-lg ml-4 md:ml-8 md:text-xl'>Trending Searches</p></div>
+        {/* Show loading spinner while fetching trending */}
+    {trendingLoading ? (
+      <div className="flex justify-center items-center h-64">
+        <Loader className="animate-spin text-white w-7 h-7"/>
+      </div>
+    ) : (
+        
+        <div className=" mr-auto m-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 sm:ml-4 md:ml-8   ">
           {TrendingData.slice(0,14).map((item, index) => (
             (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
               <Link 
               key={item.id || index} 
               to={item.type==='movie' ? `/movie/?id=${item?.id}&name=${item?.name || item?.title}` : `/tv/details/?id=${item?.id}&name=${item?.name || item?.title}`}
-              className="block bg-[#172c47] rounded-lg shadow-md hover:scale-105 transition-transform"
+              className="block my-2 rounded-lg  hover:bg-gray-700"
             >
-              <img 
-                src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                className={ " object-cover rounded-t-lg"} 
-                alt={item?.title || item?.name} 
-              />
-              <h3 className="text-sm px-2 sm:text-base font-bold text-gray-300 pt-2 truncate">
+             
+              <h3 className="text-sm px-2 sm:text-base font-bold text-gray-500  truncate">
                 {item.title || item.name}
               </h3>
-              {(item.release_date || item.first_air_date) && (
-                <p className="text-xs flex items-center sm:text-sm pb-4 p-2 text-gray-400">
-                  {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} {" "} 
-                  |<Star size={13} className='mx-1' /> <b className='pr-1'>{item.vote_average.toFixed(1)}</b> 
-                  | {item.type}
-                </p>
-              )}
+             
              
             </Link>
             )
@@ -301,6 +297,7 @@ const SearchPage = () => {
           ))}
            
         </div>
+    )}
         </>
         
       )}
@@ -325,7 +322,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-[330px] h-[183px] object-cover rounded-t-lg"} 
+                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-28 md:h-36 lg:48 w-full" }`}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm px-2 sm:text-base font-bold text-white pt-2 truncate">
@@ -381,7 +378,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={ "w-[330px] h-[183px] object-cover rounded-t-lg"}
+                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-48 w-full" }`}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white px-2 mt-2 truncate">

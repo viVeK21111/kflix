@@ -102,20 +102,50 @@ export const getPersonDetails = async(req,res) => {
 export const getPersonCredits = async(req,res) => {
     const {id} = req.params;
     try {
-        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/person/${id}/movie_credits?language=en-US&page=1`);
-        if(data.length===0) {
+        const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/person/${id}/movie_credits?language=en-US&page=1`);
+        const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/person/${id}/tv_credits?language=en-US&page=1`);
+        
+        if((!data1.cast && !data1.crew) && (!data2.cast && !data2.crew)) {
             return res.json({success:false,message:"No person found"});
         }
         
-        // Sort by popularity in descending order
+        // Combine cast from both movie and TV, add media_type
+        const combinedCast = [
+            ...(data1.cast || []).map(item => ({...item, media_type: 'movie'})),
+            ...(data2.cast || []).map(item => ({...item, media_type: 'tv'}))
+        ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+       // console.log('combined cast ',combinedCast.slice(1,15));
+        
+        // Combine crew from both movie and TV, add media_type
+        const combinedCrew = [
+            ...(data1.crew || []).map(item => ({...item, media_type: 'movie'})),
+            ...(data2.crew || []).map(item => ({...item, media_type: 'tv'}))
+        ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+        // Deduplicate by id + media_type
+        const uniqueCast = combinedCast.filter(
+            (item, index, self) =>
+            index === self.findIndex(
+                (t) => t.id === item.id && t.media_type === item.media_type
+            )
+        );
+        
+        const uniqueCrew = combinedCrew.filter(
+            (item, index, self) =>
+            index === self.findIndex(
+                (t) => t.id === item.id && t.media_type === item.media_type
+            )
+        );
+     
+  
+        
         const sortedData = {
-            ...data,
-            cast: data.cast ? data.cast.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)) : [],
-            crew: data.crew ? data.crew.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)) : []
+            cast: uniqueCast,
+            crew: uniqueCrew
         };
         
         res.json({success:true,content:sortedData});
-       // console.log("person credits success");
        
     }
     catch(error) {

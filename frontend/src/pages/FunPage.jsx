@@ -477,7 +477,7 @@ const FunPage = () => {
           fixed lg:static inset-y-0 right-0 z-40 w-72 bg-gray-800 bg-opacity-95 lg:bg-opacity-50 
           transform transition-transform duration-200 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
-          lg:min-h-screen p-4 border-r border-gray-700 lg:overflow-y-auto
+          lg:min-h-screen p-4 border-r border-gray-700 overflow-y-scroll lg:overflow-y-auto bottom-14 sm:bottom-0
         `}>
           <div className="flex items-center justify-between mb-6 lg:hidden">
             <h2 className="text-xl font-bold text-white">Sections</h2>
@@ -522,14 +522,7 @@ const FunPage = () => {
               </Link>
           </div>
           
-          {/* Contact info at bottom of sidebar */}
-          <div className="mt-8 p-4 bg-gray-700 bg-opacity-50 rounded-lg">
-            <p className='text-sm text-gray-300 mb-2'>Want to give suggestions?</p>
-            <div className="space-y-2">
-              <a href='https://discord.gg/P3rcqHwp9d' className='block text-blue-400 hover:text-blue-300 text-sm transition-colors' target='_blank'>Discord</a>
-              <a href='/contactus' className='block text-blue-400 hover:text-blue-300 text-sm transition-colors' target='_blank'>Contact us</a>
-            </div>
-          </div>
+       
         </div>
 
         {/* Overlay for mobile */}

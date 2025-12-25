@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { PersonStore } from "../store/PersonStore"; // Assuming store import
-import { ORIGINAL_IMG_BASE_URL } from "../utils/constants"; // Import Image base URL
-import { DetailsStore } from "../store/tvdetails";
+import { PersonStore } from "../store/PersonStore";
+import { ORIGINAL_IMG_BASE_URL } from "../utils/constants";
 import { Link } from 'react-router-dom';
-import {Loader,House,TvMinimal,Menu,X,Star} from 'lucide-react'
+import { Loader, Star } from 'lucide-react';
 
 export default function PersonPage() {
   const { datap, getPersonDetails, datac, getPersonCredits } = PersonStore();
   const location = useLocation();
-  const [movieids, setMovieIds] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [loadingMovies,setLoadingMovies] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [loading1, setLoading1] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [numitems, setnumitems] = useState(() => {
     const stored = sessionStorage.getItem("numitems");
     return stored ? Number(stored) : 8;
   });
-  const { getMovieDetail } = DetailsStore();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   const [readov, setreadov] = useState(350);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mediaFilter, setMediaFilter] = useState('movie'); // 'all', 'movie', 'tv'
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -37,86 +33,41 @@ export default function PersonPage() {
   // Save numitems to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem("numitems", numitems.toString());
-  }, [numitems])
+  }, [numitems]);
 
   useEffect(() => {
-    if (datac?.cast?.length > 0 && !loading2) {
-      let ids;
-      if (datap?.known_for_department === 'Acting') {
-        ids = [...new Set(datac.cast.map(x => x.id))];
-      } else {
-        ids = [...new Set(datac.crew.map(x => x.id))];
-      }
-      setMovieIds(ids.slice(0,50));
+    // Wait until credits are fully loaded
+    if (loading2) return;
+  
+    setLoadingMovies(true);
+  
+    let credits = [];
+  
+    if (datap?.known_for_department === 'Acting') {
+      credits = datac?.cast || [];
+    } else {
+      credits = datac?.crew || [];
     }
+  
+    setMovies(credits);
+    setLoadingMovies(false);
+  
   }, [datac, loading2, datap?.known_for_department]);
 
-  // Fetch movie details in batches for better performance
-  const fetchMoviesBatch = async (startIndex, endIndex) => {
-    const batch = movieids.slice(startIndex, endIndex);
-    try {
-      const movieDetails = await Promise.all(
-        batch.map(movieId => getMovieDetail(movieId))
-      );
-      return movieDetails.filter(movie => movie !== null); // Filter out failed requests
-    } catch (error) {
-      console.error("Error fetching movie batch:", error);
-      return [];
-    }
-  };
-
-  // Initial movie loading - only fetch what we need to display
-  useEffect(() => {
-    if (movieids.length > 0 && !loading2) {
-      const loadInitialMovies = async () => {
-        setLoading1(true);
-        try {
-          // Fetch initial batch
-          const initialMovies = await fetchMoviesBatch(0, numitems);
-          setMovies(initialMovies);
-          setLoading1(false);
-
-          // Optionally fetch more in background for smoother "Load More" experience
-          if (movieids.length > numitems) {
-            const backgroundBatch = await fetchMoviesBatch(numitems, Math.min(numitems + 8, movieids.length));
-            setMovies(prev => [...prev, ...backgroundBatch]);
-          }
-        } catch (error) {
-          console.error("Error loading initial movies:", error);
-          setLoading1(false);
-        }
-      };
-
-      loadInitialMovies();
-    }
-  }, [movieids, loading2]);
-
   // Handle load more functionality
-  const handleLoadMore = async () => {
-    setLoadingMore(true);
-    const newNumItems = numitems + 4;
-    
-    try {
-      // Check if we need to fetch more movie details
-      if (movies.length < newNumItems && movies.length < movieids.length) {
-        const additionalMovies = await fetchMoviesBatch(
-          movies.length,
-          Math.min(newNumItems, movieids.length)
-        );
-        setMovies(prev => [...prev, ...additionalMovies]);
-      }
-      
-      setnumitems(newNumItems);
-    } catch (error) {
-      console.error("Error loading more movies:", error);
-    } finally {
-      setLoadingMore(false);
-    }
+  const handleLoadMore = () => {
+    setnumitems(prev => prev + 4);
   };
+
+  // Filter movies based on selected media type
+  const filteredMovies = movies.filter(item => {
+    if (mediaFilter === 'all') return true;
+    return item.media_type === mediaFilter;
+  });
 
   if (loading) {
     return (
-      <div className="h-screen ">
+      <div className="h-screen">
         <div className="flex justify-center items-center bg-black h-full">
           <Loader className="animate-spin text-white w-10 h-10"/>
         </div>
@@ -125,7 +76,7 @@ export default function PersonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-800 text-white flex flex-col ">
+    <div className="min-h-screen bg-slate-800 text-white flex flex-col">
       <div className="max-w-full w-full bg-black-800 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-4">
         {/* Profile Image */}
         <div className="flex justify-center pl-3 py-3">
@@ -186,7 +137,6 @@ export default function PersonPage() {
                   Official Website
                 </a>
               )}
-              
             </div>
           </div>
         </div>
@@ -233,24 +183,64 @@ export default function PersonPage() {
 
       {/* Movies Section */}
       <div className="bg-slate-900">
-        <div className="w-full max-w-4xl text-xl mt-3"> 
-          <p className="ml-3 font-semibold">Known For: </p>
-        </div>
-        
-        {loading1 && (
-          <div className="flex justify-center h-screen mt-20">
-            <Loader className="animate-spin text-white w-7 h-7"/>
+        <div className="w-full flex items-center justify-between px-3 mt-3"> 
+          <p className="text-xl font-semibold">Known For:</p>
+          
+          
+          {/* Filter Buttons */}
+          
+          <div className="flex gap-2">
+           
+            <button
+              onClick={() => {
+                setMediaFilter('movie');
+               
+              }}
+              className={`px-3 py-1 text-sm rounded-lg transition-all ${
+                mediaFilter === 'movie'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+            >
+              Movies
+            </button>
+            <button
+              onClick={() => {
+                setMediaFilter('tv');
+               
+              }}
+              className={`px-3 py-1 text-sm rounded-lg transition-all ${
+                mediaFilter === 'tv'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+            >
+              TV Shows
+            </button>
           </div>
-        )}
+        </div>
+
+      
+        {loadingMovies ? (
+      <div className="flex justify-center items-center h-64">
+        <Loader className="animate-spin text-white w-7 h-7"/>
+      </div>
+    ) : (
 
         <div className="mt-6 mb-3 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {movies.slice(0, numitems).map((item, index) => (
-            (item?.backdrop_path || item?.poster_path) && (
-              <Link key={item.id || index} to={`/movie/?id=${item?.id}&name=${item?.name || item?.title}`}>
-                <div className="rounded-lg bg-slate-800 shadow-md hover:scale-105 transition-transform">
+          {filteredMovies.slice(0, numitems).map((item, index) => (
+            (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
+              <Link 
+                key={item.id || index} 
+                to={item.media_type === 'tv' 
+                  ? `/tv/details/?id=${item?.id}&name=${item?.name}` 
+                  : `/movie/?id=${item?.id}&name=${item?.name || item?.title}`
+                }
+              >
+                <div className="rounded-lg bg-slate-800 aspect-[4/3] shadow-md hover:bg-slate-700">
                   <img
-                    src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
-                    className="w-full h-40 sm:h-48 object-cover rounded-t-lg mb-2"
+                    src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
+                    className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg mb-2" : "w-full object-cover h-48 rounded-t-lg mb-2"}`}
                     alt={item?.title || item?.name}
                     loading="lazy"
                   />
@@ -261,7 +251,7 @@ export default function PersonPage() {
                     <p className="text-xs flex items-center sm:text-sm text-gray-300 pl-2 pb-3">
                       {item.release_date?.split("-")[0] || item.first_air_date?.split("-")[0]} 
                       | <Star size={12} className='mx-1' /> <b>{item.vote_average?.toFixed(1)}</b> 
-                      | {item.adult ? "18+" : "PG-13"}
+                      | {item.media_type === 'tv' ? 'TV' : 'Movie'}
                     </p>
                   )}
                 </div>
@@ -269,23 +259,16 @@ export default function PersonPage() {
             )
           ))}
         </div>
+    )}
 
         {/* Load More Button */}
-        {numitems < movieids.length && (
+        {numitems < filteredMovies.length && (
           <div className="flex w-full justify-center mt-4 mb-3">
             <button
               onClick={handleLoadMore}
-              disabled={loadingMore}
-              className="px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
             >
-              {loadingMore ? (
-                <div className="flex items-center space-x-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Loading More...</span>
-                </div>
-              ) : (
-                `Load More (${movieids.length - numitems} remaining)`
-              )}
+              Load More ({filteredMovies.length - numitems} remaining)
             </button>
           </div>
         )}
