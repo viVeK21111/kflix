@@ -11,6 +11,7 @@ import cronroutes from './routes/cron.route.js'
 import watchRoutes from './routes/watch.route.js'
 import galleryRoutes from './routes/gallery.route.js';
 import playlistRoutes from './routes/playlist.route.js';
+import hanimeRoutes from './routes/hanime.route.js';
 import cors from "cors";
 
 import {connectDB} from './config/db.js'
@@ -43,7 +44,7 @@ app.use('/cronjob',cronroutes)
 app.use('/api/v1/watch',watchRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/v1/playlist', playlistRoutes);
-
+app.use('/api/v1/hanime', hanimeRoutes);
 
 //app.listen(PORT,() => {
 //    console.log("server started at https://localhost:5000");
