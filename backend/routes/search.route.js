@@ -11,7 +11,7 @@ router.get('/people/:query',protectRoute,searchPeople);
 router.get('/history',protectRoute,searchHistory)
 router.delete('/removehistory/:id',protectRoute,removeFromSearchHistory)
 router.delete('/clearhistory',protectRoute,ClearHistory)
-router.get('/person/:id',protectRoute,getPersonDetails)
+router.get('/person/:id',getPersonDetails)
 router.get('/person/credits/:id',protectRoute,getPersonCredits)
 router.get('/person/popular',protectRoute,getPersonPopular);
 router.delete('/removehistoryquery',protectRoute,removeFromChatHistory)
