@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Link as LinkIcon,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText,UserCheck,User,ChevronDown,ChevronRight  } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Link as LinkIcon,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText,UserCheck,User,ChevronDown,ChevronRight,Coffee  } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -274,7 +274,7 @@ export default function ProfilePage(){
         >
           <div className="flex items-center">
             <Github className="mr-3" size={20}/>
-            GitHub Repository
+            GitHub 
           </div>
         </a>
         
@@ -287,6 +287,18 @@ export default function ProfilePage(){
           <div className="flex items-center">
             <img src="/d1.png" className="h-4 w-5 mr-3" alt="Discord"/>
             Discord Community
+          </div>
+        </a>
+
+        <a 
+          href="https://buymeacoffee.com/vivekvito" 
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block bg-zinc-800 p-4 rounded-lg hover:bg-zinc-700 transition-colors"
+        >
+          <div className="flex items-center">
+          <Coffee className='mr-3' size={20} />
+            Buy me a coffee
           </div>
         </a>
       </div>
@@ -517,7 +529,7 @@ export default function ProfilePage(){
                   >
                     <div className="flex items-center">
                       <Github className="mr-3" size={18}/>
-                      GitHub Repository
+                      GitHub
                     </div>
                   </a>
                   <a 
@@ -529,6 +541,18 @@ export default function ProfilePage(){
                     <div className="flex items-center">
                       <img src="/d1.png" className="h-4 w-5 mr-3" alt="Discord"/>
                       Discord Community
+                    </div>
+                  </a>
+
+                  <a 
+                    href="https://buymeacoffee.com/vivekvito" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-zinc-700 p-3 rounded-lg hover:bg-zinc-600 transition-colors"
+                  >
+                    <div className="flex items-center">
+                    <Coffee className='mr-3' size={18} />
+                      Buy me a coffee
                     </div>
                   </a>
                 </div>

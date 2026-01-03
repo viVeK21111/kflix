@@ -79,7 +79,7 @@ const GoatCategoryPage = () => {
 				<div className="mb-8">
 					<div className="flex items-center gap-4">
 						<Link
-							to="/goat-movies"
+							to="/genres"
 							className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition"
 						>
 							<ArrowLeft size={20} />
@@ -151,7 +151,7 @@ const GoatCategoryPage = () => {
 					<div className="text-center py-20">
 						<p className="text-xl text-gray-400">No movies found in this category</p>
 						<Link
-							to="/goat-movies"
+							to="/genres"
 							className="mt-4 inline-block bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition"
 						>
 							Back to Categories

@@ -1,24 +1,32 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronRight,Loader } from "lucide-react";
 
 
 const AuthScreen = () => {
-    const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const [Loading,setLoading] = useState(true);
-    const [Loading1,setLoading1] = useState(true);
-      const logoImage = new Image();
-      logoImage.src = '/hero.png';
-      const logo = new Image();
-      logo.src = '/kflix2.png';
-      logoImage.onload = () => {
-        setLoading(false);
-      }
-      logo.onload = () => {
-        setLoading1(false);
-      }
-      if((Loading || Loading1)) {
+
+    useEffect(() => {
+      let isMounted = true;
+  
+      const hero = new Image();
+      hero.src = "/hero.png";
+  
+      hero.onload = () => {
+        if (isMounted) setLoading(false);
+      };
+  
+      hero.onerror = () => {
+        if (isMounted) setLoading(false); // fail-safe
+      };
+  
+      return () => {
+        isMounted = false;
+      };
+    }, []);
+
+      if((Loading)) {
         return (
             <div className="h-screen ">
             <div className="flex justify-center items-center bg-black h-full">

@@ -422,13 +422,14 @@ function WatchPage() {
                         <Link 
                         key={item.id || index} 
                         to={'/movie'+`/?id=${item?.id}&name=${item?.name || item?.title}`}
-                        className="block bg-gray-800 bg-opacity-60 p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+                        className="block bg-gray-800 bg-opacity-60 rounded-lg shadow-md hover:bg-gray-800"
                       >
                         <img 
                           src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                          className="w-full h-48 object-cover rounded-lg" 
+                          className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full" }`}
                           alt={item?.title || item?.name} 
                         />
+                        <div className='p-2'>
                         <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
                           {item.title || item.name}
                         </h3>
@@ -437,6 +438,8 @@ function WatchPage() {
                           <p className="text-xs flex items-center sm:text-sm text-gray-400">{item.release_date.split("-")[0]} | <Star size={13} className='mx-1' />{item.vote_average?.toFixed(1)} </p>
                           
                       </div>
+                        </div>
+                       
                       </Link>
                       )
                     

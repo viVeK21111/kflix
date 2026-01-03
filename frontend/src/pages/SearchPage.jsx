@@ -312,7 +312,7 @@ const SearchPage = () => {
         Array.isArray(Data) ? (
           <>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6  mt-8 px-3 xl:px-10 mb-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6  mt-8 px-3 xl:px-10 mb-3">
         {Data.slice(0,numitems).map((item, index) => (
               (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link 
@@ -322,7 +322,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-28 md:h-36 lg:48 w-full" }`}
+                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full" }`}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm px-2 sm:text-base font-bold text-white pt-2 truncate">
@@ -378,7 +378,7 @@ const SearchPage = () => {
               >
                 <img 
                   src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`} 
-                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-48 w-full" }`}
+                  className={`${ (item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" :  " object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full" }`}
                   alt={item?.title || item?.name} 
                 />
                 <h3 className="text-sm sm:text-base font-bold text-white px-2 mt-2 truncate">

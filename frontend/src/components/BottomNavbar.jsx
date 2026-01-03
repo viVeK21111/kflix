@@ -110,9 +110,9 @@ const BottomNavbar = ({ className = "" }) => {
         </Link>
 
         <Link
-              to={'/goat-movies'}
+              to={'/genres'}
               className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
-                isActive('/goat-movies')
+                isActive('/genres')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
                 }`}
@@ -120,10 +120,10 @@ const BottomNavbar = ({ className = "" }) => {
                 <Popcorn
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/goat-movies') ? ' text-blue-400' : ''
+                    isActive('/genres') ? ' text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">GMOAT</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Genre</span>
           </Link>
 
         
@@ -191,9 +191,9 @@ const BottomNavbar = ({ className = "" }) => {
           })}
 
           <Link
-              to={'/directors'}
+              to={'/greatest'}
               className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
-                isActive('/directors')
+                isActive('/greatest')
                     ? 'text-gray-400 '
                     : 'text-gray-400 hover:text-white'
                 }`}
@@ -201,10 +201,10 @@ const BottomNavbar = ({ className = "" }) => {
                 <Film
                   size={24}
                   className={`transition-all duration-200 stroke-3 ${
-                    isActive('/directors') ? ' text-blue-400' : ''
+                    isActive('/greatest') ? ' text-blue-400' : ''
                   }`}
                 />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Directors</span>
+                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Greatest</span>
           </Link>
 
           <Link
@@ -263,22 +263,6 @@ const BottomNavbar = ({ className = "" }) => {
 
         
 
-          <Link
-              to={'/musicCom'}
-              className={`group relative  hidden sm:flex flex-col items-center justify-center flex-1 sm:flex-none h-full sm:h-auto transition-all duration-200 ${
-                isActive('/musicCom')
-                    ? 'text-gray-400 '
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <Piano
-                  size={24}
-                  className={`transition-all duration-200 stroke-3 ${
-                    isActive('/musicCom') ? ' text-blue-400' : ''
-                  }`}
-                />
-                <span className="absolute text-sm hidden sm:group-hover:flex bg-black px-2 py-1 rounded-lg top-7 items-center font-medium text-gray-400">Composers</span>
-          </Link>
 
                 <div className='sm:hidden flex ml-5 mr-3 items-center z-50'>
                       <Menu className='size-8 cursor-pointer text-gray-400 p-1 rounded-lg transition-all duration-400 hover:scale-110' onClick={toggleMobileMenu}/>
@@ -331,12 +315,12 @@ const BottomNavbar = ({ className = "" }) => {
 
                       </Link>
 
-                      <Link to='/goat-movies' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                      <Link to='/genres' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
                           toggleMobileMenu();
                           }}>
                                <p className='flex items-center text-white'>
                                       <Popcorn size={17} className=' mr-2'/>
-                                      <p className=''>GMOAT</p>
+                                      <p className=''>Genre</p>
                                     </p>
                       </Link>
 
@@ -372,26 +356,18 @@ const BottomNavbar = ({ className = "" }) => {
                      
 
                       
-                      <Link to='/directors' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
+                      <Link to='/greatest' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
                           toggleMobileMenu();
                           }}>
                                <p className='flex items-center text-white'>
                                       <Film size={16} className=' mr-2'/>
-                                      <p className=''>Directors</p>
+                                      <p className=''>Greatest</p>
                                     </p>
 
                       </Link>
 
-                      <Link to='/musicCom' className='block hover:bg-slate-700 p-3 border-b border-slate-700' onClick={() => {
-                          toggleMobileMenu();
-                          }}>
-                               <p className='flex items-center text-white'>
-                                      <Piano size={18} className=' mr-2'/>
-                                      <p className=''>Composers</p>
-                                    </p>
-
-                      </Link>
-
+                     
+                     
                       
 
                       <Link to='/fun' className='block p-3  hover:bg-slate-700  border-slate-700' onClick={toggleMobileMenu}>

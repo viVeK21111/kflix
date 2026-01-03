@@ -22,7 +22,6 @@ import WatchHistory from "./pages/WatchHistory"
 import HistoryPage from "./pages/HistoryPage"
 import MoviePage from "./pages/MoviePage";
 import Terms from "./pages/Terms";
-import {useLocation}  from  'react-router-dom';
 import ForgotPassword from "./pages/ForgotPassword";
 import ChangePasswordH from "./pages/ChangePasswordH";
 import Monitor from "./pages/Monitor";
@@ -42,21 +41,14 @@ import GoatMovies from './pages/GoatMovies';
 import GoatCategoryPage from './pages/GoatCategoryPage';
 import MusicComPage from "./pages/MusicComPage";
 import AspectRatiosPage from "./pages/AspectRatiosPage";
+import HanimePage from "./pages/HanimePage";
+import HanimeDetailPage from "./pages/HanimeDetailPage";
+import HanimeTermsPage from "./pages/HanimeTermsPage";
+import HanimeCollectionsPage from './pages/HanimeCollectionsPage';
+import TopPage from "./pages/TopPage";
 
 
 
-function FooterWithRouteCheck() {
-  // Import useLocation here to ensure it's updated on every route change
-  
-  const location = useLocation();
-  const {user} = userAuthStore();
-  // Don't show footer on chat page
-  if (location.pathname === '/chat' || !user) {
-    return null;
-  }
-  
-  return <Footer />;
-}
 function BottomNavbarReturn() {
   // Import useLocation here to ensure it's updated on every route change
   
@@ -81,7 +73,6 @@ function App() {
   },[authCheck]);
   
   console.log("user auth: ",user);
-  const isChatPage = location.pathname === '/chat';
   if(isCheckingauth) {
     return (
       <div className="h-screen">
@@ -102,43 +93,49 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path='/signup' element ={!user ? <SignUpPage /> : <Navigate to={'/'}/>} />
         <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
-        <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/'}/>} />
+        <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/login'}/>} />
         <Route path="/movie" element = {user ? <MoviePage/> :  <Navigate to={'/'}/>} />
         <Route path="/watch" element = {user ? <WatchPage2/> :  <Navigate to={'/'}/>} />
-        <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/'}/>} />
-        <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/'}/>} />
-        <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/'}/>} />
-        <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/'}/>} />
-        <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/'}/>} />
-        <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/'}/>} />
+        <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/login'}/>} />
+        <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/login'}/>} />
+        <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/login'}/>} />
+        <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/login'}/>} />
+        <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/login'}/>} />
+        <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/login'}/>} />
         <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
         <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
         <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
         <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
-        <Route path='/history' element = {user ? <HistoryPage/> : <Navigate to={'/'}/>} />
-        <Route path='/profile/terms' element = {user ? <Terms/> : <Navigate to={'/'}/>} />
+        <Route path='/history' element = {user ? <HistoryPage/> : <Navigate to={'/login'}/>} />
         <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
         <Route path='/changepassword' element = {<ChangePasswordH/>} />
         <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
         <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
-        <Route path='/fun' element = {user ? <FunPage /> : <Navigate to={'/'}/>} />
-        <Route path='/fun/adult' element = {user ? <AdultPage /> : <Navigate to={'/'}/>} />
-        <Route path='/fun/flappy' element = {user ? <FlappyFlix /> : <Navigate to={'/'}/>} />
-        <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/'}/>} />
-        <Route path='/animation' element = {user ? <AnimationPage /> : <Navigate to={'/'}/>} />
-        <Route path='/kdrama' element = {user ? <KdramaPage /> : <Navigate to={'/'}/>} />
-        <Route path='/directors' element = {user ? <DirectorsPage /> : <Navigate to={'/'}/>} />
+        <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/login'}/>} />
+        <Route path='/animation' element = {user ? <AnimationPage /> : <Navigate to={'/login'}/>} />
+        <Route path='/kdrama' element = {user ? <KdramaPage /> : <Navigate to={'/login'}/>} />
+	      <Route path="/user/gallery-img" element={user ? <UserGalleryImages /> :  <Navigate to={'/'}/>} />
+        <Route path="/genres" element={user ? <GoatMovies /> :  <Navigate to={'/'}/> }/>
+        <Route path="/genres/:category" element={user ? <GoatCategoryPage /> :  <Navigate to={'/'}/> }/>
+        <Route path='/fun/flappy' element = {user ? <FlappyFlix /> : <Navigate to={'/login'}/>} />
+
+        <Route path='/profile/terms' element = { <Terms/> } />
+     
+
+        <Route path='/fun' element = {<FunPage />} />
+        <Route path='/fun/adult' element = {<AdultPage /> } />
+        <Route path='/greatest' element = {<TopPage /> } />
         <Route path="/gallery-shot" element={<GalleryShot />} />
-	      <Route path="/user/gallery-img" element={<UserGalleryImages />} />
-        <Route path="/goat-movies" element={<GoatMovies />} />
-        <Route path="/goat-movies/:category" element={<GoatCategoryPage />} />
-        <Route path="/musicCom" element={<MusicComPage />} />
         <Route path="/aspect-ratios" element={<AspectRatiosPage />} />
+        <Route path="/hentocean" element={<HanimePage />} />
+        <Route path="/hentocean/:slug" element={<HanimeDetailPage />} />
+        <Route path="/hentocean/terms" element={<HanimeTermsPage />} />
+        <Route path="/hentocean/collections" element={<HanimeCollectionsPage />} />
+        <Route path="/hentocean/collections/:collectionSlug" element={<HanimeCollectionsPage />} />
         {/* Catch-all route for 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
-    <FooterWithRouteCheck/>
     <BottomNavbarReturn/>
     <Toaster/>
     </>

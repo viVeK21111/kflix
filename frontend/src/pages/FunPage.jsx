@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ExternalLink, Play, X, Globe,Satellite,Rabbit,Tv,Radio, AlertTriangle,Droplet,Video, Menu, X as CloseIcon,Gamepad2,Newspaper,Camera, Film } from 'lucide-react';
-import axios from 'axios';
+import { userAuthStore } from "../store/authUser";
 
 const FunPage = () => {
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [videoId, setVideoId] = useState(""); // You'll provide the YouTube ID later
-  const [adultPreference, setAdultPreference] = useState(false);
-  const [showAdultWarning, setShowAdultWarning] = useState(false);
+  const user = userAuthStore((state) => state.user);
+
   const [activeSection, setActiveSection] = useState(sessionStorage.getItem("funSelect") || 'live-feed'); // Default to live feed
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile sidebar toggle
   const navigate = useNavigate();
@@ -49,19 +49,7 @@ const FunPage = () => {
     setSidebarOpen(false); // Close sidebar on mobile after selection
   };
 
-  // Fetch adult preference on component mount
-  useEffect(() => {
-    const getAdultPreference = async () => {
-      try {
-        const pref = await axios.get('/api/v1/user/getadultPreference');
-        const datapref = pref.data.pref;
-        setAdultPreference(datapref);
-      } catch (error) {
-        console.error('Error fetching adult preference:', error);
-      }
-    };
-    getAdultPreference();
-  }, []);
+
 
   const handleGame = (Link) => {
     setGameLink(Link);
@@ -73,12 +61,9 @@ const FunPage = () => {
   }
 
   const handleNSFWCams = () => {
-    if (adultPreference) {
+   
       navigate('/fun/adult');
-    } else {
-      setShowAdultWarning(true);
-      //toast.error('Adult content preference is disabled. Please enable it in your profile settings.');
-    }
+   
   };
 
   // Render content based on active section
@@ -477,7 +462,7 @@ const FunPage = () => {
           fixed lg:static inset-y-0 right-0 z-40 w-72 bg-gray-800 bg-opacity-95 lg:bg-opacity-50 
           transform transition-transform duration-200 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
-          lg:min-h-screen p-4 border-r border-gray-700 overflow-y-scroll lg:overflow-y-auto bottom-14 sm:bottom-0
+          min-h-screen p-4 border-r border-gray-700 overflow-y-scroll lg:overflow-y-auto bottom-14 sm:bottom-0
         `}>
           <div className="flex items-center justify-between mb-6 lg:hidden">
             <h2 className="text-xl font-bold text-white">Sections</h2>
@@ -513,12 +498,13 @@ const FunPage = () => {
                 <span className="text-lg"><Camera className='h-5'/></span>
                 <span className="font-medium">Flixery</span>
               </Link>
+            
               <Link
-                to={'/aspect-ratios'}
+                to={'/hentocean'}
                 className={`w-full text-left p-3 rounded-lg transition-all duration-200 flex items-center gap-3 hover:bg-blue-500  `}
               >
-                <span className="text-lg"><Film className='h-5'/></span>
-                <span className="font-medium">Film aspect</span>
+                <img className="text-lg h-6" src='/animegirl.png'></img>
+                <span className="font-medium">Hentocean</span>
               </Link>
           </div>
           
@@ -536,19 +522,26 @@ const FunPage = () => {
 
         {/* Main Content Area - Scrollable */}
         <div className="flex-1 min-h-screen lg:overflow-y-auto" style={{scrollbarColor: 'rgb(53, 52, 52) transparent'}}>
-           
+
         {/* Mobile Menu Button */}
+        <div className='flex'>
+        <div className='flex lg:hidden justify-start mr-auto items-center ml-3 mt-2'>{!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 p-1 '></img></Link>}</div>
+
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="lg:hidden p-1 mx-4 mt-3 text-white hover:bg-gray-700  flex ml-auto rounded-lg transition-colors"
         >
           {sidebarOpen ? <CloseIcon className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
+        </div>
+        
 
           <div className="px-4 lg:px-16 py-8 mb-10">
-            <h1 className="text-2xl lg:text-3xl font-bold pl-2 mb-8">
+            <h1 className="flex items-center text-2xl lg:text-3xl font-bold pl-2 mb-8">
               Explore {sections.find(s => s.id === activeSection)?.title || 'Fun Page'}
+             <div className=' hidden lg:flex justify-end ml-auto items-center'>{!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 sm:p-1 '></img></Link>}</div>
             </h1>
+        
             
             {renderSectionContent()}
           </div>
@@ -623,34 +616,7 @@ const FunPage = () => {
       )}
 
 
-      {/* Adult Warning Modal */}
-      {showAdultWarning && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
-            <div className="flex items-center gap-3 mb-4">
-              <AlertTriangle className="h-8 w-8 text-red-400" />
-              <h3 className="text-xl font-semibold text-white">Content Disabled</h3>
-            </div>
-            <p className="text-gray-300 mb-6">
-              This content preference is currently disabled. To access NSFW content, please enable adult content in your profile settings.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowAdultWarning(false)}
-                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 transition-colors"
-              >
-                Close
-              </button>
-              <Link
-                to="/profile"
-                className="flex-1 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition-colors text-center"
-              >
-                Go to Profile
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+  
     </div>
   );
 };

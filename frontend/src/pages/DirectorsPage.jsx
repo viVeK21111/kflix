@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { Link } from 'react-router-dom';
+import { userAuthStore } from "../store/authUser";
 import axios from 'axios';
 
 const DirectorsPage = () => {
@@ -12,6 +13,7 @@ const DirectorsPage = () => {
     return stored ? parseInt(stored, 10) : 16;
   });
   const [loadingMore, setLoadingMore] = useState(false);
+  const user = userAuthStore((state) => state.user);
 
   // List of director IDs and names (50 directors)
   const directorsList = [
@@ -157,6 +159,7 @@ const DirectorsPage = () => {
     return (
       <div className="min-h-screen bg-gray-800 py-8">
         <div className="max-w-lg md:max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+         
           <h1 className="text-4xl font-bold text-gray-300 mb-8 text-center">Top Directors</h1>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: displayCount }).map((_, index) => (
@@ -192,7 +195,10 @@ const DirectorsPage = () => {
   return (
     <div className="min-h-screen bg-gray-800 py-8">
       <div className="max-w-lg md:max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-300 mb-10 text-center">Top Directors</h1>
+        <div className="flex items-center text-4xl font-bold text-gray-300 mb-10 text-center flex">  
+          <div className='flex justify-start'>{!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 p-2'></img></Link>}</div>
+        <p className='flex justify-center mx-auto'>Top Directors</p>
+        </div>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {directors?.slice(0, displayCount).map((director) => (

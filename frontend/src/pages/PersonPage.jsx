@@ -76,8 +76,8 @@ export default function PersonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-800 text-white flex flex-col">
-      <div className="max-w-full w-full bg-black-800 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-4">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+      <div className="max-w-full w-full bg-slate-800 rounded-t-lg shadow-lg flex flex-col sm:flex-row gap-4">
         {/* Profile Image */}
         <div className="flex justify-center pl-3 py-3">
           <img
@@ -226,8 +226,14 @@ export default function PersonPage() {
         <Loader className="animate-spin text-white w-7 h-7"/>
       </div>
     ) : (
-
-        <div className="mt-6 mb-3 max-w-full p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <>
+      {filteredMovies.length==0 && (
+        <div className="flex w-full items-center mt-5 justify-center mx-auto ">
+          <p> No content found</p>
+        </div>
+      )}
+        <div className="mt-6 mb-3 max-w-full p-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          
           {filteredMovies.slice(0, numitems).map((item, index) => (
             (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
               <Link 
@@ -240,7 +246,7 @@ export default function PersonPage() {
                 <div className="rounded-lg bg-slate-800 aspect-[4/3] shadow-md hover:bg-slate-700">
                   <img
                     src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
-                    className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg mb-2" : "w-full object-cover h-48 rounded-t-lg mb-2"}`}
+                    className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg mb-2" : "w-full object-cover h-28 sm:h-32 xl:h-48 rounded-t-lg mb-2"}`}
                     alt={item?.title || item?.name}
                     loading="lazy"
                   />
@@ -259,6 +265,7 @@ export default function PersonPage() {
             )
           ))}
         </div>
+        </>
     )}
 
         {/* Load More Button */}

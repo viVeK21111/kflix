@@ -1,80 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ExternalLink, ArrowLeft, AlertTriangle } from 'lucide-react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
 
 const AdultPage = () => {
-  const [adultPreference, setAdultPreference] = useState(false);
-  const [showAdultWarning, setShowAdultWarning] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  
+  const [showAgeGate, setShowAgeGate] = useState(false);
 
-  // Check adult preference on component mount
   useEffect(() => {
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0);
-    
-    const checkAdultPreference = async () => {
-      try {
-        const pref = await axios.get('/api/v1/user/getadultPreference');
-        const datapref = pref.data.pref;
-        setAdultPreference(datapref);
-        
-        if (!datapref) {
-          setShowAdultWarning(true);
-         // toast.error('Adult content preference is disabled. Please enable it in your profile settings.');
-        }
-      } catch (error) {
-        console.error('Error fetching adult preference:', error);
-        setShowAdultWarning(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    checkAdultPreference();
+    const accepted = sessionStorage.getItem("ageGateAccepted");
+    if (!accepted) {
+      setShowAgeGate(true);
+    }
   }, []);
+  
+  const handleAgeAccept = () => {
+    sessionStorage.setItem("ageGateAccepted", "true");
+    setShowAgeGate(false);
+  };
+  
+  const handleAgeReject = () => {
+    window.location.href = "/fun";
+  };
 
-  if (isLoading) {
+  if(showAgeGate)  {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-slate-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Checking preferences...</p>
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-gray-900 rounded-xl shadow-2xl border border-gray-700 p-6 text-center">
+  
+        <h2 className="text-2xl font-bold text-red-500 mb-3">
+          🔞 Age Restricted Content
+        </h2>
+  
+        <p className="text-gray-300 text-sm mb-4">
+          This page contains <span className="text-white font-semibold">adult content</span>.
+          It is intended only for viewers who are <span className="text-white font-semibold">18 years or older</span>.
+        </p>
+  
+        <p className="text-gray-400 text-xs mb-6">
+          By continuing, you confirm that you are legally allowed to view such content
+          in your country.
+        </p>
+  
+        <div className="flex gap-3">
+          <button
+            onClick={handleAgeReject}
+            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition"
+          >
+            Leave
+          </button>
+  
+          <button
+            onClick={handleAgeAccept}
+            className="flex-1 bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg transition font-semibold"
+          >
+            I am 18+
+          </button>
         </div>
       </div>
-    );
-  }
+    </div>
+  )}
 
-  if (!adultPreference) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-slate-900 text-white flex items-center justify-center">
-        <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-          <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="h-8 w-8 text-red-400" />
-            <h3 className="text-xl font-semibold text-white">Content Disabled</h3>
-          </div>
-          <p className="text-gray-300 mb-6">
-            This content preference is currently disabled. To access NSFW content, please enable adult content in your profile settings.
-          </p>
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/fun')}
-              className="flex-1 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 transition-colors"
-            >
-              Back to Fun
-            </button>
-            <Link
-              to="/profile"
-              className="flex-1 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition-colors text-center"
-            >
-              Go to Profile
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
+
+ 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-slate-900 text-white">
@@ -82,7 +70,7 @@ const AdultPage = () => {
 
       {/* Main Content */}
       <div className="px-4 py-8">
-        <h1 className="text-3xl mx-auto font-bold text-center mb-8">NSFW Content</h1>
+        <h1 className="text-3xl mx-auto font-bold text-center mb-8">NSFW Cams</h1>
         
         {/* Warning Note */}
         <div className="max-w-6xl mb-6">
