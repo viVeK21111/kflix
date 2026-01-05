@@ -263,6 +263,18 @@ export const getMovieCredits = async(req,res) => {
     }   
 }
 
+export const getCollection = async(req,res) => {
+    const {id} = req.params;
+    try {
+        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/collection/${id}?language=en-US`);
+        res.json({success:true,content:data});
+    }
+    catch(error) {
+        console.log("Error in getting collection: "+error.message);
+        res.status(500).json({success:false,message:error.message});
+    }   
+}
+
 export const getGoatMovies = async (req, res) => {
 	const { movies } = req.body; // Array of {title, year} objects
 	

@@ -14,6 +14,7 @@ import { getKdramaPopular } from '../controllers/movie.controller.js';
 import { getKdramaTopRated } from '../controllers/movie.controller.js';
 import {getAnimationOnAir,getAnimationPopular,getAnimationTopRated} from '../controllers/movie.controller.js'
 import { getGoatMovies } from "../controllers/movie.controller.js";
+import { getCollection } from '../controllers/movie.controller.js';
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.get('/kdrama/popular',protectRoute,getKdramaPopular);
 router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
 router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
 router.post('/goat-movies', protectRoute, getGoatMovies);
+router.get('/collection/:id', protectRoute, getCollection);
 
 export default router;
