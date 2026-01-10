@@ -391,15 +391,15 @@ const TopPage = () => {
             </div>
 
             {/* People Grid */}
-            <div className="flex justify-center mx-auto space-y-3 max-w-6xl">
-              <div className="max-w-lg md:max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className=" mx-auto space-y-3 max-w-full">
+              <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
                 {loading ? (
                   <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-3 md:gap-6">
                       {people.slice(0, displayCount).map((person) => (
                         <Link
                           to={`/person/details/?id=${person.id}&name=${encodeURIComponent(person.name)}`}
@@ -411,7 +411,7 @@ const TopPage = () => {
                               <img
                                 src={`${ORIGINAL_IMG_BASE_URL}${person.profile_path}`}
                                 alt={person.name}
-                                className="w-64 h-80 object-cover"
+                                className="w-full h-full object-cover"
                                 loading="lazy"
                                 onError={(e) => {
                                   e.target.style.display = 'none';

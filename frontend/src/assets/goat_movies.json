@@ -460,10 +460,7 @@
       "title": "American Psycho",
       "year": 2000
     },
-    {
-      "title": "Heat",
-      "year": 1995
-    },
+    { "title": "The Manchurian Candidate", "year": 1962 },
     {
       "title": "Oldboy",
       "year": 2003
@@ -2376,7 +2373,60 @@
   { "title": "Blue Is the Warmest Color", "year": 2013 },
   { "title": "The Handmaiden", "year": 2016 },
   { "title": "Shoplifters", "year": 2018 }
+],
+"Documentary": [
+  { "title": "Shoah", "year": 1985 },
+  { "title": "The Act of Killing", "year": 2012 },
+  { "title": "The Look of Silence", "year": 2014 },
+  { "title": "13th", "year": 2016 },
+  { "title": "I Am Not Your Negro", "year": 2016 },
+  { "title": "Bowling for Columbine", "year": 2002 },
+  { "title": "Super Size Me", "year": 2004 },
+  { "title": "March of the Penguins", "year": 2005 },
+  { "title": "Grizzly Man", "year": 2005 },
+  { "title": "Man on Wire", "year": 2008 },
+  { "title": "Citizenfour", "year": 2014 },
+  { "title": "The Fog of War", "year": 2003 },
+  { "title": "Hearts of Darkness: A Filmmaker's Apocalypse", "year": 1991 },
+  { "title": "Hoop Dreams", "year": 1994 },
+  { "title": "Paris Is Burning", "year": 1990 },
+  { "title": "Nanook of the North", "year": 1922 },
+  { "title": "Night and Fog", "year": 1956 },
+  { "title": "Harlan County, USA", "year": 1976 },
+  { "title": "Grey Gardens", "year": 1975 },
+  { "title": "The Thin Blue Line", "year": 1988 },
+  { "title": "American Factory", "year": 2019 },
+  { "title": "My Octopus Teacher", "year": 2020 },
+  { "title": "Free Solo", "year": 2018 },
+  { "title": "The Cove", "year": 2009 },
+  { "title": "Inside Job", "year": 2010 },
+  { "title": "An Inconvenient Truth", "year": 2006 },
+  { "title": "Won’t You Be My Neighbor?", "year": 2018 },
+  { "title": "RBG", "year": 2018 },
+  { "title": "Searching for Sugar Man", "year": 2012 },
+  { "title": "Exit Through the Gift Shop", "year": 2010 },
+  { "title": "Restrepo", "year": 2010 },
+  { "title": "The Square", "year": 2013 },
+  { "title": "Honeyland", "year": 2019 },
+  { "title": "Collective", "year": 2019 },
+  { "title": "The Imposter", "year": 2012 },
+  { "title": "Three Identical Strangers", "year": 2018 },
+  { "title": "Capturing the Friedmans", "year": 2003 },
+  { "title": "The War Room", "year": 1993 },
+  { "title": "Salesman", "year": 1969 },
+  { "title": "Gimme Shelter", "year": 1970 },
+  { "title": "Woodstock", "year": 1970 },
+  { "title": "Don’t Look Back", "year": 1967 },
+  { "title": "Buena Vista Social Club", "year": 1999 },
+  { "title": "Baraka", "year": 1992 },
+  { "title": "Samsara", "year": 2011 },
+  { "title": "Koyaanisqatsi", "year": 1982 },
+  { "title": "Human", "year": 2015 },
+  { "title": "Life Itself", "year": 2014 },
+  { "title": "The Last Dance", "year": 2020 },
+  { "title": "Oppenheimer", "year": 2023 }
 ]
+
 
 
 

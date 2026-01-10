@@ -25,6 +25,7 @@ const GoatMovies = () => {
 		{ title: "Rocky", year: 1976, category: "Sports" },
 		{ title: "Saving Private Ryan", year: 1998, category: "War" },
 		{ title: "Seven Samurai", year: 1954, category: "International" },
+		{ title: "Shoah", year: 1985, category: "Documentary" },
 		// Add more categories as needed based on your goatMoviesData structure
 	];
 
@@ -78,7 +79,7 @@ const GoatMovies = () => {
 
 	return (
 		<div className="min-h-screen bg-black text-white">
-			<div className="max-w-7xl mx-auto px-4 py-8">
+			<div className="max-w-full md:mx-4 xl:mx-20 mx-auto px-4 py-8">
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold mb-2">Genres</h1>

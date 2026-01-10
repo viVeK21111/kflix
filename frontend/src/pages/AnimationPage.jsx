@@ -102,8 +102,8 @@ const AnimationPage = () => {
 
     return (
       <>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 py-3">
-          {visible.map((item) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 py-3">
+        {visible.map((item) => (
             (item?.poster_path || item?.backdrop_path) && (
               <div 
                 key={item.id} 
@@ -114,7 +114,7 @@ const AnimationPage = () => {
                   <img 
                     src={`${SMALL_IMG_BASE_URL}${item.poster_path || item.backdrop_path}`} 
                     alt={item.name || item.title} 
-                    className="w-full h-56 object-cover rounded-lg transform transition-transform duration-200 group-hover:scale-105" 
+                    className="w-full h-full object-cover rounded-lg transform transition-transform duration-200 group-hover:scale-105" 
                   />
                 </div>
                 <h3 className="text-sm font-semibold text-white mt-2 truncate group-hover:text-gray-100 transition-colors duration-200">
@@ -221,8 +221,8 @@ const AnimationPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto p-4 relative">
-        <div className="flex pb-5 font-semibold text-xl md:text-2xl">
+      <div className="max-w-full md:mx-4 xl:mx-20 p-4 relative">
+      <div className="flex pb-5 font-semibold text-xl md:text-2xl">
           <img className="h-12 sm:h-16 md:h-20 lg:h-24" src='/Animation.png' alt="Animation" />
         </div>
         

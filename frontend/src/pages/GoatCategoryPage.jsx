@@ -74,8 +74,8 @@ const GoatCategoryPage = () => {
 
 	return (
 		<div className="min-h-screen bg-black text-white">
-			<div className="max-w-7xl mx-auto px-4 py-8">
-				{/* Header */}
+			<div className="max-w-full md:mx-4 xl:mx-20 mx-auto px-4 py-8">
+			{/* Header */}
 				<div className="mb-8">
 					<div className="flex items-center gap-4">
 						<Link
@@ -122,7 +122,7 @@ const GoatCategoryPage = () => {
 									/>
 									
 									{/* Hover Overlay */}
-									<div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-75 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+									<div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-45 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
 										<div className="text-center px-4">
 											<Play size={40} className="mx-auto mb-2" />
 											<p className="font-semibold text-sm">{movie.title}</p>
