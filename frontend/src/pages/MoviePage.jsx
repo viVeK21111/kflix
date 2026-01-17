@@ -88,7 +88,7 @@ function WatchPage() {
 
   useEffect(() => {
     setLoading(true);
-
+    setCollectionData(null);
     if (Id) {
       Promise.all([getMoviedetails(Id), getCredits(Id), getSimilarMovies(Id)]).then(() => {
         setLoading(false);

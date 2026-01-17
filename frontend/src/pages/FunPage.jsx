@@ -32,7 +32,7 @@ const FunPage = () => {
 
   const handleISSLive = () => {
     // You'll provide the YouTube video ID here
-    setVideoId('xRPjKQtRXR8');
+    setVideoId('fO9e9jnhYK8');
     setShowVideoPlayer(true);
   };
 
@@ -71,7 +71,7 @@ const FunPage = () => {
     switch (activeSection) {
       case 'live-feed':
         return (
-          <div className="space-y-3 max-w-3xl">
+          <div className="space-y-3 max-w-full">
             {/* IPTV Link */}
             <div 
               className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors cursor-pointer"
@@ -94,12 +94,12 @@ const FunPage = () => {
               <div className="flex items-center justify-between text-lg font-semibold text-green-500 hover:text-green-400 transition-colors">
                 <div className="flex items-center gap-3">
                   <Satellite  className="h-6 w-6" />
-                  <span>ISS Live</span>
+                  <span>Live Earth</span>
                 </div>
                 <Play className="h-5 w-5" />
               </div>
-              <p className="text-gray-400 mt-2">Watch live feed from the International Space Station by <a href='https://www.youtube.com/@afartv' className='hover:text-blue-400 text-gray-300' target='_blank'>afarTV</a> </p>
-              <p className='text-gray-400'><b>Fact:</b> Speed of iss is 28000 kmph and it takes approximately 90 min to complete one revolution around the earth.</p>
+              <p className="text-gray-400 mt-2">Watch Live 4k Earth from sen's 4k video cameras on International Space Station by <a href='https://www.youtube.com/@Sen' className='hover:text-blue-400 text-gray-300' target='_blank'>Sen</a> </p>
+              <p className='text-gray-400'><b>Fact:</b> Speed of Iss is 28000 kmph and it takes approximately 90 min to complete one revolution around the earth.</p>
             </div>
 
              {/* IPTV Link */}
@@ -218,7 +218,7 @@ const FunPage = () => {
 
       case 'documentaries':
         return (
-          <div className="space-y-3 max-w-3xl">
+          <div className="space-y-3 max-w-full">
             <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
               onClick={() => window.open('https://watchdocumentaries.com/', '_blank', 'noopener,noreferrer')}>
               <div className="flex items-center justify-between text-lg font-semibold text-gray-300 hover:text-gray-200 transition-colors">
@@ -285,7 +285,7 @@ const FunPage = () => {
         );
         case  'games':
         return (
-          <div className="space-y-3 max-w-3xl">
+          <div className="space-y-3 max-w-full">
             
             <Link className="bg-gray-800 flex rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
               to={'flappy'}>
@@ -363,7 +363,7 @@ const FunPage = () => {
 
         case  'news':
         return (
-          <div className="space-y-3 max-w-3xl">
+          <div className="space-y-3 max-w-full">
             
             
 
@@ -420,7 +420,7 @@ const FunPage = () => {
 
         case 'radio' :
           return (
-            <div className="space-y-3 max-w-3xl">
+            <div className="space-y-3 max-w-full">
 
             <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors cursor-pointer" 
               onClick={() => window.open('https://radio.garden/', '_blank', 'noopener,noreferrer')}>

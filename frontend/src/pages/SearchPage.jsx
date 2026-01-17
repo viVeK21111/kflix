@@ -185,7 +185,7 @@ const SearchPage = () => {
   
       
       {/* Search Section */}
-      <div className="flex max-w-2xl mt-8 md:mt-6 w-full px-3">
+      <div className="flex max-w-full px-4 lg:px-36 xl:px-52 mt-8 md:mt-6 w-full ">
 
         <div className="relative mr-2">
           <button
@@ -269,7 +269,7 @@ const SearchPage = () => {
 
       { query.length==0 && (
         <>
-        <div className='text-gray-400 flex mr-auto'><p className='font-semibold mt-8 text-lg ml-4 md:ml-8 md:text-xl'>Trending Searches</p></div>
+        <div className='text-blue-400 flex mx-auto'><p className='font-semibold mt-8 md:mt-12 text-lg  md:text-xl'>Trending Searches</p></div>
         {/* Show loading spinner while fetching trending */}
     {trendingLoading ? (
       <div className="flex justify-center items-center h-64">
@@ -277,7 +277,7 @@ const SearchPage = () => {
       </div>
     ) : (
         
-        <div className=" mr-auto m-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 sm:ml-4 md:ml-8   ">
+        <div className="flex justify-center max-w-full mt-5 pl-2 w-full mx-auto  grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5    ">
           {TrendingData.slice(0,14).map((item, index) => (
             (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
               <Link 
@@ -360,7 +360,7 @@ const SearchPage = () => {
           )}
           </>
         ) : (
-          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
+          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-full">
             <p>{Data}</p>
           </div>
         )
@@ -418,7 +418,7 @@ const SearchPage = () => {
           )}
           </>
         ) : (
-          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
+          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-full">
             <p>{Data}</p>
           </div>
         )
@@ -470,7 +470,7 @@ const SearchPage = () => {
           )}
           </>
         ) : (
-          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-md">
+          <div className="mt-6 p-4 bg-gray-800 text-center text-white rounded-lg shadow-md max-w-full">
             <p>{Data}</p>
           </div>
         )

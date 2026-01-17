@@ -97,6 +97,7 @@ const TopPage = () => {
         { name: "Erich Wolfgang Korngold", id: "67429" },
         { name: "Nino Rota", id: "3098" },
         { name: "Alan Silvestri", id: "37" },
+        { name: "Alfred Newman", id: "8503" },
         { name: "James Horner", id: "1729" },
         { name: "Howard Shore", id: "117" },
         { name: "Alex North", id: "10536" },
@@ -464,7 +465,7 @@ const TopPage = () => {
           </div>
           </div>
        
-          <footer className="mt-12 pt-8 pb-6 border-t border-gray-800">
+          <footer className="mt-12 pt-8 pb-6 border-t bg-black border-gray-800">
           <div className="text-center space-y-4">
             {/* Attribution */}
            

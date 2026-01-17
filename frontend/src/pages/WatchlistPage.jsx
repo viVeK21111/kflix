@@ -316,8 +316,8 @@ const WatchlistPage = () => {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 bg-gray-900 min-h-0 lg:overflow-y-auto">
-          <div className="flex flex-col items-center">
+        <div className="flex-1 bg-gray-900 min-h-0 lg:overflow-y-auto ">
+          <div className="flex flex-col items-center mx-2 md:mx-4">
             {/* Mobile Playlist Selector */}
             <div className="ml-auto flex items-center px-4 pt-4 lg:hidden w-full">
               <select
@@ -340,7 +340,7 @@ const WatchlistPage = () => {
             </div>
 
             {/* Section Title */}
-            <div className="text-white w-full px-4 sm:px-6 max-w-6xl mt-4">
+            <div className="text-white w-full px-4 sm:px-6 max-w-full mt-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-bold">
                   {currentPlaylist?.name || 'Playlist'}
@@ -412,7 +412,7 @@ const WatchlistPage = () => {
 
             {/* Content Grid */}
             {!itemsLoading && playlistItems.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-6xl">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 mt-6 w-full px-4 sm:px-6 mb-2 max-w-full">
                 {playlistItems.slice(0, displayCount).map((item, index) => (
                   <Link
                     key={`${item.id}-${item.season || ''}-${item.episode || ''}-${index}`}
@@ -437,7 +437,7 @@ const WatchlistPage = () => {
 
                     <img
                       src={`${ORIGINAL_IMG_BASE_URL}${item.image}`}
-                      className="w-full h-56 sm:h-64 object-cover rounded-lg transition-all"
+                      className="w-full h-full  object-cover rounded-lg transition-all"
                       alt={item.title}
                     />
 
@@ -494,7 +494,7 @@ const WatchlistPage = () => {
       {/* Create Playlist Dialog */}
       {showCreateDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md 2xl:max-w-lg w-full">
             <h2 className="text-xl font-bold text-white mb-4">Create New Playlist</h2>
             <form onSubmit={handleCreatePlaylist}>
               <input
@@ -532,7 +532,7 @@ const WatchlistPage = () => {
       {/* Rename Playlist Dialog */}
       {showRenameDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md 2xl:max-w-lg w-full">
             <h2 className="text-xl font-bold text-white mb-4">Rename Playlist</h2>
             <form onSubmit={(e) => {
               e.preventDefault();

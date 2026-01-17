@@ -580,14 +580,16 @@ const TvPage = () => {
             <Link
               key={item.id || index}
               to={'/tv/details' + `/?id=${item?.id}&name=${item?.name || item?.title}`}
-              className="block bg-gray-800 bg-opacity-60  p-2 rounded-lg shadow-md hover:scale-105 transition-transform"
+              className="block bg-gray-800 bg-opacity-60  rounded-lg shadow-md hover:scale-105 transition-transform"
               onClick={() => window.scroll(0,0)} // Add this onClick handler
             >
               <img
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
-                className="w-full h-48 object-cover rounded-lg"
+                className="w-full h-48 object-cover rounded-t-lg"
                 alt={item?.title || item?.name}
               />
+              <div className="p-2">
+
               <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
                 {item.title || item.name}
               </h3>
@@ -595,6 +597,8 @@ const TvPage = () => {
               <div>
                           <p className="text-xs flex items-center sm:text-sm text-gray-400">{item.first_air_date.split("-")[0]} | <Star size={13} className='mx-1' />{item.vote_average?.toFixed(1)} </p>
                 </div>
+              </div>
+              
             </Link>
             )
           ))}

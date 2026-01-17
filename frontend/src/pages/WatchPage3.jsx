@@ -296,7 +296,7 @@ function WatchPage() {
 
   return (
     <div className={`page min-h-screen ${bgColorClass} overflow-auto`}>
-      <div className=''>
+      <div className='min-h-screen'>
        
        
         {/* Trailer Modal */}
@@ -594,13 +594,13 @@ function WatchPage() {
           
           
          
-          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-6xl items-center mb-5  lg:rounded-sm font-semibold text-gray-500 text-sm p-2 mt-6 `: `flex text-gray-500  lg:rounded-sm font-semibold text-sm w-full max-w-5xl mb-5 lg:max-w-6xl items-center p-2 mt-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
+          <p className={bgColorClass!=='bg-black' ? Season ? `flex  w-full max-w-5xl lg:max-w-6xl items-center mb-5  lg:rounded-sm font-semibold text-gray-500 text-sm p-2 mt-6 `: `flex text-gray-500  lg:rounded-sm font-semibold text-sm w-full max-w-5xl lg:max-w-6xl items-center p-2 mt-3 lg:mt-6` : 'hidden'}>Switch to different sources if the current one gives an error.</p>
         
       </div>
           {Loading ? (
             <p className='text-white font-semibold text-base justify-center mt-10'>Loading...!</p>
           ) : (
-            <div className={bgColorClass!='bg-black'?`w-full pb-3 md:bg-gray-900 xl:hidden px-2 `:`hidden`}>
+            <div className={bgColorClass!='bg-black'?`w-full pb-3  xl:hidden px-2 `:`hidden`}>
               <div className='pb-4 md:pb-0'>
                 <div className={Season ? (datae?.episodes?.[Episode-1]?.overview.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-3 md:mt-10`:`text-left w-full flex justify-center items-center flex-col md:flex-row mt-3 md:mt-10` ):(datam?.overview?.length>0 ? `text-left w-full flex justify-center items-center md:items-start md:justify-start flex-col md:flex-row mt-3 md:mt-10`: `text-left w-full flex items-center justify-center flex-col mt-3 md:mt-10`)}>
                   <img

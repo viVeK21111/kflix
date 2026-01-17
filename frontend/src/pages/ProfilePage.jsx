@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { ProfileStore } from "../store/ProfileStore";
 import { userAuthStore } from "../store/authUser";
 import {Link} from 'react-router-dom';
-import {Lock,Eye,History,Search,MessagesSquare,Link as LinkIcon,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText,UserCheck,User,ChevronDown,ChevronRight,Coffee  } from "lucide-react";
+import {Lock,Eye,History,Search,MessagesSquare,Link as LinkIcon,Tv,Mail,AlertTriangle,Loader,Github,ReceiptText,UserCheck,User,ChevronDown,ChevronRight,Coffee,CircleQuestionMark  } from "lucide-react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -35,7 +35,8 @@ export default function ProfilePage(){
     security: false,
     about: false,
     links: false,
-    admin: false
+    admin: false,
+    FAQ: false,
   });
 
   useEffect(() => {
@@ -97,6 +98,53 @@ export default function ProfilePage(){
       [section]: !prev[section]
     }));
   };
+  const [openIndex, setOpenIndex] = useState(null);
+  
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+
+  const faqs = [
+    {
+      question: "What is KFlix?",
+      answer: "KFlix is a streaming platform that allows you to discover and watch movies and TV shows. Browse through various categories, create watchlists, chat with Flix AI bot and enjoy your favorite content."
+    },
+    {
+      question: "Site blocked on Airtel network or anyother",
+      answer: (
+        <>
+          Change the DNS of your network in order to access the site.
+          <br /><br />
+          <strong>Mobile:</strong> Settings → Network & Internet → Advanced → Private DNS → Provide hostname → dns.google
+          <br /><br />
+          <strong>WiFi:</strong> Settings → WiFi → Tap info → Configure DNS → Change to manual → Add server → Add Google DNS: 8.8.8.8 and 8.8.4.4
+        </>
+      )
+    },
+    {
+      question: "Movie or tv is not playing",
+      answer: "Change to different sources available in order to play your content. Sometimes the respected server maynot work or blocked or busy."
+    },
+    {
+      question: "Getting too many ads or redirects",
+      answer: "Use brave browser or any adblocker like ublock or adblock plus to block all the ads and redirects."
+    },
+    {
+      question: "Is KFlix free to use?",
+      answer: "Yes, KFlix is completely free to use. You can browse, search, and watch content without any subscription fees."
+    },
+    {
+      question: "What should I do if I forgot my password?",
+      answer: "On the login page, click 'Forgot Password' and follow the instructions to reset your password via email. Or Goto Settings>Security>change password"
+    },
+    {
+      question: "How can I report a bug or suggest a feature?",
+      answer: "Join our Discord community or submit through contact us page"
+    },
+   
+   
+  ];
 
   if(deleted ) {
     return (
@@ -122,6 +170,7 @@ export default function ProfilePage(){
     { id: 'security', label: 'Security', icon: Lock },
     { id: 'about', label: 'About', icon: ReceiptText },
     { id: 'links', label: 'Links', icon: LinkIcon },
+    { id: 'FAQ', label : 'FAQ', icon:CircleQuestionMark },
     ...(isAdmin() ? [{ id: 'admin', label: 'Admin', icon: UserCheck }] : [])
   ];
 
@@ -321,6 +370,64 @@ export default function ProfilePage(){
     </div>
   );
 
+  const FAQContent = () => {
+   
+  
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+        
+        <div className="space-y-3">
+          {faqs.map((faq, index) => (
+            <div 
+              key={index} 
+              className="bg-zinc-800 rounded-lg overflow-hidden transition-all"
+            >
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full p-4 text-left flex justify-between items-center hover:bg-zinc-700 transition-colors"
+              >
+                <span className="font-medium text-white pr-4">{faq.question}</span>
+                <ChevronDown 
+                  className={`flex-shrink-0 transition-transform duration-200 ${
+                    openIndex === index ? 'rotate-180' : ''
+                  }`}
+                  size={20}
+                />
+              </button>
+              
+              <div 
+                className={`overflow-hidden transition-all duration-200 ${
+                  openIndex === index ? 'max-h-96' : 'max-h-0'
+                }`}
+              >
+                <div className="p-4 pt-3 text-gray-300 border-t border-zinc-700">
+                  {faq.answer}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+  
+        <div className="bg-zinc-800 p-4 rounded-lg mt-6">
+          <p className="text-gray-300">
+            Can't find what you're looking for? Join our{' '}
+            <a 
+              href="https://discord.com/invite/P3rcqHwp9d" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline"
+            >
+              Discord community
+            </a>
+        
+            {' '}for more help.
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   // Render content based on selection
   const renderContent = () => {
     switch(settingSelected) {
@@ -329,6 +436,7 @@ export default function ProfilePage(){
       case 'about': return <AboutContent />;
       case 'links': return <LinksContent />;
       case 'admin': return <AdminContent />;
+      case 'FAQ' : return <FAQContent/>;
       default: return <AccountContent />;
     }
   };
@@ -556,6 +664,74 @@ export default function ProfilePage(){
                     </div>
                   </a>
                 </div>
+              )}
+            </div>
+
+             {/* FAQ Section */}
+             <div className="bg-zinc-800 rounded-lg overflow-hidden">
+              <button
+                onClick={() => toggleMobileSection('FAQ')}
+                className="w-full flex items-center justify-between p-4  text-left hover:bg-zinc-700 transition-colors"
+              >
+                <div className="flex items-center">
+                  <CircleQuestionMark className="mr-3" size={20}/>
+                  FAQ
+                </div>
+                {mobileExpanded.FAQ ? <ChevronDown size={20}/> : <ChevronRight size={20}/>}
+              </button>
+              
+              {mobileExpanded.FAQ && (
+                <div className="space-y-6">
+                <h2 className="text-2xl px-4 pt-4 font-semibold">Frequently Asked Questions</h2>
+                
+                <div className="space-y-3">
+                  {faqs.map((faq, index) => (
+                    <div 
+                      key={index} 
+                      className="bg-zinc-800 rounded-lg overflow-hidden transition-all"
+                    >
+                      <button
+                        onClick={() => toggleFAQ(index)}
+                        className="w-full p-4 text-left flex justify-between items-center hover:bg-zinc-700 transition-colors"
+                      >
+                        <span className="font-medium text-white pr-4">{faq.question}</span>
+                        <ChevronDown 
+                          className={`flex-shrink-0 transition-transform duration-200 ${
+                            openIndex === index ? 'rotate-180' : ''
+                          }`}
+                          size={20}
+                        />
+                      </button>
+                      
+                      <div 
+                        className={`overflow-hidden transition-all duration-200 ${
+                          openIndex === index ? 'max-h-96' : 'max-h-0'
+                        }`}
+                      >
+                        <div className="p-4 pt-3 text-gray-300 border-t border-zinc-700">
+                          {faq.answer}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+          
+                <div className="bg-zinc-800 p-4 rounded-lg mt-6">
+                  <p className="text-gray-300">
+                    Can't find what you're looking for? Join our{' '}
+                    <a 
+                      href="https://discord.com/invite/P3rcqHwp9d" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline"
+                    >
+                      Discord community
+                    </a>
+                
+                    {' '}for more help.
+                  </p>
+                </div>
+              </div>
               )}
             </div>
 
