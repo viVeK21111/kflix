@@ -20,7 +20,8 @@ export const getAnimePopular = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc&page=3`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=popularity.desc&page=4`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -34,7 +35,8 @@ export const getAnimationPopular = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=popularity.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=popularity.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=popularity.desc&page=3`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=popularity.desc&page=4`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -48,7 +50,8 @@ export const getKdramaPopular = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&sort_by=popularity.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=3`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=4`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -64,7 +67,8 @@ export const getAnimeTopRated = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&vote_count.gte=200`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&page=2&vote_count.gte=200`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&page=3&vote_count.gte=200`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&sort_by=vote_average.desc&page=4&vote_count.gte=200`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -78,7 +82,8 @@ export const getAnimationTopRated = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=vote_average.desc&vote_count.gte=200`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=vote_average.desc&page=2&vote_count.gte=200`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=vote_average.desc&page=3&vote_count.gte=200`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&sort_by=vote_average.desc&page=4&vote_count.gte=200`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -92,7 +97,8 @@ export const getKdramaTopRated = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&vote_count.gte=100&sort_by=vote_average.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&vote_count.gte=100&sort_by=vote_average.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&vote_count.gte=100&sort_by=vote_average.desc&page=3`);
-        const data = [...data1.results, ...data2.results,...data3.results];
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&vote_count.gte=100&sort_by=vote_average.desc&page=4`);
+        const data = [...data1.results, ...data2.results,...data3.results,...data4.results];
         res.json({success:true,content:data});
     }
     catch(error) {
@@ -108,8 +114,8 @@ export const getAnimeOnAir = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=3`);
-
-        const data = [...data1.results,...data2.results,data3.results]
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_keywords=210024&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=4`);
+        const data = [...data1.results,...data2.results,data3.results,...data4.results]
         res.json({ success: true, content: data });
     } catch (error) {
         console.log("Error in getting anime on air: " + error.message);
@@ -123,8 +129,8 @@ export const getAnimationOnAir = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=3`);
-
-        const data = [...data1.results,...data2.results,data3.results]
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_genres=16&with_origin_country=US&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=4`);
+        const data = [...data1.results,...data2.results,data3.results,...data4.results]
         res.json({ success: true, content: data });
     } catch (error) {
         console.log("Error in getting anime on air: " + error.message);
@@ -138,8 +144,8 @@ export const getKdramaOnAir = async (req,res) => {
         const data1 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc`);
         const data2 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=2`);
         const data3 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=3`);
-
-        const data = [...data1.results,...data2.results,data3.results]
+        const data4 = await fetchFromTMDB(`https://api.themoviedb.org/3/discover/tv?with_origin_country=KR&with_original_language=ko&with_genres=18&first_air_date.lte=${TODAY}&sort_by=first_air_date.desc&page=4`);
+        const data = [...data1.results,...data2.results,data3.results,...data4.results]
         res.json({ success: true, content: data });
     } catch (error) {
         console.log("Error in getting anime on air: " + error.message);
