@@ -149,7 +149,7 @@ export default function ProfilePage(){
   if(deleted ) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center text-xl font-semibold bg-gray-900 text-white">
-        <img className="w-32 sm:w-32 h-14" src='/kflix3.png'></img>
+        <img className="w-32 sm:w-32 h-28" src='/kflix2.png'></img>
         <p>Sorry to see u go...</p>
       </div>
     )
@@ -284,7 +284,7 @@ export default function ProfilePage(){
       <h2 className="text-2xl font-semibold">About</h2>
       
       <div className="space-y-4">
-        <Link to={'/'}> <img src="/kflix3.png" className="h-12 flex justify-center items-center mx-auto"/></Link>
+        <Link to={'/'}> <img src="/kflix2.png" className="h-28 flex justify-center items-center mx-auto"/></Link>
         <Link 
           to={'/contactus'} 
           className="block bg-zinc-800 p-4 rounded-lg hover:bg-zinc-700 transition-colors"
@@ -596,7 +596,7 @@ export default function ProfilePage(){
               
               {mobileExpanded.about && (
                 <div className="p-4 pt-0 space-y-2">
-                   <Link to={'/'}> <img src="/kflix3.png" className="h-12 flex justify-center items-center mx-auto"/></Link>
+                   <Link to={'/'}> <img src="/kflix2.png" className="h-20 flex justify-center items-center mx-auto"/></Link>
                    
                   <Link to={'/contactus'} className="block bg-zinc-700 p-3 mt-2 rounded-lg hover:bg-zinc-600 transition-colors">
                     <div className="flex items-center">

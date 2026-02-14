@@ -24,12 +24,13 @@ import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
 import { addWatchStore } from '../store/watchStore';
 import AddToPlaylistModal from '../components/AddToPlaylistModal';
 import Footer from '../components/Footer'
+import { userAuthStore } from "../store/authUser";
 import axios from 'axios';
 
 function WatchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search)
-  
+  const {user} = userAuthStore();
   const {datac,getCredits} = creditStore();
   
   const [datam, setdatam] = useState(null);
@@ -90,6 +91,7 @@ function WatchPage() {
   },[Id]);
 
   useEffect(() => {
+    if(!user) return ;
     let isMounted = true; // Prevent race conditions
 
     const addToHistory = async () => {

@@ -525,7 +525,6 @@ const FunPage = () => {
 
         {/* Mobile Menu Button */}
         <div className='flex'>
-        <div className='flex lg:hidden justify-start mr-auto items-center ml-3 mt-2'>{!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 p-1 '></img></Link>}</div>
 
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -539,7 +538,6 @@ const FunPage = () => {
           <div className="px-4 lg:px-16 py-8 mb-10">
             <h1 className="flex items-center text-2xl lg:text-3xl font-bold pl-2 mb-8">
               Explore {sections.find(s => s.id === activeSection)?.title || 'Fun Page'}
-             <div className=' hidden lg:flex justify-end ml-auto items-center'>{!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 sm:p-1 '></img></Link>}</div>
             </h1>
         
             

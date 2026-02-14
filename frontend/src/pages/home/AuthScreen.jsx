@@ -1,11 +1,16 @@
 import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronRight,Loader } from "lucide-react";
-
+import { userAuthStore } from "../../store/authUser";
 
 const AuthScreen = () => {
     const navigate = useNavigate();
     const [Loading,setLoading] = useState(true);
+    const {user} = userAuthStore();
+
+    if(user) {
+        navigate('/');
+    }
 
     useEffect(() => {
       let isMounted = true;
@@ -38,7 +43,7 @@ const AuthScreen = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        navigate("/signup");
+        navigate("/");
     };
 
     return (
@@ -47,7 +52,7 @@ const AuthScreen = () => {
             <div className="hero-bg">
             <div className='flex items-center justify-between p-2  max-w-full ml-2  md:ml-3'>
                 
-                <img src='/kflix3.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
+                <img src='/kflix2.png' alt='Netflix Logo' className='w-32 sm:w-36 h-22' /> 
                
                 <Link to={"/login"} className='text-white bg-gray-600 bg-opacity-80 hover:bg-opacity-90 py-1 px-2 rounded'>
                     Sign In
@@ -76,6 +81,35 @@ const AuthScreen = () => {
             {/* separator */}
             <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
+            <div className='py-10 bg-black text-white'>
+                <div className='flex max-w-6xl items-center justify-center md:flex-row flex-col px-4 mx-10 xl:mx-auto md:px-2'>
+                    {/* left side */}
+                    <div className='flex-1 text-center md:text-left'>
+                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Watch Movies and TV Shows for Free</h2>
+                        <p className='text-lg md:text-xl'>
+                            Stream unlimited movies and TV shows across all genres, completely free with no subscription required.
+                        </p>
+                    </div>
+
+                    {/* right side */}
+                    <div className='flex-1 relative overflow-hidden'>
+                        <img src='/device-pile.png' alt='Device image' className='mt-4 z-20 relative' />
+                        <video
+                            className='absolute top-2 left-1/2 -translate-x-1/2  h-4/6 z-10
+               max-w-[63%] 
+              '
+                            playsInline
+                            autoPlay={true}
+                            muted
+                            loop
+                        >
+                            <source src='/video-devices.m4v' type='video/mp4' />
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
             {/* 2nd section */}
             
             <div className='py-5 bg-black text-white'>
@@ -113,30 +147,22 @@ const AuthScreen = () => {
             <div className='h-1 w-full bg-[#232323]' aria-hidden='true' />
 
             {/* 3rd section */}
-            <div className='py-5 bg-black text-white'>
-                <div className='flex max-w-6xl items-center justify-center md:flex-row flex-col px-4 mx-10 xl:mx-auto md:px-2'>
-                    {/* left side */}
-                    <div className='flex-1 text-center md:text-left'>
-                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Watch everywhere</h2>
-                        <p className='text-lg md:text-xl'>
-                            Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV for completely free.
-                        </p>
+            <div className='py-10 bg-black text-white'>
+                <div className='flex max-w-7xl items-center justify-center md:flex-row flex-col-reverse px-4 mx-10 xl:mx-auto md:px-2'>
+                    {/* left side - Images */}
+                    <div className='flex-1 relative mt-5 md:mt-0'>
+                        
+                            <img src='/camera.png' alt='Cinema camera' className='rounded-lg  object-cover' />
+                            
+                        
                     </div>
 
                     {/* right side */}
-                    <div className='flex-1 relative overflow-hidden'>
-                        <img src='/device-pile.png' alt='Device image' className='mt-4 z-20 relative' />
-                        <video
-                            className='absolute top-2 left-1/2 -translate-x-1/2  h-4/6 z-10
-               max-w-[63%] 
-              '
-                            playsInline
-                            autoPlay={true}
-                            muted
-                            loop
-                        >
-                            <source src='/video-devices.m4v' type='video/mp4' />
-                        </video>
+                    <div className='flex-1 text-center md:text-left md:ml-10'>
+                        <h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Explore Cinema and Media</h2>
+                        <p className='text-lg md:text-xl'>
+                            Discover a vast collection of classic films, blockbusters, greatest directors and music composers.
+                        </p>
                     </div>
                 </div>
             </div>

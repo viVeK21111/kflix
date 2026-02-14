@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { DetailsStore } from '../store/tvdetails';
 import { creditStore } from '../store/credits';
-import { ORIGINAL_IMG_BASE_URL } from '../utils/constants';
+import { ORIGINAL_IMG_BASE_URL,SMALL_IMG_BASE_URL } from '../utils/constants';
 import { SimilarStore } from '../store/SimilarStore';
 import { addWatchStore } from '../store/watchStore';
 import { Plus, Star, Play, Dot, Loader, CircleArrowLeft, House, TvMinimal, Menu, X } from 'lucide-react';
@@ -53,29 +53,30 @@ function WatchPage() {
 
   // Fetch collection data if belongs_to_collection exists
   useEffect(() => {
+    let activeMovieId = data?.id;
+  
+    setCollectionData(null);
+  
     const fetchCollection = async () => {
-      if (data?.belongs_to_collection && data.belongs_to_collection.id) {
-        setLoadingCollection(true);
-        try {
-          const response = await axios.get(`/api/v1/movies/collection/${data.belongs_to_collection.id}`);
-          if (response.data.success) {
-            console.log("collection",response.data.content);
-            setCollectionData(response.data.content);
-          }
-        } catch (error) {
-          console.error('Error fetching collection:', error);
-        } finally {
-          setLoadingCollection(false);
-        }
-      } else {
-        setCollectionData(null);
+      if (!data?.belongs_to_collection?.id) return;
+  
+      setLoadingCollection(true);
+      const res = await axios.get(
+        `/api/v1/movies/collection/${data.belongs_to_collection.id}`
+      );
+  
+      if (activeMovieId === data?.id) {
+        setCollectionData(res.data.content);
       }
+      setLoadingCollection(false);
     };
-
-    if (data) {
-      fetchCollection();
-    }
-  }, [data]);
+  
+    fetchCollection();
+  
+    return () => {
+      activeMovieId = null;
+    };
+  }, [data?.id])
 
   useEffect(() => {
     const getTrailerId = async () => {
@@ -110,19 +111,9 @@ function WatchPage() {
     if (datac) setDir(getDirector(datac.crew));
   }, [datac]);
 
-  const addWatchList = async (e, id) => {
-    e.preventDefault();
-    console.log("id " + id);
-    addWatch(id);
-  }
+ 
 
-  const handleSelectChange = (e) => {
-    if (selectopen) {
-      setselectopen(false);
-    } else {
-      setselectopen(true);
-    }
-  }
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -372,6 +363,8 @@ function WatchPage() {
               </button>
             </div>
           )}
+       
+
 
           {/* Collection Section */}
           {collectionData && collectionData.parts && collectionData.parts.length > 1 && (
@@ -395,7 +388,7 @@ function WatchPage() {
                       >
                         <img
                           src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path}`}
-                          className="w-full object-cover rounded-t-lg h-40 sm:h-48"
+                          className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" : " object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full"}`}
                           alt={item?.title}
                         />
                         <div className='p-2'>
@@ -435,35 +428,71 @@ function WatchPage() {
             </>
           )}
 
-          {/* Similar Movies Section */}
-          <div className='text-white w-full border-t-2 border-white border-opacity-30 pl-4 pt-5 text-xl'><h3 className='font-bold'>Similar Movies</h3></div>
-          <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3 ">
-            {datas?.slice(0, numitemsm).map((item, index) => (
-              (item?.backdrop_path || item?.poster_path || item?.profile_path) &&
-              (
+       {/* Production Companies Section */}
+<div className='flex text-white border-t border-white border-opacity-30 pl-3 pt-4 text-xl'>
+  <h3 className='font-bold'>Production Companies</h3>
+</div>
+
+      {data?.production_companies?.length > 0 ? (
+        <div className="w-full grid grid-cols-2 py-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-3 sm:px-4">
+          {data.production_companies.map((item, index) =>
+            item.logo_path ? (
+              <div key={index} className="flex flex-col items-center">
+                <div className="h-28 w-full flex items-center justify-center bg-gray-200 rounded-sm p-2">
+                  <img
+                    src={`${SMALL_IMG_BASE_URL}${item.logo_path}`}
+                    alt={item.name}
+                    className="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <p className="text-sm text-white mt-2 text-center">{item.name}</p>
+              </div>
+            ) : null
+          )}
+        </div>
+      ) : (
+        <p className="text-white text-center py-5">No data found</p>
+      )}
+
+
+        {/* Similar Movies Section */}
+        <div className='text-white w-full border-t-2 border-white border-opacity-30 pl-4 pt-5 text-xl'>
+          <h3 className='font-bold'>Similar Movies</h3>
+        </div>
+
+        {datas?.length > 0 ? (
+          <div className="grid grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2 md:gap-3 mt-5 px-2 md:px-3">
+            {datas.slice(0, numitemsm).map((item, index) =>
+              (item?.backdrop_path || item?.poster_path || item?.profile_path) && (
                 <Link
                   key={item.id || index}
-                  to={'/movie' + `/?id=${item?.id}&name=${item?.name || item?.title}`}
+                  to={`/movie?id=${item?.id}&name=${item?.name || item?.title}`}
                   className="block bg-gray-800 bg-opacity-60 rounded-lg shadow-md hover:bg-gray-800"
                 >
                   <img
                     src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
-                    className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" : " object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full"}`}
+                    className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" : "object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full"}`}
                     alt={item?.title || item?.name}
                   />
                   <div className='p-2'>
                     <h3 className="text-sm sm:text-base font-bold text-white mt-2 truncate">
                       {item.title || item.name}
                     </h3>
-
                     <div>
-                      <p className="text-xs flex items-center sm:text-sm text-gray-400">{item.release_date.split("-")[0]} | <Star size={13} className='mx-1' />{item.vote_average?.toFixed(1)} </p>
+                      <p className="text-xs flex items-center sm:text-sm text-gray-400">
+                        {item.release_date?.split("-")[0]} | <Star size={13} className='mx-1' />{item.vote_average?.toFixed(1)}
+                      </p>
                     </div>
                   </div>
                 </Link>
               )
-            ))}
+            )}
           </div>
+        ) : (
+          <p className="text-white text-center py-5">No data found</p>
+        )}
+
           {numitemsm < datas?.slice(0, 10).length && (
             <div className="flex w-full justify-end mt-6">
               <button

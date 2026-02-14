@@ -4,10 +4,10 @@ import HomeScreen from "./HomeScreen"
 
 
 const HomePage = () => {
-    const {user} = userAuthStore();
-
+   // const {user} = userAuthStore();
+   // {user ? <HomeScreen/> : <AuthScreen/>}
  return <div>
-        {user ? <HomeScreen/> : <AuthScreen/>}
+        {<HomeScreen/>}
     </div> 
  
 };

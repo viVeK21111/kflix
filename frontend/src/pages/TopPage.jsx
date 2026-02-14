@@ -371,10 +371,7 @@ const TopPage = () => {
 
           <div className='flex-1'>
           <div className='flex'>
-            <div className='flex lg:hidden justify-start mr-auto items-center ml-3 mt-2'>
-              {!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 p-1' alt="Logo" /></Link>}
-            </div>
-
+          
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="lg:hidden p-1 mx-4 mt-3 text-white hover:bg-gray-700 flex ml-auto rounded-lg transition-colors"
@@ -386,9 +383,7 @@ const TopPage = () => {
           <div className=" py-8 mb-10">
             <div className="flex relative justify-center items-center text-2xl lg:text-3xl  font-bold mb-8 ">
                {currentSectionData?.title || 'Page'}
-              <div className='hidden lg:flex absolute px-2 right-0 ml-auto items-center'>
-                {!user && <Link to={'/'}><img src='/klogo1.png' className='h-14 md:h-16 sm:p-1' alt="Logo" /></Link>}
-              </div>
+              
             </div>
 
             {/* People Grid */}

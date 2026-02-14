@@ -21,10 +21,17 @@ const LoginPage = () => {
   }
   return (
     <div className='h-screen w-full contact-bg'>
-      
+     
+
       <div className='flex items-center justify-center pt-20 mx-3'>
         <div className='w-full max-w-md bg-black/70 shadow-md p-8 rounded-lg'>
-          <h1 className='text-2xl text-white mb-4 font-bold text-center'>Sign In</h1>
+        <div className='flex justify-center p-2  max-w-full '>
+                
+                <img src='/klogo1.png' alt='Netflix Logo' className='flex items-center h-10 mr-1' /> 
+                <h1 className='flex items-center text-2xl text-white  font-bold text-center'>Sign In</h1>
+                
+            </div>
+        
           <form className='space-y-4' onSubmit={handleSubmit}>
             <div>
               <label htmlFor='email' className='text-sm text-white font-medium block'>Email</label>

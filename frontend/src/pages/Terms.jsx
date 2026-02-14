@@ -10,9 +10,9 @@ export default function Terms() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
-      <header className="hidden sm:flex items-center justify-between bg-gray-800 px-4 py-3">
+      <header className="flex items-center justify-between bg-gray-800 px-4 py-3">
               <Link to="/" className="flex-shrink-0">
-                <img src="/kflix3.png" alt="Kflix Logo" className="w-30 sm:w-32 h-12 sm:h-14" />
+                <img src="/kflix2.png" alt="Kflix Logo" className=" h-20 sm:h-28" />
               </Link>
               
       </header>

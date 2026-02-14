@@ -1,19 +1,23 @@
 // AddToPlaylistModal.jsx
 import { useState, useEffect } from 'react';
-import { X, Plus, Check, Loader } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Plus, Loader, LogIn } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { userAuthStore } from '../store/authUser';
 
 const AddToPlaylistModal = ({ isOpen, onClose, item }) => {
+	const navigate = useNavigate();
+	const { user } = userAuthStore();
 	const [playlists, setPlaylists] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [addingTo, setAddingTo] = useState(null);
 
 	useEffect(() => {
-		if (isOpen) {
+		if (isOpen && user) {
 			fetchPlaylists();
 		}
-	}, [isOpen]);
+	}, [isOpen, user]);
 
 	const fetchPlaylists = async () => {
 		try {
@@ -70,6 +74,47 @@ const AddToPlaylistModal = ({ isOpen, onClose, item }) => {
 	}
 
 	if (!isOpen) return null;
+
+	// Not logged in: show login prompt box
+	if (!user) {
+		return (
+			<div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+				<div className="bg-gray-900 rounded-lg max-w-md w-full overflow-hidden border border-gray-700">
+					<div className="flex justify-between items-center p-4 border-b border-gray-700">
+						<h2 className="text-xl font-bold text-white">Save to watchlist</h2>
+						<button
+							onClick={handleClose}
+							className="text-gray-400 hover:text-white transition"
+							aria-label="Close"
+						>
+							<X size={24} />
+						</button>
+					</div>
+					<div className="p-8 flex flex-col items-center justify-center text-center">
+						<p className="text-gray-300 text-lg mb-6">Login to save to watchlist</p>
+						<div className="flex gap-3">
+							<button
+								onClick={handleClose}
+								className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition"
+							>
+								Cancel
+							</button>
+							<button
+								onClick={() => {
+									onClose();
+									navigate('/login');
+								}}
+								className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
+							>
+								<LogIn size={18} />
+								Login
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">

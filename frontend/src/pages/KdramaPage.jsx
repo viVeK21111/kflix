@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { Loader, ChevronLeft, ChevronRight } from "lucide-react";  
+import { Loader, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SMALL_IMG_BASE_URL } from "../utils/constants";
 
@@ -17,21 +17,36 @@ const getEndpoint = (media, sectionKey) => {
 
 const ITEMS_PER_PAGE = 12;
 
-const AnimePage = () => {
+const AnimationPage = () => {
   const navigate = useNavigate();
-  
-  // Initialize state from sessionStorage
-  const [media, setMedia] = useState(() => sessionStorage.getItem("animeMedia") || "movies");
-  const [active, setActive] = useState(() => sessionStorage.getItem("animeActive") || "popular");
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = sessionStorage.getItem("animeCurrentPage");
-    return savedPage ? parseInt(savedPage) : 1;
-  });
-  
-  const [data, setData] = useState({ popular: [], topRated: [], onAir: [] });
-  const [loading, setLoading] = useState({ popular: false, topRated: false, onAir: false });
 
-  // Save state to sessionStorage whenever it changes
+  /* -------------------- STATE -------------------- */
+
+  const [media, setMedia] = useState(
+    () => sessionStorage.getItem("animeMedia") || "movies"
+  );
+  const [active, setActive] = useState(
+    () => sessionStorage.getItem("animeActive") || "popular"
+  );
+  const [currentPage, setCurrentPage] = useState(() => {
+    const saved = sessionStorage.getItem("animeCurrentPage");
+    return saved ? parseInt(saved, 10) : 1;
+  });
+
+  const [data, setData] = useState({
+    popular: [],
+    topRated: [],
+    onAir: [],
+  });
+
+  const [loading, setLoading] = useState({
+    popular: false,
+    topRated: false,
+    onAir: false,
+  });
+
+  /* -------------------- SESSION STORAGE -------------------- */
+
   useEffect(() => {
     sessionStorage.setItem("animeMedia", media);
   }, [media]);
@@ -44,186 +59,211 @@ const AnimePage = () => {
     sessionStorage.setItem("animeCurrentPage", currentPage.toString());
   }, [currentPage]);
 
+  /* -------------------- FETCH DATA -------------------- */
+
   useEffect(() => {
-    // Fetch the active section when component mounts or media changes
     fetchSection(active);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [media]);
 
   const fetchSection = async (section) => {
     if (loading[section]) return;
-    setLoading(prev => ({ ...prev, [section]: true }));
+
+    setLoading((prev) => ({ ...prev, [section]: true }));
+
     try {
       const res = await axios.get(getEndpoint(media, section));
-      if (res?.data?.success) {
-        setData(prev => ({ ...prev, [section]: res.data.content }));
-      } else if (res?.data) {
-        setData(prev => ({ ...prev, [section]: res.data }));
-      }
+      const content = res?.data?.content || res?.data || [];
+
+      setData((prev) => ({
+        ...prev,
+        [section]: Array.isArray(content) ? content : [],
+      }));
     } catch (err) {
-      console.error("Error fetching anime section", section, err);
+      console.error("Error fetching animation:", err);
     } finally {
-      setLoading(prev => ({ ...prev, [section]: false }));
+      setLoading((prev) => ({ ...prev, [section]: false }));
     }
   };
 
+  
+
+  /* -------------------- HANDLERS -------------------- */
+
   const handleTabClick = (tab) => {
     setActive(tab);
-    setCurrentPage(1); // Reset to page 1 when changing sections
-    if (data[tab].length === 0) fetchSection(tab);
+    setCurrentPage(1);
+
+    if (data[tab].length === 0) {
+      fetchSection(tab);
+    }
   };
 
   const handleMediaChange = (newMedia) => {
     if (newMedia === media) return;
-    
+
     setMedia(newMedia);
-    setCurrentPage(1); // Reset to page 1 when changing media type
-    
-    // Clear existing data
+    setCurrentPage(1);
     setData({ popular: [], topRated: [], onAir: [] });
   };
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const goToTvDetails = (item) => {
-    const base = media === 'movies' ? '/movie' : '/tv/details';
-    navigate(`${base}/?id=${item.id}&name=${encodeURIComponent(item.name || item.title)}`);
-    window.scroll(0, 0);
+    const base = media === "movies" ? "/movie" : "/tv/details";
+    navigate(
+      `${base}/?id=${item.id}&name=${encodeURIComponent(
+        item.name || item.title
+      )}`
+    );
+    window.scrollTo(0, 0);
   };
 
-  const renderGrid = (sectionKey) => {
-    const list = data[sectionKey] || [];
-    const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const visible = list.slice(startIndex, endIndex);
+  /* -------------------- PAGINATION LOGIC -------------------- */
 
+  const activeList = data[active] || [];
+  const totalPages = Math.ceil(activeList.length / ITEMS_PER_PAGE);
+
+  const safePage = Math.min(currentPage, totalPages || 1);
+  const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  const visibleItems = useMemo(() => {
+    return activeList.slice(startIndex, endIndex);
+  }, [activeList, startIndex, endIndex]);
+
+  /* -------------------- GRID -------------------- */
+  const getPageNumbers = (current, total) => {
+    const pages = [];
+  
+    // Always show first page
+    pages.push(1);
+  
+    // Show left ellipsis if needed
+    if (current > 3) {
+      pages.push("...");
+    }
+  
+    // Pages around current
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+  
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+  
+    // Show right ellipsis if needed
+    if (current < total - 2) {
+      pages.push("...");
+    }
+  
+    // Always show last page (if more than 1)
+    if (total > 1) {
+      pages.push(total);
+    }
+  
+    return pages;
+  };
+  
+
+  const renderGrid = () => {
     return (
       <>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 py-3">
-          {visible.map((item) => (
-            (item?.poster_path || item?.backdrop_path) && (
-              <div 
-                key={item.id} 
-                className="cursor-pointer group transform transition duration-200 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl p-1" 
-                onClick={() => goToTvDetails(item)}
-              >
-                <div className="overflow-hidden rounded-lg">
-                  <img 
-                    src={`${SMALL_IMG_BASE_URL}${item.poster_path || item.backdrop_path}`} 
-                    alt={item.name || item.title} 
-                    className="w-full h-full object-cover rounded-lg transform transition-transform duration-200 group-hover:scale-105" 
-                  />
-                </div>
-                <h3 className="text-sm font-semibold text-white mt-2 truncate group-hover:text-gray-100 transition-colors duration-200">
-                  {item.name || item.title}
-                </h3>
-              </div>
-            )
-          ))}
+        {/* FORCE REMOUNT PER PAGE */}
+        <div key={`${media}-${active}-${safePage}`}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 py-3">
+            {visibleItems.map(
+              (item) =>
+                (item.poster_path || item.backdrop_path) && (
+                  <div
+                    key={`${media}-${active}-${item.id}`}
+                    className="cursor-pointer group transition hover:scale-105 p-1"
+                    onClick={() => goToTvDetails(item)}
+                  >
+                    <div className="overflow-hidden rounded-lg">
+                      <img
+                        src={`${SMALL_IMG_BASE_URL}${
+                          item.poster_path || item.backdrop_path
+                        }`}
+                        alt={item.name || item.title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                    <h3 className="text-sm font-semibold mt-2 truncate">
+                      {item.name || item.title}
+                    </h3>
+                  </div>
+                )
+            )}
+          </div>
         </div>
 
-        {/* Pagination Controls */}
+        {/* PAGINATION CONTROLS */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 py-6">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 bg-white bg-opacity-10 text-white rounded-md hover:bg-opacity-30 disabled:opacity-30 disabled:cursor-not-allowed transition duration-150"
-            >
-              <ChevronLeft size={20} />
-            </button>
+  <div className="flex justify-center items-center gap-2 py-6 select-none">
+    
+    {/* PREVIOUS */}
+    <button
+      onClick={() => handlePageChange(safePage - 1)}
+      disabled={safePage === 1}
+      className="px-3 py-1 bg-white/10 rounded hover:bg-white/30 disabled:opacity-30"
+    >
+      &lt;
+    </button>
 
-            <div className="flex gap-1">
-              {/* Generate page buttons */}
-              {(() => {
-                const pages = [];
+    {/* PAGE NUMBERS */}
+    {getPageNumbers(safePage, totalPages).map((p, idx) => {
+      if (p === "start-ellipsis" || p === "end-ellipsis") {
+        return (
+          <span key={idx} className="px-2 text-gray-400">
+            ...
+          </span>
+        );
+      }
 
-                // Always show first page if not in range
-                if (currentPage > 2) {
-                  pages.push(
-                    <button
-                      key={1}
-                      onClick={() => handlePageChange(1)}
-                      className="px-3 py-1 bg-white bg-opacity-10 text-white rounded-md hover:bg-opacity-30 transition duration-150"
-                    >
-                      1
-                    </button>
-                  );
-                  // Show ellipsis if there's a gap
-                  if (currentPage > 3) {
-                    pages.push(<span key="ellipsis-start" className="px-2 py-1 text-gray-400">...</span>);
-                  }
-                }
+      return (
+        <button
+          key={p}
+          onClick={() => handlePageChange(p)}
+          className={`px-3 py-1 rounded transition ${
+            p === safePage
+              ? "bg-blue-600 text-white"
+              : "bg-white/10 hover:bg-white/30"
+          }`}
+        >
+          {p}
+        </button>
+      );
+    })}
 
-                // Show pages around current page
-                const startPage = Math.max(1, currentPage - 1);
-                const endPage = Math.min(totalPages, currentPage + 1);
+    {/* NEXT */}
+    <button
+      onClick={() => handlePageChange(safePage + 1)}
+      disabled={safePage === totalPages}
+      className="px-3 py-1 bg-white/10 rounded hover:bg-white/30 disabled:opacity-30"
+    >
+      &gt;
+    </button>
+  </div>
+)}
 
-                for (let i = startPage; i <= endPage; i++) {
-                  pages.push(
-                    <button
-                      key={i}
-                      onClick={() => handlePageChange(i)}
-                      className={`px-3 py-1 rounded-md transition duration-150 ${
-                        currentPage === i
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white bg-opacity-10 text-white hover:bg-opacity-30'
-                      }`}
-                    >
-                      {i}
-                    </button>
-                  );
-                }
 
-                // Always show last page if not in range
-                if (currentPage < totalPages - 1) {
-                  // Show ellipsis if there's a gap
-                  if (currentPage < totalPages - 2) {
-                    pages.push(<span key="ellipsis-end" className="px-2 py-1 text-gray-400">...</span>);
-                  }
-                  pages.push(
-                    <button
-                      key={totalPages}
-                      onClick={() => handlePageChange(totalPages)}
-                      className="px-3 py-1 bg-white bg-opacity-10 text-white rounded-md hover:bg-opacity-30 transition duration-150"
-                    >
-                      {totalPages}
-                    </button>
-                  );
-                }
-
-                return pages;
-              })()}
-            </div>
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="p-2 bg-white bg-opacity-10 text-white rounded-md hover:bg-opacity-30 disabled:opacity-30 disabled:cursor-not-allowed transition duration-150"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        )}
-
-        {/* Page info */}
-        {totalPages > 0 && (
-          <div className="text-center text-sm text-gray-400 pb-4">
-            Page {currentPage} of {totalPages} 
-          </div>
-        )}
+        <div className="text-center text-sm text-gray-400 pb-4">
+          Page {safePage} of {totalPages || 1}
+        </div>
       </>
     );
   };
+
+  /* -------------------- UI -------------------- */
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <div className="max-w-full md:mx-4 xl:mx-20 p-4 relative">
       <div className="flex pb-5 font-semibold text-xl md:text-2xl"><h2>K-Drama</h2></div>
-        
         <div className="absolute top-4 right-4">
           <select 
             value={media} 
@@ -235,44 +275,34 @@ const AnimePage = () => {
           </select>
         </div>
 
-        <div className="flex gap-4 justify-start items-center mb-4">
-          <button 
-            className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md ${
-              active === 'popular' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30'
-            }`} 
-            onClick={() => handleTabClick('popular')}
-          >
-            Popular
-          </button>
-          <button 
-            className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md ${
-              active === 'topRated' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30'
-            }`} 
-            onClick={() => handleTabClick('topRated')}
-          >
-            Top Rated
-          </button>
-          <button 
-            className={`px-2 py-1 text-sm md:text-base md:px-4 md:py-2 rounded-md ${
-              active === 'onAir' ? 'bg-blue-600 scale-105' : 'bg-white bg-opacity-10 hover:bg-opacity-30'
-            }`} 
-            onClick={() => handleTabClick('onAir')}
-          >
-            Latest
-          </button>
+        <div className="flex gap-4 mb-4 text-sm md:text-base">
+          {["popular", "topRated", "onAir"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabClick(tab)}
+              className={`md:px-4 py-2 px-2 rounded-md ${
+                active === tab
+                  ? "bg-blue-600"
+                  : "bg-white/10 hover:bg-white/30"
+              }`}
+            >
+              {tab === "onAir"
+                ? "Latest"
+                : tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
 
-        <div>
-          {loading[active] && (
-            <div className="flex justify-center h-screen mt-20">
-              <Loader className="animate-spin text-white w-7 h-7" />
-            </div>
-          )}
-          {!loading[active] && renderGrid(active)}
-        </div>
+        {loading[active] ? (
+          <div className="flex justify-center mt-20">
+            <Loader className="animate-spin w-7 h-7" />
+          </div>
+        ) : (
+          renderGrid()
+        )}
       </div>
     </div>
   );
 };
 
-export default AnimePage;
+export default AnimationPage;

@@ -21,9 +21,9 @@ const Navbar = ({ movieSectionRef }) => {
       };
 
     return (
-        <header className='w-full flex flex-wrap items-center  p-4 h-20'>
+        <header className='w-full flex flex-wrap items-center  h-20'>
             <div className='flex w-full justify-start sm:justify-end items-center  z-50'>
-                <Link to='/'><img src='/kflix3.png' alt='logo' className='w-32 sm:w-32 h-14'></img></Link>
+                <Link to='/'><img src='/kflix2.png' alt='logo' className='w-36 '></img></Link>
             </div>
            
             

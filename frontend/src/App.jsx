@@ -46,22 +46,27 @@ import HanimeDetailPage from "./pages/HanimeDetailPage";
 import HanimeTermsPage from "./pages/HanimeTermsPage";
 import HanimeCollectionsPage from './pages/HanimeCollectionsPage';
 import TopPage from "./pages/TopPage";
+import AuthScreen from "./pages/home/AuthScreen";
+import { useLocation } from 'react-router-dom';
+import LoginRequired from './pages/LoginRequired';
 
 
+
+const HIDE_NAVBAR_PATHS = ['/welcome', '/signup', '/login','/forgotpassword'];
 
 function BottomNavbarReturn() {
-  // Import useLocation here to ensure it's updated on every route change
-  
-  const {user} = userAuthStore();
-  if (user) {
-    return <BottomNavbar />
+  const location = useLocation();
+  if (HIDE_NAVBAR_PATHS.includes(location.pathname)) {
+    return null;
   }
+  return <BottomNavbar />;
 }
 
 
 function App() {
-
+  const location = useLocation();
   const {user,isCheckingauth,authCheck} = userAuthStore();
+  const showBottomNavbar = !HIDE_NAVBAR_PATHS.includes(location.pathname);
   const adminEmails = import.meta.env.VITE_ADMIN_EMAILS?.split(',') || [];
 
    const isAdmin = () => {
@@ -88,40 +93,43 @@ function App() {
   return (
     <>
 
-    <div className={user ? `pb-16 sm:pb-0 sm:pl-20` : ``}>
+    <div className={showBottomNavbar ? `pb-16 sm:pb-0 sm:pl-20` : ``}>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/welcome" element={<AuthScreen />} />
         <Route path='/signup' element ={!user ? <SignUpPage /> : <Navigate to={'/'}/>} />
         <Route path='/login' element ={!user ? <LoginPage /> : <Navigate to={'/'}/>} />
-        <Route path='/chat' element ={user ? <ChatPage /> :  <Navigate to={'/login'}/>} />
-        <Route path="/movie" element = {user ? <MoviePage/> :  <Navigate to={'/'}/>} />
-        <Route path="/watch" element = {user ? <WatchPage2/> :  <Navigate to={'/'}/>} />
-        <Route path="/tv/details" element = {user ? <TvPage/> :  <Navigate to={'/login'}/>} />
-        <Route path="/person/details" element = {user ? <PersonPage/> :  <Navigate to={'/login'}/>} />
-        <Route path='/search' element = {user ? <SearchPage/> :  <Navigate to={'/login'}/>} />
-        <Route path='/profile' element = {user ? <ProfilePage/> : <Navigate to={'/login'}/>} />
-        <Route path='/watchlist' element = {user ? <WatchlistPage/> : <Navigate to={'/login'}/>} />
-        <Route path='/contactus' element = {user ? <ContactPage/> : <Navigate to={'/login'}/>} />
-        <Route path='/profile/changepassword' element = {user ? <ChangePassword/> : <Navigate to={'/'}/>} />
-        <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> : <Navigate to={'/'}/>} />
-        <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> : <Navigate to={'/'}/>} />
-        <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <Navigate to={'/'}/>} />
-        <Route path='/history' element = {user ? <HistoryPage/> : <Navigate to={'/login'}/>} />
+        <Route path='/chat' element ={user ? <ChatPage /> :  <LoginRequired />} />
+
+        <Route path="/movie" element = { <MoviePage/> } />
+        <Route path="/watch" element = { <WatchPage2/> } />
+        <Route path="/tv/details" element = { <TvPage/> } />
+        <Route path="/person/details" element = { <PersonPage/> } />
+        <Route path='/search' element = { <SearchPage/> } />
+
+        <Route path='/profile' element = {user ? <ProfilePage/> :  <LoginRequired />} />
+        <Route path='/watchlist' element = {user ? <WatchlistPage/> :  <LoginRequired />} />
+        <Route path='/contactus' element = {user ? <ContactPage/> :  <LoginRequired />} />
+        <Route path='/profile/changepassword' element = {user ? <ChangePassword/> :  <LoginRequired />} />
+        <Route path='/profile/searchHistory' element = {user ? <SearchHistory/> :  <LoginRequired />} />
+        <Route path='/profile/chatHistory' element = {user ? <ChatHistory/> :  <LoginRequired />} />
+        <Route path='/profile/watchHistory' element = {user ? <WatchHistory/> : <LoginRequired />} />
+        <Route path='/history' element = {user ? <HistoryPage/> :  <LoginRequired />} />
         <Route path='/forgotpassword' element = {!user ? <ForgotPassword/> : <Navigate to={'/'}/>} />
         <Route path='/changepassword' element = {<ChangePasswordH/>} />
         <Route path='/profile/admin' element = {isAdmin() ? <Monitor /> : <Navigate to={'/profile'}/>} />
         <Route path='/profile/admin/user' element = {isAdmin() ? <UserMonitor /> : <Navigate to={'/profile'}/>} />
-        <Route path='/anime' element = {user ? <AnimePage /> : <Navigate to={'/login'}/>} />
-        <Route path='/animation' element = {user ? <AnimationPage /> : <Navigate to={'/login'}/>} />
-        <Route path='/kdrama' element = {user ? <KdramaPage /> : <Navigate to={'/login'}/>} />
-	      <Route path="/user/gallery-img" element={user ? <UserGalleryImages /> :  <Navigate to={'/'}/>} />
-        <Route path="/genres" element={user ? <GoatMovies /> :  <Navigate to={'/'}/> }/>
-        <Route path="/genres/:category" element={user ? <GoatCategoryPage /> :  <Navigate to={'/'}/> }/>
-        <Route path='/fun/flappy' element = {user ? <FlappyFlix /> : <Navigate to={'/login'}/>} />
 
+        <Route path='/anime' element = {<AnimePage /> } />
+        <Route path='/animation' element = { <AnimationPage /> } />
+        <Route path='/kdrama' element = { <KdramaPage /> } />
+
+	      <Route path="/user/gallery-img" element={user ? <UserGalleryImages /> :   <LoginRequired />} />
+        <Route path='/fun/flappy' element = {user ? <FlappyFlix /> :  <LoginRequired />} />
+
+        <Route path="/genres" element={ <GoatMovies /> }/>
+        <Route path="/genres/:category" element={ <GoatCategoryPage /> }/>
         <Route path='/profile/terms' element = { <Terms/> } />
-     
-
         <Route path='/fun' element = {<FunPage />} />
         <Route path='/fun/adult' element = {<AdultPage /> } />
         <Route path='/greatest' element = {<TopPage /> } />

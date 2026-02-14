@@ -585,7 +585,7 @@ const TvPage = () => {
             >
               <img
                 src={`${ORIGINAL_IMG_BASE_URL}${item?.backdrop_path || item?.poster_path || item?.profile_path}`}
-                className="w-full h-48 object-cover rounded-t-lg"
+                className={`${(item?.backdrop_path || item?.profile_path) ? "w-full object-cover rounded-t-lg" : "object-cover rounded-t-lg h-28 sm:h-32 xl:h-44 w-full"}`}
                 alt={item?.title || item?.name}
               />
               <div className="p-2">

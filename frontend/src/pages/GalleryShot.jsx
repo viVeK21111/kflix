@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Trash2, Upload, ExternalLink, Loader, X,ArrowBigRight } from 'lucide-react';
+import { Trash2, Upload, ExternalLink, Loader, X,ArrowBigRight,LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { userAuthStore } from '../store/authUser';
 import { Link } from 'react-router-dom';
@@ -46,6 +46,10 @@ const GalleryShot = () => {
 		const lowercaseUrl = url.toLowerCase();
 		return imageExtensions.some(ext => lowercaseUrl.includes(ext));
 	};
+
+	const handleClose = () => {
+		setShowUploadDialog(false);
+	}
 
 	const handleUpload = async (e) => {
 		e.preventDefault();
@@ -132,7 +136,7 @@ const GalleryShot = () => {
                 <div className='flex text-blue-400 px-2'><Link className='ml-auto flex items-center pb-2 px-1 hover:underline' to={'/user/gallery-img'}>Go to My pics</Link><ArrowBigRight className='items-center flex mt-1' size={18}/></div>
 
 				{/* Upload Dialog Box */}
-				{showUploadDialog && (
+				{showUploadDialog && user && (
 					<div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
 						<div className="bg-gray-800 rounded-xl p-6 max-w-lg w-full shadow-2xl border border-gray-700">
 							<div className="flex justify-between items-center mb-6">
@@ -209,6 +213,44 @@ const GalleryShot = () => {
 							</form>
 						</div>
 					</div>
+				)}
+
+				{showUploadDialog && !user && (
+					<div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+					<div className="bg-gray-900 rounded-lg max-w-md w-full overflow-hidden border border-gray-700">
+						<div className="flex justify-between items-center p-4 border-b border-gray-700">
+							
+							<button
+								onClick={handleClose}
+								className="text-gray-400 hover:text-white transition"
+								aria-label="Close"
+							>
+								<X size={24} />
+							</button>
+						</div>
+						<div className="p-8 flex flex-col items-center justify-center text-center">
+							<p className="text-gray-300 text-lg mb-6">Login to add images</p>
+							<div className="flex gap-3">
+								<button
+									onClick={handleClose}
+									className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition"
+								>
+									Cancel
+								</button>
+								<button
+									onClick={() => {
+										onClose();
+										navigate('/login');
+									}}
+									className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
+								>
+									<LogIn size={18} />
+									Login
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				)}
 
                 {selectedImage && (
