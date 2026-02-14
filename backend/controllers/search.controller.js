@@ -3,10 +3,22 @@ import {User} from "../models/user.model.js";
 
 export const searchMovies = async(req,res) => {
     const {query} = req.params;
-    try {
-        const user = await User.findById(req.user._id);
-        const pref = user?.Preferences?.adult;
-        const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/movie?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
+   try {
+        
+    let pref = false;
+        
+    // Check if user is logged in by checking if req.user and req.user._id exist
+    if (req.user && req.user._id) {
+        try {
+            const user = await User.findById(req.user._id);
+            pref = user?.Preferences?.adult || false;
+        } catch(error) {
+            console.log("Error fetching user preferences:", error);
+            pref = false;
+        }
+    }
+    
+    const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/movie?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
         const movie = data.results;
         if(movie.length===0) {
             res.json({success:false,message:"No movie found"});
@@ -15,16 +27,20 @@ export const searchMovies = async(req,res) => {
         res.json({success:true,content:movie});
         console.log("movie search success");
 
-        await User.findByIdAndUpdate(req.user._id,{
-            $push:{
-                searchHistory:{
-            type:'movie',
-            id:movie[0].id,
-            image: movie[0].poster_path,
-            title: movie[0].title,
-            date: new Date(),
-            }
-    }});
+        if (req.user && req.user._id) { 
+            await User.findByIdAndUpdate(req.user._id,{
+                $push:{
+                    searchHistory:{
+                type:'movie',
+                id:movie[0].id,
+                image: movie[0].poster_path,
+                title: movie[0].title,
+                date: new Date(),
+                }
+        }});
+        }
+
+        
     }
     catch(error) {
         console.log("Error in searching movies: "+error.message);
@@ -34,52 +50,81 @@ export const searchMovies = async(req,res) => {
 export const searchTv = async(req,res) => {
     const {query} = req.params;
     try {
-        const user = await User.findById(req.user._id);
-        const pref = user?.Preferences?.adult;
+        let pref = false;
+        
+        // Check if user is logged in by checking if req.user and req.user._id exist
+        if (req.user && req.user._id) {
+            try {
+                const user = await User.findById(req.user._id);
+                pref = user?.Preferences?.adult || false;
+            } catch(error) {
+                console.log("Error fetching user preferences:", error);
+                pref = false;
+            }
+        }
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/tv?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
         const tv = data.results;
         if(tv.length === 0) {
             return res.json({success:false,message:"No tv show found"});
         }
         res.json({success:true,content:tv});
-        await User.findByIdAndUpdate(req.user._id,{
-            $push:{searchHistory:{
-            type:'tv',
-            id:tv[0].id,
-            image: tv[0].backdrop_path,
-            name: tv[0].original_name,
-            date: new Date(),
-        }}});
+        if (req.user && req.user._id) {
+            await User.findByIdAndUpdate(req.user._id,{
+                $push:{searchHistory:{
+                type:'tv',
+                id:tv[0].id,
+                image: tv[0].backdrop_path,
+                name: tv[0].original_name,
+                date: new Date(),
+            }}});
+        }
+       
     }
     catch(error) {
         console.log("Error in searching tv show: "+error.message);
         res.status(500).json({success:false,message:error.message});
     }   
 }
-export const searchPeople = async(req,res) => {
+export const searchPeople = async(req, res) => {
     const {query} = req.params;
     try {
-        const user = await User.findById(req.user._id);
-        const pref = user?.Preferences?.adult;
+        let pref = false;
+        
+        if (req.user && req.user._id) {
+            try {
+                const user = await User.findById(req.user._id);
+                pref = user?.Preferences?.adult || false;
+            } catch(error) {
+                pref = false;
+            }
+        }
+        
         const data = await fetchFromTMDB(`https://api.themoviedb.org/3/search/person?query=${query}&sort_by=popularity.desc&include_adult=${pref}&language=en-US&page=1`);
         const person = data.results;
-        if(person.length===0) {
-            return res.json({success:false,message:"No person found"});
+        
+        if(person.length === 0) {
+            return res.json({success: false, message: "No person found"});
         }
-        res.json({success:true,content:person});
-        console.log("person search success");
-        await User.findByIdAndUpdate(req.user._id,{
-            $push:{searchHistory:{
-            type:'person',
-            id: person[0].id,
-            image: person[0].profile_path,
-            name: person[0].name,
-            date: new Date(),
-        }}});
-    }
-    catch(error) {
-        console.log("Error in searching person: "+error.message);
-        res.status(500).json({success:false,message:error.message});
+        
+        res.json({success: true, content: person});
+        
+        if (req.user && req.user._id) {
+            User.findByIdAndUpdate(req.user._id, {
+                $push: {
+                    searchHistory: {
+                        type: 'person',
+                        id: person[0].id,
+                        image: person[0].profile_path,
+                        name: person[0].name,
+                        date: new Date(),
+                    }
+                }
+            }).catch(err => console.log("Error updating search history:", err));
+        }
+        
+    } catch(error) {
+        console.log("Error in searching person: " + error.message);
+        res.status(500).json({success: false, message: error.message});
     }   
 }
 export const getPersonDetails = async(req,res) => {

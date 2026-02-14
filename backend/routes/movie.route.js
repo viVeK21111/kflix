@@ -18,25 +18,25 @@ import { getCollection } from '../controllers/movie.controller.js';
 
 const router = express.Router();
 
-router.get('/trending',protectRoute,getTrendingMovies)
-router.get('/trailers/:id',protectRoute,getMovieTrailer)
-router.get('/details/:id',protectRoute,getMovieDetails)
-router.get('/similar/:id',protectRoute,getSimilarMovies)
-router.get('/category/:category',protectRoute,getMoviebyCategory)
-router.get('/credits/:id',protectRoute,getMovieCredits);
+router.get('/trending',getTrendingMovies)
+router.get('/trailers/:id',getMovieTrailer)
+router.get('/details/:id',getMovieDetails)
+router.get('/similar/:id',getSimilarMovies)
+router.get('/category/:category',getMoviebyCategory)
+router.get('/credits/:id',getMovieCredits);
 router.put('/addWatch/:id',protectRoute,addMovieWatch);
 router.get('/getWatchlist',protectRoute,getWatchlist);
 router.delete('/removeWatch/:id',protectRoute,removeFromWatchlist);
-router.get('/anime/popular',protectRoute,getAnimePopular);
-router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
-router.get('/anime/on-air',protectRoute,getAnimeOnAir);
-router.get('/animation/popular',protectRoute,getAnimationPopular);
-router.get('/animation/top-rated',protectRoute,getAnimationTopRated);
-router.get('/animation/on-air',protectRoute,getAnimationOnAir);
-router.get('/kdrama/popular',protectRoute,getKdramaPopular);
-router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
-router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
-router.post('/goat-movies', protectRoute, getGoatMovies);
-router.get('/collection/:id', protectRoute, getCollection);
+router.get('/anime/popular',getAnimePopular);
+router.get('/anime/top-rated',getAnimeTopRated);
+router.get('/anime/on-air',getAnimeOnAir);
+router.get('/animation/popular',getAnimationPopular);
+router.get('/animation/top-rated',getAnimationTopRated);
+router.get('/animation/on-air',getAnimationOnAir);
+router.get('/kdrama/popular',getKdramaPopular);
+router.get('/kdrama/top-rated',getKdramaTopRated);
+router.get('/kdrama/on-air',getKdramaOnAir);
+router.post('/goat-movies', getGoatMovies);
+router.get('/collection/:id', getCollection);
 
 export default router;

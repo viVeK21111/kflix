@@ -19,25 +19,25 @@ import { getAnimationTopRated,getAnimationPopular,getAnimationOnAir } from '../c
 
 const router = express.Router();
 
-router.get('/trending',protectRoute,getTrendingTv)
-router.get('/trailers/:id',protectRoute,getTvTrailer)
-router.get('/details/:id',protectRoute,getTvDetails)
-router.get('/similar/:id',protectRoute,getSimilarTv)
-router.get('/category/:category',protectRoute,getTvbyCategory)
+router.get('/trending',getTrendingTv)
+router.get('/trailers/:id',getTvTrailer)
+router.get('/details/:id',getTvDetails)
+router.get('/similar/:id',getSimilarTv)
+router.get('/category/:category',getTvbyCategory)
 router.put('/addWatch/:id',protectRoute,addTvWatch);
-router.post('/episodes',protectRoute,getTvEpisodes)
+router.post('/episodes',getTvEpisodes)
 router.post('/addEpisode',protectRoute,addEpisode)
-router.get('/credits/:id',protectRoute,getTvCredits);
+router.get('/credits/:id',getTvCredits);
 router.delete('/removeWatchE/:id/:season/:episode',protectRoute ,removeEpisode);
-router.get('/anime/popular',protectRoute,getAnimePopular);
-router.get('/anime/top-rated',protectRoute,getAnimeTopRated);
-router.get('/anime/on-air',protectRoute,getAnimeOnAir);
-router.get('/animation/popular',protectRoute,getAnimationPopular);
-router.get('/animation/top-rated',protectRoute,getAnimationTopRated);
-router.get('/animation/on-air',protectRoute,getAnimationOnAir);
-router.get('/kdrama/popular',protectRoute,getKdramaPopular);
-router.get('/kdrama/top-rated',protectRoute,getKdramaTopRated);
-router.get('/kdrama/on-air',protectRoute,getKdramaOnAir);
+router.get('/anime/popular',getAnimePopular);
+router.get('/anime/top-rated',getAnimeTopRated);
+router.get('/anime/on-air',getAnimeOnAir);
+router.get('/animation/popular',getAnimationPopular);
+router.get('/animation/top-rated',getAnimationTopRated);
+router.get('/animation/on-air',getAnimationOnAir);
+router.get('/kdrama/popular',getKdramaPopular);
+router.get('/kdrama/top-rated',getKdramaTopRated);
+router.get('/kdrama/on-air',getKdramaOnAir);
 
 
 export default router;
