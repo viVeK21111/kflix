@@ -257,6 +257,33 @@ export const getMoviebyCategory = async(req,res) => {
         res.status(500).json({success:false,message:error.message});
     }   
 }
+export const getRandomMovie = async(req,res) => {
+    try {
+        // Step 1: random page (TMDB max 500 pages)
+        const randomPage = Math.floor(Math.random() * 500) + 1;
+    
+        const data = await fetchFromTMDB(
+          `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&page=${randomPage}&include_adult=false`
+        );
+    
+        const movies = data.results;
+    
+        if (!movies || movies.length === 0) {
+          return res.status(404).json({ success: false });
+        }
+    
+        // Step 2: pick random movie from page
+        const randomMovie =
+          movies[Math.floor(Math.random() * movies.length)];
+    
+        res.json({ success: true, content: randomMovie });
+    
+      } catch (error) {
+        console.error("Random movie error:", error.message);
+        res.status(500).json({ success: false });
+      }
+    };
+
 export const getMovieCredits = async(req,res) => {
     const {id} = req.params;
     try {

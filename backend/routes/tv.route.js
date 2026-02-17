@@ -16,6 +16,7 @@ import { getKdramaOnAir } from '../controllers/tv.controller.js';
 import { getKdramaPopular } from '../controllers/tv.controller.js';
 import { getKdramaTopRated } from '../controllers/tv.controller.js';
 import { getAnimationTopRated,getAnimationPopular,getAnimationOnAir } from '../controllers/tv.controller.js';
+import { getRandomTv } from '../controllers/tv.controller.js';
 
 const router = express.Router();
 
@@ -38,6 +39,7 @@ router.get('/animation/on-air',getAnimationOnAir);
 router.get('/kdrama/popular',getKdramaPopular);
 router.get('/kdrama/top-rated',getKdramaTopRated);
 router.get('/kdrama/on-air',getKdramaOnAir);
+router.get('/random',getRandomTv);
 
 
 export default router;
