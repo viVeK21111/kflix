@@ -231,8 +231,8 @@ export const getTvbyCategory = async(req,res) => {
 }
 export const getRandomTv = async(req,res) => {
     try {
-        // Step 1: random page (TMDB max 500 pages)
-        const randomPage = Math.floor(Math.random() * 500) + 1;
+        // Step 1: random page (TMDB max 200 pages)
+        const randomPage = Math.floor(Math.random() * 200) + 1;
     
         const data = await fetchFromTMDB(
           `https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&vote_count.gte=100&page=${randomPage}&include_adult=false`
