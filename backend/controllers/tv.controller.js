@@ -235,7 +235,7 @@ export const getRandomTv = async(req,res) => {
         const randomPage = Math.floor(Math.random() * 500) + 1;
     
         const data = await fetchFromTMDB(
-          `https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&page=${randomPage}&include_adult=false`
+          `https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&vote_count.gte=100&page=${randomPage}&include_adult=false`
         );
     
         const movies = data.results;
